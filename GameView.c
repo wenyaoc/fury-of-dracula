@@ -20,10 +20,31 @@
 #include "Places.h"
 // add your own #includes here
 
+
 // TODO: ADD YOUR OWN STRUCTS HERE
+typedef struct historyNode *HistoryNode;
+
+typedef struct _historyNode {
+	PlaceId place; //the real location
+	bool vampire;
+	bool trap;
+    bool revealed;
+	HistoryNode next;
+} historyNode;
+
+typedef struct _playerData {
+	Player player;
+	int health;
+	int totalNumber; // total munber in history
+	HistoryNode first; // the first node in the history list
+	HistoryNode last;  // the last node in the history list
+} playerData;
 
 struct gameView {
 	// TODO: ADD FIELDS HERE
+	int round;
+	int score;
+	playerData data[5]; // data[0-3]:hunter  data[4]:dracula
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -37,7 +58,6 @@ GameView GvNew(char *pastPlays, Message messages[])
 		fprintf(stderr, "Couldn't allocate GameView!\n");
 		exit(EXIT_FAILURE);
 	}
-
 	return new;
 }
 
