@@ -19,26 +19,10 @@
 #include "Map.h"
 #include "Places.h"
 // add your own #includes here
-
+#include "PlayerDataList.h"
 
 // TODO: ADD YOUR OWN STRUCTS HERE
-typedef struct historyNode *HistoryNode;
 
-typedef struct _historyNode {
-	PlaceId place; //the real location
-	bool vampire;
-	bool trap;
-    bool revealed;
-	HistoryNode next;
-} historyNode;
-
-typedef struct _playerData {
-	Player player;
-	int health;
-	int totalNumber; // total munber in history
-	HistoryNode first; // the first node in the history list
-	HistoryNode last;  // the last node in the history list
-} playerData;
 
 struct gameView {
 	// TODO: ADD FIELDS HERE
