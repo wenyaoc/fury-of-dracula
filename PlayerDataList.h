@@ -1,7 +1,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "Game.h"
+#include "Places.h"
+#include "Map.h"
+
 typedef struct historyNode *HistoryNode;
+
 
 typedef struct _historyNode {
 	PlaceId place; //the real location
