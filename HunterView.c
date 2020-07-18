@@ -25,7 +25,7 @@
 
 struct hunterView {
 	// TODO: ADD FIELDS HERE
-	int round;
+	Round round;
 	int score;
 	playerData data[5];
 };
