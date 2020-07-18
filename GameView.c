@@ -26,7 +26,7 @@
 
 struct gameView {
 	// TODO: ADD FIELDS HERE
-	int round;
+	Round round;
 	int score;
 	playerData data[5]; // data[0-3]:hunter  data[4]:dracula
 };
