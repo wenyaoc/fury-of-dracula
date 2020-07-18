@@ -11,7 +11,7 @@ typedef struct historyNode *HistoryNode;
 typedef struct _historyNode {
 	PlaceId place; //the real location
 	bool vampire;
-	bool trap;
+	bool trap[3];
     bool revealed;
 	HistoryNode next;
 } historyNode;
