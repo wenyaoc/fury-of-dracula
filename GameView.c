@@ -19,11 +19,16 @@
 #include "Map.h"
 #include "Places.h"
 // add your own #includes here
+#include "PlayerDataList.h"
 
 // TODO: ADD YOUR OWN STRUCTS HERE
 
+
 struct gameView {
 	// TODO: ADD FIELDS HERE
+	int round;
+	int score;
+	playerData data[5]; // data[0-3]:hunter  data[4]:dracula
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -37,7 +42,6 @@ GameView GvNew(char *pastPlays, Message messages[])
 		fprintf(stderr, "Couldn't allocate GameView!\n");
 		exit(EXIT_FAILURE);
 	}
-
 	return new;
 }
 
