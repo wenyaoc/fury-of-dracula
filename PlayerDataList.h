@@ -35,6 +35,7 @@ void NodeFree(historyNode node);
 HistoryNode newNode(PlaceId place, bool vampire, bool trap, bool revealed);
 
 // add the node to the head of the list  
+//  每走新的一步的时候， 把node加在linklist的最前面
 playerData addToHead(playerData data, HistoryNode newNode);
 
 // add the node to the end of the list
@@ -42,5 +43,5 @@ playerData addToTail(playerData data, HistoryNode newNode);
 
 // get a copy of the last N Node in the history list
 // returns: the head of the new list
-// !!!!!! make sure you free it after you use it !!!!!!
+// !!!!!! make sure you free it after you use it ， 别忘了!!!!!!
 HistoryNode getLastN(playerData data, int n);
