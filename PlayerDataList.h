@@ -47,4 +47,21 @@ HistoryNode addToTail(HistoryNode list, HistoryNode newNode);
 HistoryNode getLastN(playerData data, int n);
 
 
+// find out whether dracula can go to that city is in the trail(does not include HIDE and BOUBLE_BACK)
+// 不包括判断Dracula是否能坐火车， 请自行判断
+// return false if already in the trail
+// return true if not in the trail
+bool canGo(HistoryNode list, PlaceId place);
+
+// find out whether dracula can double back to a city
+// return #  for doubleback if can double back
+// return 0 if cannot double back or do not need to use double back
+int canDoubleBack(HistoryNode list, PlaceId place);
+
+
+// find out whether dracula can hide in a city
+// return the number in the trail if already in the trail
+// return 0 if not in the trail
+bool canHide(HistoryNode list);
+
 
