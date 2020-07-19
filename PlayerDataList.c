@@ -6,6 +6,9 @@
 #include "Places.h"
 #include "Map.h"
 
+
+static PlaceId findDBCity(HistoryNode node);
+
 void ListFree(HistoryNode node) {
     HistoryNode curr = node;
     HistoryNode next ;
@@ -83,4 +86,66 @@ HistoryNode getLastN(playerData data, int n){
     return newHead;
 }
 
+bool canGo(HistoryNode list, PlaceId place) {
+    if(list == NULL) return true;
+    HistoryNode curr = list;
+    int counter = 0;
+    while((curr != NULL) && counter < 5) {
+        if(curr->place == place) {
+            return false;
+        } else if(curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
+            if(place == findDBCity(curr)) return false;
+        }
+        counter++;
+        if(counter == 5 && curr->next != NULL) {   //if the 5th is HIDE
+            if(curr->place == HIDE && curr->next->place == place) return false;
+        }
+        curr = curr->next;
+    }
+    return true;
+}
 
+
+int canDoubleBack(HistoryNode list, PlaceId place) {
+    HistoryNode curr = list;
+    int counter = 0;
+    while((curr != NULL) && counter < 5) {
+        if(curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) return 0;
+        counter++;
+        curr = curr->next;
+    }
+    curr = list;
+    counter = 0;
+    while((curr != NULL) && counter < 5) {
+        if(curr->place == place) return counter + 1;
+        counter++;
+        curr = curr->next;
+    }
+    return 0;
+}
+
+bool canHide(HistoryNode list){
+    HistoryNode curr = list;
+    int counter = 0;
+    while((curr != NULL) && counter < 5) {
+        if(curr->place == HIDE) return false;
+        counter++;
+        curr = curr->next;
+    }
+    return true;
+}
+
+
+
+static PlaceId findDBCity(HistoryNode node) {
+    int DBNumber = node->place - DOUBLE_BACK_1;
+    int i = 0;
+    HistoryNode curr = node;
+    while (curr != NULL && i <= DBNumber) {
+        i++;
+        curr = curr->next;
+    }
+    if(curr == NULL)
+        return NOWHERE;
+    return curr->place;
+}
