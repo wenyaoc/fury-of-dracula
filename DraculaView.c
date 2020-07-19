@@ -30,7 +30,6 @@ struct draculaView {
 };
 
 
-int getPlayerNum(Player player);
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -181,7 +180,7 @@ PlaceId *DvWhereCanTheyGoByType(DraculaView dv, Player player,
 	*numReturnedLocs = 0;
 	if (player == PLAYER_DRACULA) return DvWhereCanIGoByType(dv, road, boat, numReturnedLocs);
 
-	int playernum = getPlayerNum(player);
+	int playernum = player;
 	if(dv->data[playernum].totalNumber == 0) return NULL;
 	Map m = MapNew();
 	ConnList connection = MapGetConnections(m, dv->data[4].first->place);
@@ -231,18 +230,5 @@ PlaceId *DvWhereCanTheyGoByType(DraculaView dv, Player player,
 // Your own interface functions
 // TODO
 
-/*
-return
-0 for PLAYER_LORD_GODALMING,	
-1 for PLAYER_DR_SEWARD,		
-2 for PLAYER_VAN_HELSING,		
-3 for PLAYER_MINA_HARKER,	
-*/
-int getPlayerNum(Player player) {
-	if (player == PLAYER_LORD_GODALMING) return 0;
-	if (player == PLAYER_DR_SEWARD) return 1;
-	if (player == PLAYER_VAN_HELSING) return 2;
-	else return 3;
-}
 
 
