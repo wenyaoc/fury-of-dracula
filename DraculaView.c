@@ -29,6 +29,8 @@ struct draculaView {
 	playerData data[5];
 };
 
+
+int getPlayerNum(Player player);
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -40,7 +42,6 @@ DraculaView DvNew(char *pastPlays, Message messages[])
 		fprintf(stderr, "Couldn't allocate DraculaView\n");
 		exit(EXIT_FAILURE);
 	}
-
 	return new;
 }
 
@@ -96,15 +97,40 @@ PlaceId *DvGetTrapLocations(DraculaView dv, int *numTraps)
 PlaceId *DvGetValidMoves(DraculaView dv, int *numReturnedMoves)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedMoves = 0;
-	return NULL;
+	if(dv->data[4].totalNumber == 0) return NULL;
+	int DBnumber = 0;
+	Map m = MapNew();
+	ConnList connection = MapGetConnections(m, dv->data[4].first->place);
+	ConnList curr = connection;
+	PlaceId * place = NULL;
+	while (curr != NULL) {
+		if (curr->type == ROAD || curr->type == BOAT) {
+			if (canGo(dv->data[4].first, curr->p)) {
+				place = realloc(place, (*numReturnedMoves + 1) * sizeof(PlaceId));
+				place[*numReturnedMoves] =  curr->p;
+				*numReturnedMoves = *numReturnedMoves + 1;
+			} else if ((DBnumber = canDoubleBack(dv->data[4].first, curr->p)) > 0) {
+				place = realloc(place, (*numReturnedMoves + 1) * sizeof(PlaceId));
+				place[*numReturnedMoves] = DOUBLE_BACK_1 + DBnumber - 1;
+				*numReturnedMoves = *numReturnedMoves + 1;
+			}	
+		}
+		curr = curr -> next;
+	}
+	if (canHide(dv->data[4].first)) {
+		place = realloc(place, (*numReturnedMoves + 1) * sizeof(PlaceId));
+		place[*numReturnedMoves] = HIDE;
+		*numReturnedMoves = *numReturnedMoves + 1;
+	}
+	return place;
 }
 
 PlaceId *DvWhereCanIGo(DraculaView dv, int *numReturnedLocs)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedLocs = 0;
-	return NULL;
+	return DvWhereCanIGoByType(dv, true, true, numReturnedLocs);
 }
 
 PlaceId *DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
@@ -112,15 +138,39 @@ PlaceId *DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedLocs = 0;
-	return NULL;
+	if(dv->data[4].totalNumber == 0) return NULL;
+
+	Map m = MapNew();
+	ConnList connection = MapGetConnections(m, dv->data[4].first->place);
+	ConnList curr = connection;
+	PlaceId * place = NULL;
+	while (curr != NULL) {
+		if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
+			if (canGo(dv->data[4].first, curr->p)) {
+				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+				place[*numReturnedLocs] =  curr->p;
+				*numReturnedLocs = *numReturnedLocs + 1;
+			} else if (canDoubleBack(dv->data[4].first, curr->p) > 0) {
+				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+				place[*numReturnedLocs] = curr->p;
+				*numReturnedLocs = *numReturnedLocs + 1;
+			}	
+		}
+		curr = curr -> next;
+	}
+	if (canHide(dv->data[4].first)) {
+		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+		place[*numReturnedLocs] = dv->data[4].first->place;
+		*numReturnedLocs = *numReturnedLocs + 1;
+	}
+	return place;
 }
 
 PlaceId *DvWhereCanTheyGo(DraculaView dv, Player player,
                           int *numReturnedLocs)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedLocs = 0;
-	return NULL;
+	return DvWhereCanTheyGoByType(dv, player, true, true, true, numReturnedLocs);
 }
 
 PlaceId *DvWhereCanTheyGoByType(DraculaView dv, Player player,
@@ -129,10 +179,70 @@ PlaceId *DvWhereCanTheyGoByType(DraculaView dv, Player player,
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedLocs = 0;
-	return NULL;
+	if (player == PLAYER_DRACULA) return DvWhereCanIGoByType(dv, road, boat, numReturnedLocs);
+
+	int playernum = getPlayerNum(player);
+	if(dv->data[playernum].totalNumber == 0) return NULL;
+	Map m = MapNew();
+	ConnList connection = MapGetConnections(m, dv->data[4].first->place);
+	ConnList curr = connection;
+	PlaceId * place = NULL;
+	while (curr != NULL) {
+		if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
+			place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+			place[*numReturnedLocs] = dv->data[4].first->place;
+			*numReturnedLocs = *numReturnedLocs + 1;
+		} else if (curr->type == RAIL && rail == true && dv->round % 4 != 0) {
+			if (dv->round % 4 == 1) {
+				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+				place[*numReturnedLocs] = dv->data[4].first->place;
+				*numReturnedLocs = *numReturnedLocs + 1;
+			} else {
+				ConnList connection2 = MapGetConnections(m, curr->p);
+				ConnList curr2 = connection2;
+				while (curr2 != NULL) {
+					if (curr2->type == RAIL) {
+						place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+						place[*numReturnedLocs] = dv->data[4].first->place;
+						*numReturnedLocs = *numReturnedLocs + 1;
+						if (dv->round % 4 == 3) {
+							ConnList connection3 = MapGetConnections(m, curr->p);
+							ConnList curr3 = connection3;
+							while (curr3 != NULL) {
+								if (curr3->type == RAIL) {
+									place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+									place[*numReturnedLocs] = dv->data[4].first->place;
+									*numReturnedLocs = *numReturnedLocs + 1;
+								}
+								curr3 = curr3->next;
+							}
+						}
+					}
+					curr2 = curr2->next;
+				}
+			}
+		}
+		curr = curr -> next;
+	}
+	return place;
 }
 
 ////////////////////////////////////////////////////////////////////////
 // Your own interface functions
-
 // TODO
+
+/*
+return
+0 for PLAYER_LORD_GODALMING,	
+1 for PLAYER_DR_SEWARD,		
+2 for PLAYER_VAN_HELSING,		
+3 for PLAYER_MINA_HARKER,	
+*/
+int getPlayerNum(Player player) {
+	if (player == PLAYER_LORD_GODALMING) return 0;
+	if (player == PLAYER_DR_SEWARD) return 1;
+	if (player == PLAYER_VAN_HELSING) return 2;
+	else return 3;
+}
+
+
