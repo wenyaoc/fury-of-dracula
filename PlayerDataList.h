@@ -1,4 +1,3 @@
-  
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -12,14 +11,14 @@ struct historyNode {
 	PlaceId place; //the real location
 	bool vampire;
 	int trapNumber;
-    	bool revealed;
+    bool revealed;
 	HistoryNode next;
 };
 
 typedef struct _playerData {
 	Player player;
 	int health;
-	int totalNumber; // total munber in history
+	int turn; // total munber in history
 	HistoryNode first; // the first node in the history list, 别忘了初始化的时候赋值为NULL
 } playerData;
 
@@ -64,3 +63,5 @@ int canDoubleBack(HistoryNode list, PlaceId place);
 // return the number in the trail if already in the trail
 // return 0 if not in the trail
 bool canHide(HistoryNode list);
+
+
