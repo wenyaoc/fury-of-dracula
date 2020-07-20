@@ -1,10 +1,14 @@
 # fury-of-dracula
 
 ![Image text](https://github.com/wenyaoc/cs2521-lab08/blob/master/dra.PNG)
+```diff
+- Group name:
+```
+Boyu Cai - Wenyao Chen - Ziyi Shao - Kexin Tian<br> <br> 
 
-**Group name:** Boyu Cai - Wenyao Chen - Ziyi Shao - Kexin Tian
-
-
+```diff
+- Group numbers:
+```
 **GitHub username:** wenyaoc<br> 
 **real name:** Wenyao Chen<br> 
 **zID:** z5253448<br> 
