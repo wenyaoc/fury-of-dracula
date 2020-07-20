@@ -20,11 +20,14 @@
 #include "Map.h"
 #include "Places.h"
 // add your own #includes here
-
+#include "PlayerDataList.h"
 // TODO: ADD YOUR OWN STRUCTS HERE
 
 struct hunterView {
 	// TODO: ADD FIELDS HERE
+	Round round;
+	int score;
+	playerData data[5];
 };
 
 ////////////////////////////////////////////////////////////////////////
