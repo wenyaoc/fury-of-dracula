@@ -44,7 +44,7 @@ HistoryNode copyNode(HistoryNode prevNode) {
 
 
 // add the node to the head of the list  
-void addToHead(playerData data, HistoryNode newNode) {
+void addToHistory(playerData data, HistoryNode newNode) {
     if(data.first == NULL){
         data.first = newNode;
         data.totalNumber++;
