@@ -47,6 +47,9 @@ DraculaView DvNew(char *pastPlays, Message messages[])
 void DvFree(DraculaView dv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+	for (int i = 0; i < 5; i++) {
+		ListFree(dv->data[i].first);
+	}
 	free(dv);
 }
 
@@ -56,30 +59,44 @@ void DvFree(DraculaView dv)
 Round DvGetRound(DraculaView dv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return 0;
+	return dv->round;
 }
 
 int DvGetScore(DraculaView dv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return 0;
+	return dv->score;
 }
 
 int DvGetHealth(DraculaView dv, Player player)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return 0;
+	return dv->data[player].health;
 }
 
 PlaceId DvGetPlayerLocation(DraculaView dv, Player player)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return NOWHERE;
+	if(dv->data[player].totalNumber == 0)
+		return NOWHERE;
+	else 
+		return dv->data[player].first->place;
 }
 
 PlaceId DvGetVampireLocation(DraculaView dv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+	if(dv->data[PLAYER_DRACULA].totalNumber == 0)
+		return NOWHERE;
+	HistoryNode curr = dv->data[PLAYER_DRACULA].first;
+	int counter = 0;
+	while (curr != NULL && counter < 5) {
+		if (curr->vampire == true) {
+			return curr->place;
+		}
+		counter++;
+		curr = curr->next;
+	}
 	return NOWHERE;
 }
 
@@ -87,7 +104,22 @@ PlaceId *DvGetTrapLocations(DraculaView dv, int *numTraps)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numTraps = 0;
-	return NULL;
+	if(dv->data[PLAYER_DRACULA].totalNumber == 0) return NULL;
+	HistoryNode curr = dv->data[PLAYER_DRACULA].first;
+	int counter = 0;
+	PlaceId * place = NULL;
+	while (curr != NULL && counter < 5) {
+		if (curr->trapNumber > 0) {
+			for (int i = 0; i < curr->trapNumber; i++) {
+				place = realloc(place, (*numTraps + 1) * sizeof(PlaceId));
+				place[*numTraps] = curr->place;
+				*numTraps = *numTraps + 1;
+			}
+		}
+		counter++;
+		curr = curr->next;
+	}
+	return place;
 }
 
 ////////////////////////////////////////////////////////////////////////
