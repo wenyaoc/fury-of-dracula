@@ -23,7 +23,7 @@ HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed){
     HistoryNode new = malloc(sizeof(* new));
     new->place = place;
     new->vampire = vampire;
-    new->trapNumber = 0;
+    new->trapNumber = trap;
     new->revealed = revealed; 
     new->next = NULL;
     return new;
@@ -41,15 +41,15 @@ HistoryNode copyNode(HistoryNode prevNode) {
 
 
 // add the node to the head of the list  
-void addToHead(playerData data, HistoryNode newNode) {
+void addToHistory(playerData data, HistoryNode newNode) {
     if(data.first == NULL){
         data.first = newNode;
-        data.totalNumber++;
+        data.turn++;
         return;
     } 
     newNode->next = data.first;
     data.first = newNode;
-    data.totalNumber++;
+    data.turn++;
 }
 
 // add the node to the end of the list
