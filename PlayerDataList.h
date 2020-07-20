@@ -1,3 +1,4 @@
+  
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -11,7 +12,7 @@ struct historyNode {
 	PlaceId place; //the real location
 	bool vampire;
 	int trapNumber;
-    bool revealed;
+    	bool revealed;
 	HistoryNode next;
 };
 
@@ -27,7 +28,7 @@ typedef struct _playerData {
 void ListFree(HistoryNode node);
 
 // creat a new node 
-HistoryNode creatNode(PlaceId place, bool vampire, bool trap, bool revealed);
+HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed);
 
 // creat a copy of an exist noode
 HistoryNode copyNode(HistoryNode prevNode);
@@ -63,5 +64,3 @@ int canDoubleBack(HistoryNode list, PlaceId place);
 // return the number in the trail if already in the trail
 // return 0 if not in the trail
 bool canHide(HistoryNode list);
-
-
