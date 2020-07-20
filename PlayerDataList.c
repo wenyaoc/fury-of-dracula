@@ -19,14 +19,11 @@ void ListFree(HistoryNode node) {
     }
 }
 
-HistoryNode creatNode(PlaceId place, bool vampire, bool trap, bool revealed){
+HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed){
     HistoryNode new = malloc(sizeof(* new));
     new->place = place;
     new->vampire = vampire;
-    if (trap == true)
-        new->trapNumber = 1;
-    else
-        new->trapNumber = 0;
+    new->trapNumber = 0;
     new->revealed = revealed; 
     new->next = NULL;
     return new;
