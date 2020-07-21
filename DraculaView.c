@@ -61,7 +61,7 @@ DraculaView DvNew(char *pastPlays, Message messages[])
 			trailLoad(new_dv, play);
 		}
 	}
-	//printf("%d %d %d", new_dv->data[4].first->trapNumber, new_dv->data[4].first->next->trapNumber, new_dv->data[4].first->next->next->trapNumber);
+	//printf("%d %d %d %d %d", new_dv->data[4].first->trapNumber, new_dv->data[4].first->next->trapNumber, new_dv->data[4].first->next->next->trapNumber, new_dv->data[4].first->next->next->next->trapNumber, new_dv->data[4].first->next->next->next->next->trapNumber);
 	free(play);
 	return new_dv;
 }
@@ -335,6 +335,8 @@ void trailLoad(DraculaView dv, char* play) {
 		DvEvent(dv, play, place, player);
 	else
 		HvEvent(dv, play, place, player);
+	
+	//printf("%d\n", dv->data[player].health);
 
 }
 
@@ -363,22 +365,10 @@ void DvEvent(DraculaView dv, char* play, PlaceId place, int player)
 
 	if (placeIsSea(place))
 		dv->data[player].health -= LIFE_LOSS_SEA;
-	else if(place == HIDE) {
-		PlaceId realPlace = dv->data[PLAYER_DRACULA].first->next->place;
-		if (placeIsSea(realPlace))
-			dv->data[player].health -= LIFE_LOSS_SEA;
-		else if (realPlace >= DOUBLE_BACK_1 && realPlace <= DOUBLE_BACK_5) {
-			if (placeIsSea(findDBCity(dv->data[PLAYER_DRACULA].first->next)->place)) 
-				dv->data[player].health -= LIFE_LOSS_SEA;
-		}
-	} else if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5) {
+	else if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5) {
 		HistoryNode node = findDBCity(dv->data[PLAYER_DRACULA].first->next);
 		if (placeIsSea(node->place))
 			dv->data[player].health -= LIFE_LOSS_SEA;
-		else if (node->place == HIDE) {
-			if(placeIsSea(node->next->place))
-				dv->data[player].health -= LIFE_LOSS_SEA;
-		}
 	}
 
 	if (place == CASTLE_DRACULA && dv->data[PLAYER_DRACULA].turn > 1)
@@ -405,15 +395,15 @@ void DvEvent(DraculaView dv, char* play, PlaceId place, int player)
 
 void HvEvent(DraculaView dv, char* play, PlaceId place, int player)
 {
-	if (dv->data[player].health <= 0) 
+	if (dv->data[player].health == 0) 
 		dv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
 
 	HistoryNode new = creatNode(place, false, 0, true);
 	dv->data[player] = addToHistory(dv->data[player], new);
 	if (play[3] == 'T') {
-		deleteTraps(dv, place);
 		dv->data[player].health -= LIFE_LOSS_TRAP_ENCOUNTER;
-
+		//printf("%d\n", dv->data[player].health);
+		deleteTraps(dv, place);
 	}
 	if (play[3] == 'V' || play[4] == 'V') {
 		deleteVampire(dv);
@@ -428,6 +418,9 @@ void HvEvent(DraculaView dv, char* play, PlaceId place, int player)
 		if (dv->data[player].health > GAME_START_HUNTER_LIFE_POINTS)
 			dv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
 	}
+	if (dv->data[player].health <= 0) 
+		dv->data[player].health = 0;
+	
 }
 
 
