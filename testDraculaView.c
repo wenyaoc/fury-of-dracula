@@ -36,7 +36,6 @@ int main(void)
 		Message messages[] = {
 			"Hello", "Goodbye", "Stuff", "..."
 		};
-		
 		DraculaView dv = DvNew(trail, messages);
 
 		assert(DvGetRound(dv) == 0);
@@ -79,7 +78,6 @@ int main(void)
 		assert(DvGetPlayerLocation(dv, PLAYER_LORD_GODALMING) == GENEVA);
 		assert(DvGetPlayerLocation(dv, PLAYER_DRACULA) == GENEVA);
 		assert(DvGetVampireLocation(dv) == NOWHERE);
-
 		printf("Test passed!\n");
 		DvFree(dv);
 	}
@@ -107,8 +105,7 @@ int main(void)
 		assert(traps[0] == LONDON);
 		assert(traps[1] == LONDON);
 		assert(traps[2] == MANCHESTER);
-		free(traps);
-		
+		free(traps);		
 		printf("Test passed!\n");
 		DvFree(dv);
 	}
@@ -166,5 +163,61 @@ int main(void)
 		DvFree(dv);
 	}
 
+	// extra test 1 : hunter encounters a trap 1
+	{///////////////////////////////////////////////////////////////////
+	
+		printf("Test hunter encounters a trap\n");
+		
+		char *trail =
+			"GGE.... SGE.... HGE.... MGE.... DSTT... "
+			"GGE.... SGE.... HGE.... MGE.... DCOT... "
+			"GSTT... SGE.... HGE.... MGE....";
+		
+		Message messages[24] = {};
+		DraculaView dv = DvNew(trail, messages);
+		
+		
+		assert(DvGetScore(dv) == GAME_START_SCORE - 2 * SCORE_LOSS_DRACULA_TURN);
+		assert(DvGetHealth(dv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_TRAP_ENCOUNTER);
+		int numTraps = -1;
+		PlaceId *traps = DvGetTrapLocations(dv, &numTraps);
+		assert(numTraps == 1);
+		sortPlaces(traps, numTraps);
+		assert(traps[0] == COLOGNE);
+		free(traps);
+		
+		printf("Test passed!\n");
+		DvFree(dv);
+	}
+
+	// extra test 2 : hunter encounters a trap 2(with HIDE)
+	{///////////////////////////////////////////////////////////////////
+	
+		printf("Test hunter encounters a trap\n");
+		
+		char *trail =
+			"GGE.... SGE.... HGE.... MGE.... DSTT... "
+			"GGE.... SGE.... HGE.... MGE.... DHIT... "
+			"GGE.... SGE.... HGE.... MGE.... DCOT... "
+			"GSTT... SGE.... HGE.... MGE....";
+		
+		Message messages[24] = {};
+		DraculaView dv = DvNew(trail, messages);
+		
+		assert(DvGetScore(dv) == GAME_START_SCORE - 3 * SCORE_LOSS_DRACULA_TURN);
+		assert(DvGetHealth(dv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_TRAP_ENCOUNTER);
+		int numTraps = -1;
+		PlaceId *traps = DvGetTrapLocations(dv, &numTraps);
+		assert(numTraps == 2);
+		sortPlaces(traps, numTraps);
+		assert(traps[0] == COLOGNE);
+		assert(traps[1] == STRASBOURG);
+		free(traps);
+		
+		printf("Test passed!\n");
+		DvFree(dv);
+	}
+
 	return EXIT_SUCCESS;
 }
+
