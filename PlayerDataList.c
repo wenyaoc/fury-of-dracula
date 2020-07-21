@@ -41,15 +41,16 @@ HistoryNode copyNode(HistoryNode prevNode) {
 
 
 // add the node to the head of the list  
-void addToHistory(playerData data, HistoryNode newNode) {
+playerData addToHistory(playerData data, HistoryNode newNode) {
     if(data.first == NULL){
         data.first = newNode;
         data.turn++;
-        return;
+        return data;
     } 
     newNode->next = data.first;
     data.first = newNode;
     data.turn++;
+    return data;
 }
 
 // add the node to the end of the list
