@@ -7,7 +7,6 @@
 #include "Places.h"
 #include "Map.h"
 
-
 void ListFree(HistoryNode node) {
     HistoryNode curr = node;
     HistoryNode next ;
@@ -37,7 +36,6 @@ HistoryNode copyNode(HistoryNode prevNode) {
     new->next = NULL;
     return new;
 }
-
 
 // add the node to the head of the list  
 playerData addToHistory(playerData data, HistoryNode newNode) {
@@ -106,7 +104,6 @@ bool canGo(HistoryNode list, PlaceId place) {
     return true;
 }
 
-
 int getDoubleBackNum(HistoryNode list, PlaceId place) {
     HistoryNode curr = list;
     int counter = 0;
@@ -142,7 +139,6 @@ bool canHide(HistoryNode list) {
 }
 
 
-
 HistoryNode findDBCity(HistoryNode node) {
     int DBNumber = node->place - DOUBLE_BACK_1;
     int i = 0;
@@ -157,3 +153,4 @@ HistoryNode findDBCity(HistoryNode node) {
         return curr->next;
     return curr;
 }
+

@@ -8,20 +8,19 @@
 typedef struct historyNode *HistoryNode;
 
 struct historyNode {
-	PlaceId place; //the real location
-	bool vampire;
-	int trapNumber;
+    PlaceId place; //the real location
+    bool vampire;
+    int trapNumber;
     bool revealed;
-	HistoryNode next;
+    HistoryNode next;
 };
 
 typedef struct _playerData {
-	Player player;
-	int health;
-	int turn; // total munber in history
-	HistoryNode first; // the first node in the history list
+    Player player;
+    int health;
+    int turn; // total munber in history
+    HistoryNode first; // the first node in the history list
 } playerData;
-
 
 // free the whole history list
 void ListFree(HistoryNode node);
@@ -31,7 +30,6 @@ HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed);
 
 // creat a copy of an exist noode
 HistoryNode copyNode(HistoryNode prevNode);
-
 
 // add the node to the head of the history  
 //  每走新的一步的时候， 把node加在history的最前面
@@ -46,7 +44,6 @@ HistoryNode addToTail(HistoryNode list, HistoryNode newNode);
 // 别忘了 free！！！！//
 HistoryNode getLastN(playerData data, int n);
 
-
 // find out whether dracula can go to that city is in the trail(does not include HIDE and BOUBLE_BACK)
 // 不包括判断Dracula是否能坐火车， 请自行判断
 // return false if already in the trail
@@ -58,9 +55,7 @@ bool canGo(HistoryNode list, PlaceId place);
 // return 0 if cannot double back or do not need to use double back
 int getDoubleBackNum(HistoryNode list, PlaceId place);
 
-
 bool canDoubleBack(HistoryNode list);
-
 
 // find out whether dracula can hide in a city
 // return the number in the trail if already in the trail
@@ -68,7 +63,7 @@ bool canDoubleBack(HistoryNode list);
 bool canHide(HistoryNode list);
 
 
-
 HistoryNode findDBCity(HistoryNode node);
+
 
 
