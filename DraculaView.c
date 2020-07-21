@@ -356,6 +356,12 @@ void trailLoad(DraculaView dv, char * play) {
 		if (play[6] == 'V') {
 			dv->score -= SCORE_LOSS_VAMPIRE_MATURES;
 		}
+
+		if (place == CASTLE_DRACULA)
+			dv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
+		/*
+			handle hunters' health
+		*/
 		dv->score -= SCORE_LOSS_DRACULA_TURN;
 	} else {
 		HistoryNode new = creatNode(place, false, 0, true);
