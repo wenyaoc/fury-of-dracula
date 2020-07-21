@@ -381,9 +381,25 @@ void DvEvent(DraculaView dv, char* play, PlaceId place, int player)
 		}
 	}
 
-	if (place == CASTLE_DRACULA)
-		dv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-
+	if (place == CASTLE_DRACULA && dv->data[PLAYER_DRACULA].turn > 1)
+		dv->data[player].health += LIFE_GAIN_CASTLE_DRACULA ;
+	else if(place == HIDE) {
+		HistoryNode node = dv->data[PLAYER_DRACULA].first->next;
+		if (node->place == CASTLE_DRACULA)
+			dv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
+		else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
+			if (findDBCity(node->next)->place == CASTLE_DRACULA) 
+				dv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
+		}
+	} else if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5) {
+		HistoryNode node = findDBCity(dv->data[PLAYER_DRACULA].first->next);
+		if (node->place == CASTLE_DRACULA)
+			dv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
+		else if (node->place == HIDE) {
+			if(node->next->place == CASTLE_DRACULA)
+				dv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
+		}
+	}
 	dv->score -= SCORE_LOSS_DRACULA_TURN;
 }
 
