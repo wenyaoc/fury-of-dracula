@@ -35,7 +35,7 @@ HistoryNode copyNode(HistoryNode prevNode);
 
 // add the node to the head of the history  
 //  每走新的一步的时候， 把node加在history的最前面
-void addToHistory(playerData data, HistoryNode newNode);
+playerData addToHistory(playerData data, HistoryNode newNode);
 
 // add the node to the end of the list
 // 单纯link list操作， 与history无瓜
