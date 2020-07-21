@@ -32,7 +32,7 @@ void HvEvent(DraculaView dv, char* play, PlaceId place, int player);
 //int countTraps(DraculaView dv);
 //int getHistoryTraps(DraculaView dv, int previous);
 void deleteTraps(DraculaView dv, PlaceId place);
-void deleteVampire(DraculaView dv, PlaceId place);
+void deleteVampire(DraculaView dv);
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -408,7 +408,7 @@ void HvEvent(DraculaView dv, char* play, PlaceId place, int player)
 
 	}
 	if (play[3] == 'V' || play[4] == 'V') {
-		deleteVampire(dv, dv->data[player].first->place);
+		deleteVampire(dv);
 	}
 	if (play[3] == 'D' || play[4] == 'D' || play[5] == 'D') {
 		dv->data[player].health -= LIFE_LOSS_DRACULA_ENCOUNTER;
@@ -437,17 +437,16 @@ void deleteTraps(DraculaView dv, PlaceId place) {
 		result->trapNumber = 0;
 }
 
-void deleteVampire(DraculaView dv, PlaceId place) {
+void deleteVampire(DraculaView dv) {
 
 	HistoryNode curr = dv->data[PLAYER_DRACULA].first;
-	HistoryNode result = NULL;
 	for (int counter = 0; curr != NULL && counter < 5 && counter < dv->round; counter++) {
-		if (curr->vampire && curr->place == place)
-			result = curr;
+		if (curr->vampire){
+			curr->vampire = false;
+			return;
+		}
 		curr = curr->next;
 	}
-	if (result != NULL)
-		result->vampire = false;
 }
 
 /*
