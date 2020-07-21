@@ -19,14 +19,11 @@ void ListFree(HistoryNode node) {
     }
 }
 
-HistoryNode creatNode(PlaceId place, bool vampire, bool trap, bool revealed){
+HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed){
     HistoryNode new = malloc(sizeof(* new));
     new->place = place;
     new->vampire = vampire;
-    if (trap == true)
-        new->trapNumber = 1;
-    else
-        new->trapNumber = 0;
+    new->trapNumber = trap;
     new->revealed = revealed; 
     new->next = NULL;
     return new;
@@ -44,15 +41,16 @@ HistoryNode copyNode(HistoryNode prevNode) {
 
 
 // add the node to the head of the list  
-void addToHistory(playerData data, HistoryNode newNode) {
+playerData addToHistory(playerData data, HistoryNode newNode) {
     if(data.first == NULL){
         data.first = newNode;
-        data.totalNumber++;
-        return;
+        data.turn++;
+        return data;
     } 
     newNode->next = data.first;
     data.first = newNode;
-    data.totalNumber++;
+    data.turn++;
+    return data;
 }
 
 // add the node to the end of the list

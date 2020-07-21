@@ -18,8 +18,8 @@ struct historyNode {
 typedef struct _playerData {
 	Player player;
 	int health;
-	int totalNumber; // total munber in history
-	HistoryNode first; // the first node in the history list, 别忘了初始化的时候赋值为NULL
+	int turn; // total munber in history
+	HistoryNode first; // the first node in the history list
 } playerData;
 
 
@@ -27,7 +27,7 @@ typedef struct _playerData {
 void ListFree(HistoryNode node);
 
 // creat a new node 
-HistoryNode creatNode(PlaceId place, bool vampire, bool trap, bool revealed);
+HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed);
 
 // creat a copy of an exist noode
 HistoryNode copyNode(HistoryNode prevNode);
@@ -35,7 +35,7 @@ HistoryNode copyNode(HistoryNode prevNode);
 
 // add the node to the head of the history  
 //  每走新的一步的时候， 把node加在history的最前面
-void addToHistory(playerData data, HistoryNode newNode);
+playerData addToHistory(playerData data, HistoryNode newNode);
 
 // add the node to the end of the list
 // 单纯link list操作， 与history无瓜
