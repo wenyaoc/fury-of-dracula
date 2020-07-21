@@ -399,7 +399,7 @@ void HvEvent(DraculaView dv, char* play, PlaceId place, int player)
 		dv->data[player].first->place = ST_JOSEPH_AND_ST_MARY;
 	}
 
-	if (dv->data[player].first->place == dv->data[player].first->next->place)
+	if (dv->data[player].first->next != NULL && dv->data[player].first->place == dv->data[player].first->next->place)
 		dv->data[player].health += LIFE_GAIN_REST;
 		
 	if (play[3] == 'T') {
