@@ -136,15 +136,18 @@ PlaceId *DvGetTrapLocations(DraculaView dv, int *numTraps)
     while (curr != NULL && counter < 5 && counter < dv->round) {
         if (curr->trapNumber > 0) {
             place = realloc(place, (*numTraps + 1) * sizeof(PlaceId));
-			if (curr->place == HIDE)
-            	place[*numTraps] = curr->next->place;
-			else
+			if (curr->place == HIDE) {
+				if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5)
+					place[*numTraps] = findDBCity(curr->next)->place;
+				else
+					place[*numTraps] = curr->next->place;
+
+			}
+			else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
+				place[*numTraps] = findDBCity(curr)->place;
+			} else
 				place[*numTraps] = curr->place;
-            *numTraps = *numTraps + 1;
-				
-			/*
-			handle with DB
-			*/			
+            *numTraps = *numTraps + 1;			
         }
         counter++;
         curr = curr->next;
@@ -160,33 +163,42 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedMoves = 0;
-	if (dv->data[4].turn == 0) return NULL;
+	if (dv->data[PLAYER_DRACULA].turn == 0) return NULL;
 	int DBnumber = 0;
 	Map m = MapNew();
-	ConnList connection = MapGetConnections(m, dv->data[4].first->place);
+	ConnList connection = MapGetConnections(m, dv->data[PLAYER_DRACULA].first->place);
 	ConnList curr = connection;
-	PlaceId * place = NULL;
+	PlaceId * move = NULL;
 	while (curr != NULL) {
 		if (curr->type == ROAD || curr->type == BOAT) {
-			if (canGo(dv->data[4].first, curr->p)) {
-				place = realloc(place, (*numReturnedMoves + 1) * sizeof(PlaceId));
-				place[*numReturnedMoves] = curr->p;
+			if (canGo(dv->data[PLAYER_DRACULA].first, curr->p)) {
+				move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
+				move[*numReturnedMoves] = curr->p;
 				*numReturnedMoves = *numReturnedMoves + 1;
 			}
-			else if ((DBnumber = canDoubleBack(dv->data[4].first, curr->p)) > 0) {
-				place = realloc(place, (*numReturnedMoves + 1) * sizeof(PlaceId));
-				place[*numReturnedMoves] = DOUBLE_BACK_1 + DBnumber - 1;
+			else if ((DBnumber = getDoubleBackNum(dv->data[PLAYER_DRACULA].first, curr->p)) > 0) {
+				move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
+				move[*numReturnedMoves] = DOUBLE_BACK_1 + DBnumber - 1;
 				*numReturnedMoves = *numReturnedMoves + 1;
 			}
 		}
 		curr = curr->next;
 	}
-	if (canHide(dv->data[4].first)) {
-		place = realloc(place, (*numReturnedMoves + 1) * sizeof(PlaceId));
-		place[*numReturnedMoves] = HIDE;
+	if (canDoubleBack(dv->data[PLAYER_DRACULA].first)) {
+		move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
+		move[*numReturnedMoves] = DOUBLE_BACK_1;
 		*numReturnedMoves = *numReturnedMoves + 1;
 	}
-	return place;
+	if (canHide(dv->data[PLAYER_DRACULA].first)) {
+		move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
+		move[*numReturnedMoves] = HIDE;
+		*numReturnedMoves = *numReturnedMoves + 1;
+	}
+
+	for(int i = 0; i < *numReturnedMoves; i++) {
+		printf("%s ", placeIdToName(move[i]));
+	}
+	return move;
 }
 
 PlaceId* DvWhereCanIGo(DraculaView dv, int* numReturnedLocs)
@@ -214,7 +226,7 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 				place[*numReturnedLocs] = curr->p;
 				*numReturnedLocs = *numReturnedLocs + 1;
 			}
-			else if (canDoubleBack(dv->data[4].first, curr->p) > 0) {
+			else if (getDoubleBackNum(dv->data[4].first, curr->p) > 0) {
 				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 				place[*numReturnedLocs] = curr->p;
 				*numReturnedLocs = *numReturnedLocs + 1;

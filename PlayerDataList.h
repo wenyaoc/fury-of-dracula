@@ -56,7 +56,10 @@ bool canGo(HistoryNode list, PlaceId place);
 // find out whether dracula can double back to a city
 // return #  for doubleback if can double back
 // return 0 if cannot double back or do not need to use double back
-int canDoubleBack(HistoryNode list, PlaceId place);
+int getDoubleBackNum(HistoryNode list, PlaceId place);
+
+
+bool canDoubleBack(HistoryNode list);
 
 
 // find out whether dracula can hide in a city
