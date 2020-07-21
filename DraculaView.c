@@ -23,12 +23,11 @@ struct draculaView {
 };
 
 Player getPlayer(char c);
-void split(char* src, const char* separator, char** dest, int* num);
 void trailLoad(DraculaView dv, char * play);
-PlaceId SetLocation(DraculaView dv, char* location);
-void PastEvent(DraculaView dv, char* line, int player);
-int countTraps(DraculaView dv);
-int getHistoryTraps(DraculaView dv, int previous);
+void DvEvent(DraculaView dv, char* play, PlaceId place, int player);
+void HvEvent(DraculaView dv, char* play, PlaceId place, int player);
+void deleteTraps(DraculaView dv, PlaceId place);
+void deleteVampire(DraculaView dv, PlaceId place);
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -211,12 +210,16 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 	int* numReturnedLocs)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedLocs = 0;
 	if (dv->data[4].turn == 0) return NULL;
-
 	Map m = MapNew();
-	ConnList connection = MapGetConnections(m, dv->data[4].first->place);
+	ConnList connection ;
+	if (placeIsReal(dv->data[4].first->place) == 0) {
+		connection = MapGetConnections(m, dv->data[4].first->next->place);
+	}
+	else {
+		connection = MapGetConnections(m, dv->data[4].first->place);
+	}
 	ConnList curr = connection;
 	PlaceId * place = NULL;
 	while (curr != NULL) {
@@ -260,7 +263,14 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 	int playernum = player;
 	if (dv->data[playernum].turn == 0) return NULL;
 	Map m = MapNew();
-	ConnList connection = MapGetConnections(m, dv->data[4].first->place);
+	ConnList connection;
+	
+	if (placeIsReal(dv->data[4].first->place) == 0) {
+		connection = MapGetConnections(m, dv->data[4].first->next->place);
+	}
+	else {
+		connection = MapGetConnections(m, dv->data[4].first->place);
+	}
 	ConnList curr = connection;
 	PlaceId * place = NULL;
 	while (curr != NULL) {
@@ -312,25 +322,8 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 // TODO
 
 //backup function
-/*
-void split(char* src, const char* separator, char** dest, int* num) {
-	char* pNext;
-	int count = 0;
-	if (src == NULL || strlen(src) == 0) 
-		return;
-	if (separator == NULL || strlen(separator) == 0)
-		return;
-	pNext = (char*)strtok(src, separator);
-	while (pNext != NULL) {
-		*dest++ = pNext;
-		++count;
-		pNext = (char*)strtok(NULL, separator);
-	}
-	*num = count;
-}
-*/
 
-void trailLoad(DraculaView dv, char * play) {
+void trailLoad(DraculaView dv, char* play) {
 
 	Player player = getPlayer(play[0]);
 	char abbrev[3];
@@ -338,47 +331,64 @@ void trailLoad(DraculaView dv, char * play) {
 	abbrev[1] = play[2];
 	abbrev[2] = '\0';
 	PlaceId place = placeAbbrevToId(abbrev);
-	if(player == PLAYER_DRACULA) {
-		bool vampire = false;
-		int trap = 0;
-		if(play[3] == 'T')
-			trap++;
-		if(play[4] == 'V')
-			vampire = true;
-		HistoryNode new = creatNode(place, vampire, trap, true);
-		dv->data[player] = addToHistory(dv->data[player], new);
+	if (player == PLAYER_DRACULA)
+		DvEvent(dv, play, place, player);
+	else
+		HvEvent(dv, play, place, player);
 
-		if (placeIsSea(place))
-			dv->data[player].health -= LIFE_LOSS_SEA;
-		/*
-		handle M
-		*/
-		if (play[6] == 'V') {
-			dv->score -= SCORE_LOSS_VAMPIRE_MATURES;
-		}
-		dv->score -= SCORE_LOSS_DRACULA_TURN;
-	} else {
-		HistoryNode new = creatNode(place, false, 0, true);
-		dv->data[player] = addToHistory(dv->data[player], new);
-		/*
-			if teleport to hospital
-		*/
-		if (play[3] == 'T') {
-			/*
-				delete that trap
-			*/
-			dv->data[player].health -= LIFE_LOSS_TRAP_ENCOUNTER ; 
+}
 
-		} 
-		if (play[3] == 'V' || play[4] == 'V') {
-			/*
-				delete that V
-			*/
-		}
-		if (play[3] == 'D' || play[4] == 'D' || play[5] == 'D') {
-			dv->data[player].health -= LIFE_LOSS_DRACULA_ENCOUNTER;
-			dv->data[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
-		}
+void DvEvent(DraculaView dv, char* play, PlaceId place, int player)
+{
+	bool vampire = false;
+	int trap = 0;
+	if (play[3] == 'T')
+		trap++;
+	if (play[4] == 'V')
+		vampire = true;
+
+	HistoryNode new = creatNode(place, vampire, trap, true);
+	dv->data[player] = addToHistory(dv->data[player], new);
+
+	if (placeIsSea(place))
+		dv->data[player].health -= LIFE_LOSS_SEA;
+	/*
+	handle M
+	*/
+	if (play[6] == 'V') {
+		dv->score -= SCORE_LOSS_VAMPIRE_MATURES;
+	}
+
+	if (place == CASTLE_DRACULA)
+		dv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
+
+	dv->score -= SCORE_LOSS_DRACULA_TURN;
+}
+
+void HvEvent(DraculaView dv, char* play, PlaceId place, int player)
+{
+	if (dv->data[player].health <= 0) 
+		dv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
+
+	HistoryNode new = creatNode(place, false, 0, true);
+	dv->data[player] = addToHistory(dv->data[player], new);
+	if (play[3] == 'T') {
+		deleteTraps(dv, place);
+		dv->data[player].health -= LIFE_LOSS_TRAP_ENCOUNTER;
+
+	}
+	if (play[3] == 'V' || play[4] == 'V') {
+		deleteVampire(dv, place);
+	}
+	if (play[3] == 'D' || play[4] == 'D' || play[5] == 'D') {
+		dv->data[player].health -= LIFE_LOSS_DRACULA_ENCOUNTER;
+		dv->data[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
+	}
+
+	if (dv->data[player].turn > 1 && dv->data[player].first->place == dv->data[player].first->next->place) {
+		dv->data[player].health += LIFE_GAIN_REST;
+		if (dv->data[player].health > GAME_START_HUNTER_LIFE_POINTS)
+			dv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
 	}
 }
 
@@ -391,77 +401,75 @@ Player getPlayer(char c){
 	else return PLAYER_DRACULA;		
 }
 
-/*
-PlaceId SetLocation(DraculaView dv, char* location)
-{
-	char place[3];
-	for (int m = 1; m < 3; m++) {
-		place[m - 1] = location[m];
+void deleteTraps(DraculaView dv, PlaceId place) {
+
+	HistoryNode curr = dv->data[PLAYER_DRACULA].first;
+	HistoryNode result = NULL;
+	for (int counter = 0; curr != NULL && counter < 5; counter++) {
+		if (curr->place == place && curr->trapNumber == 1) {
+			curr->trapNumber = 0;
+			return; 
+		}	
+		curr = curr->next;
 	}
-	place[2] = '\0';
-
-	return placeAbbrevToId(place);
-}
-
-void PastEvent(DraculaView dv, char* line, int player)
-{
-	char pevent[5];
-	for (int m = 3; m < 7; m++) {
-		pevent[m - 3] = line[m];
-	}
-	pevent[4] = '\0';
-
-	if (player != PLAYER_DRACULA) {
-		for (int i = 0; i < 4; i++) {
-			switch (pevent[i]) {
-				case 'T':
-					break;
-				case 'V':break;
-				case 'D':
-					dv->data[player].health -= 4;
-					dv->data[PLAYER_DRACULA].health -= 10;
-				case '.':break;
+	curr = dv->data[PLAYER_DRACULA].first;
+	for (int counter = 0; curr != NULL && counter < 5; counter++) {
+		if (curr->place == HIDE) {
+			if (curr->next->place == place){
+				if(curr->next->trapNumber == 1)
+					curr->next->trapNumber = 0;
+				else
+					curr->trapNumber = 0;
+				return; 
+			} else if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5) {
+				HistoryNode node = findDBCity(curr->next);
+				if (node->place == place) {
+					if (node->trapNumber == 1)
+						node->trapNumber = 0;
+					else if (curr->next->trapNumber == 1)
+						curr->trapNumber = 0;
+					else
+						curr->trapNumber = 0;
+					return; 
+				}
+			}
+		} else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
+			HistoryNode node = findDBCity(curr->next);
+			if (node->place == place) {
+				if (node->trapNumber == 1)
+					node->trapNumber = 0;
+				else
+					curr->trapNumber = 0;
+				return;
+			} else if (node->place == HIDE) {
+				if (node->next->place == place) {
+					if (node->next->trapNumber == 1)
+						node->next->trapNumber = 0;
+					else if (node->trapNumber == 1)
+						node->trapNumber = 0;
+					else
+						curr->trapNumber = 0;
+					return;
+				}
+				
 			}
 		}
-		return;
+		curr = curr->next;
 	}
 
-	for (int i = 0; i < 4; i++) {
-		switch (pevent[i]) {
-			case 'T':
-				dv->data->last->trapNumber += countTraps(dv);
-			case 'V':
-				if (i == 1);
-				if (i == 2);
-			case 'M':break;
-			case '.':break;
-		}
-	}
+	if (result != NULL)
+		result->trapNumber = 0;
 }
 
-int countTraps(DraculaView dv) {
-	PlaceId place = dv->data[PLAYER_DRACULA].last->place;
-	if (place == HIDE)
-		return getHistoryTraps(dv, 1);
-	if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5)
-		return getHistoryTraps(dv, DOUBLE_BACK_1 - 102);
-	if (place == TELEPORT)
-		return getHistoryTraps(dv, 1);
+void deleteVampire(DraculaView dv, PlaceId place) {
 
-	return 0;
-}
-
-int getHistoryTraps(DraculaView dv, int previous) {
-	HistoryNode history_node = dv->data[PLAYER_DRACULA].first;
-	for (int i = 0; i < dv->data[i].turn; i++) {
-
-		//Find the previous history node
-		if (i < dv->data[i].turn - previous) {
-			history_node = history_node->next;
-			continue;
-		}
-
-		return history_node->trapNumber;
+	HistoryNode curr = dv->data[PLAYER_DRACULA].first;
+	HistoryNode result = NULL;
+	for (int counter = 0; curr != NULL && counter < 5; counter++) {
+		if (curr->vampire && curr->place == place)
+			result = curr;
+		curr = curr->next;
 	}
-	return 0;
-}*/
+	if (result != NULL)
+		result->vampire = false;
+}
