@@ -65,3 +65,7 @@ int canDoubleBack(HistoryNode list, PlaceId place);
 bool canHide(HistoryNode list);
 
 
+
+HistoryNode findDBCity(HistoryNode node);
+
+

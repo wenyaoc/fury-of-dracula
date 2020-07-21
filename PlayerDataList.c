@@ -7,8 +7,6 @@
 #include "Map.h"
 
 
-static PlaceId findDBCity(HistoryNode node);
-
 void ListFree(HistoryNode node) {
     HistoryNode curr = node;
     HistoryNode next ;
@@ -92,7 +90,11 @@ bool canGo(HistoryNode list, PlaceId place) {
         if(curr->place == place) {
             return false;
         } else if(curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
-            if(place == findDBCity(curr)) return false;
+            HistoryNode node = findDBCity(curr);
+            if(node != NULL) {
+                if(place == node->place) 
+                    return false;
+            }
         }
         counter++;
         if(counter == 5 && curr->next != NULL) {   //if the 5th is HIDE
@@ -135,7 +137,7 @@ bool canHide(HistoryNode list){
 
 
 
-static PlaceId findDBCity(HistoryNode node) {
+HistoryNode findDBCity(HistoryNode node) {
     int DBNumber = node->place - DOUBLE_BACK_1;
     int i = 0;
     HistoryNode curr = node;
@@ -144,6 +146,6 @@ static PlaceId findDBCity(HistoryNode node) {
         curr = curr->next;
     }
     if(curr == NULL)
-        return NOWHERE;
-    return curr->place;
+        return NULL;
+    return curr;
 }
