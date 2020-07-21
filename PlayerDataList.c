@@ -1,3 +1,4 @@
+  
 #include <assert.h>
 #include <stdio.h>
 
@@ -145,7 +146,9 @@ HistoryNode findDBCity(HistoryNode node) {
         i++;
         curr = curr->next;
     }
-    if(curr == NULL)
+    if (curr == NULL)
         return NULL;
+    if (curr->place == HIDE)
+        return curr->next;
     return curr;
 }
