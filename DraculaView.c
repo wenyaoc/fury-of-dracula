@@ -23,14 +23,16 @@ struct draculaView {
 };
 
 Player getPlayer(char c);
-void split(char* src, const char* separator, char** dest, int* num);
+//void split(char* src, const char* separator, char** dest, int* num);
 void trailLoad(DraculaView dv, char * play);
 void DvEvent(DraculaView dv, char* play, PlaceId place, int player);
 void HvEvent(DraculaView dv, char* play, PlaceId place, int player);
-PlaceId SetLocation(DraculaView dv, char* location);
-void PastEvent(DraculaView dv, char* line, int player);
-int countTraps(DraculaView dv);
-int getHistoryTraps(DraculaView dv, int previous);
+//PlaceId SetLocation(DraculaView dv, char* location);
+//void PastEvent(DraculaView dv, char* line, int player);
+//int countTraps(DraculaView dv);
+//int getHistoryTraps(DraculaView dv, int previous);
+void deleteTraps(DraculaView dv, PlaceId place);
+void deleteVampire(DraculaView dv, PlaceId place);
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -391,20 +393,22 @@ void HvEvent(DraculaView dv, char* play, PlaceId place, int player)
 {
 	HistoryNode new = creatNode(place, false, 0, true);
 	dv->data[player] = addToHistory(dv->data[player], new);
-	/*
-		if teleport to hospital
-	*/
+	
+	if (dv->data[player].health <= 0) {
+		dv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
+		dv->data[player].first->place = ST_JOSEPH_AND_ST_MARY;
+	}
+
+	if (dv->data[player].first->place == dv->data[player].first->next->place)
+		dv->data[player].health += LIFE_GAIN_REST;
+		
 	if (play[3] == 'T') {
-		/*
-			delete that trap
-		*/
+		deleteTraps(dv, dv->data[player].first->place);
 		dv->data[player].health -= LIFE_LOSS_TRAP_ENCOUNTER;
 
 	}
 	if (play[3] == 'V' || play[4] == 'V') {
-		/*
-			delete that V
-		*/
+		deleteVampire(dv, dv->data[player].first->place);
 	}
 	if (play[3] == 'D' || play[4] == 'D' || play[5] == 'D') {
 		dv->data[player].health -= LIFE_LOSS_DRACULA_ENCOUNTER;
@@ -412,13 +416,38 @@ void HvEvent(DraculaView dv, char* play, PlaceId place, int player)
 	}
 }
 
-
 Player getPlayer(char c){
 	if (c == 'G') return PLAYER_LORD_GODALMING;
 	if (c == 'S') return PLAYER_DR_SEWARD;
 	if (c == 'H') return PLAYER_VAN_HELSING;
 	if (c == 'M') return PLAYER_MINA_HARKER;
 	else return PLAYER_DRACULA;		
+}
+
+void deleteTraps(DraculaView dv, PlaceId place) {
+
+	HistoryNode curr = dv->data[PLAYER_DRACULA].first;
+	HistoryNode result = NULL;
+	for (int counter = 0; curr != NULL && counter < 5 && counter < dv->round; counter++) {
+		if (curr->trapNumber > 0 && curr->place == place)
+			result = curr;
+		curr = curr->next;
+	}
+	if (result != NULL)
+		result->trapNumber--;
+}
+
+void deleteVampire(DraculaView dv, PlaceId place) {
+
+	HistoryNode curr = dv->data[PLAYER_DRACULA].first;
+	HistoryNode result = NULL;
+	for (int counter = 0; curr != NULL && counter < 5 && counter < dv->round; counter++) {
+		if (curr->vampire && curr->place == place)
+			result = curr;
+		curr = curr->next;
+	}
+	if (result != NULL)
+		result->vampire == false;
 }
 
 /*
