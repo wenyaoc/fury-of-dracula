@@ -1,3 +1,4 @@
+  
 #include <assert.h>
 #include <stdio.h>
 
@@ -106,16 +107,10 @@ bool canGo(HistoryNode list, PlaceId place) {
 }
 
 
-int canDoubleBack(HistoryNode list, PlaceId place) {
+int getDoubleBackNum(HistoryNode list, PlaceId place) {
     HistoryNode curr = list;
     int counter = 0;
-    while((curr != NULL) && counter < 5) {
-        if(curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) return 0;
-        counter++;
-        curr = curr->next;
-    }
-    curr = list;
-    counter = 0;
+    if (!canDoubleBack(list)) return 0;
     while((curr != NULL) && counter < 5) {
         if(curr->place == place) return counter + 1;
         counter++;
@@ -124,7 +119,18 @@ int canDoubleBack(HistoryNode list, PlaceId place) {
     return 0;
 }
 
-bool canHide(HistoryNode list){
+bool canDoubleBack(HistoryNode list) {
+    HistoryNode curr = list;
+    int counter = 0;
+    while((curr != NULL) && counter < 5) {
+        if(curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) return false;
+        counter++;
+        curr = curr->next;
+    }
+    return true;
+}
+
+bool canHide(HistoryNode list) {
     HistoryNode curr = list;
     int counter = 0;
     while((curr != NULL) && counter < 5) {
@@ -145,7 +151,9 @@ HistoryNode findDBCity(HistoryNode node) {
         i++;
         curr = curr->next;
     }
-    if(curr == NULL)
+    if (curr == NULL)
         return NULL;
+    if (curr->place == HIDE)
+        return curr->next;
     return curr;
 }
