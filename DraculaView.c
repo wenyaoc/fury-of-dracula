@@ -434,7 +434,7 @@ void deleteTraps(DraculaView dv, PlaceId place) {
 		curr = curr->next;
 	}
 	if (result != NULL)
-		result->trapNumber--;
+		result->trapNumber = 0;
 }
 
 void deleteVampire(DraculaView dv, PlaceId place) {
@@ -447,7 +447,7 @@ void deleteVampire(DraculaView dv, PlaceId place) {
 		curr = curr->next;
 	}
 	if (result != NULL)
-		result->vampire == false;
+		result->vampire = false;
 }
 
 /*
