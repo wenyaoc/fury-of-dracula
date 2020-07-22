@@ -70,7 +70,6 @@ int main(void)
 		};
 		
 		DraculaView dv = DvNew(trail, messages);
-
 		assert(DvGetRound(dv) == 1);
 		assert(DvGetScore(dv) == GAME_START_SCORE - SCORE_LOSS_DRACULA_TURN);
 		assert(DvGetHealth(dv, PLAYER_LORD_GODALMING) == 5);
@@ -190,7 +189,7 @@ int main(void)
 		DvFree(dv);
 	}
 
-	// extra test 2 : hunter encounters a trap 2(with HIDE)
+	// extra test 2 : hunter encounters a trap 2(with HIDE and double back)
 	{///////////////////////////////////////////////////////////////////
 	
 		printf("Test hunter encounters a trap\n");
@@ -199,13 +198,15 @@ int main(void)
 			"GGE.... SGE.... HGE.... MGE.... DSTT... "
 			"GGE.... SGE.... HGE.... MGE.... DHIT... "
 			"GGE.... SGE.... HGE.... MGE.... DCOT... "
+			"GGE.... SGE.... HGE.... MGE.... DD2T... "
+			"GSTT... SGE.... HGE.... MGE.... DNU.... "
 			"GSTT... SGE.... HGE.... MGE....";
 		
 		Message messages[24] = {};
 		DraculaView dv = DvNew(trail, messages);
 		
-		assert(DvGetScore(dv) == GAME_START_SCORE - 3 * SCORE_LOSS_DRACULA_TURN);
-		assert(DvGetHealth(dv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_TRAP_ENCOUNTER);
+		assert(DvGetScore(dv) == GAME_START_SCORE - 5 * SCORE_LOSS_DRACULA_TURN);
+		assert(DvGetHealth(dv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - 2* LIFE_LOSS_TRAP_ENCOUNTER + LIFE_GAIN_REST);
 		int numTraps = -1;
 		PlaceId *traps = DvGetTrapLocations(dv, &numTraps);
 		assert(numTraps == 2);
@@ -216,7 +217,42 @@ int main(void)
 		
 		printf("Test passed!\n");
 		DvFree(dv);
-	}
+	}/*
+	 // extra test 3 : Hunter Die
+    {///////////////////////////////////////////////////////////////////
+    
+        printf("Test hunter encounters a trap\n");
+        
+        char *trail =
+            "GGE.... SGE.... HGE.... MGE.... DST.V.. "
+            "GGE.... SGE.... HGE.... MGE.... DHIT... "
+            "GGE.... SGE.... HGE.... MGE.... DPAT... "
+            "GPATD.. SGE.... HGE.... MGE.... DBUT... "
+            "GBUTD.. SGE.... HGE.... MGE....";
+            
+        
+        Message messages[24] = {};
+        DraculaView dv = DvNew(trail, messages);
+        
+        printf("The score is : %d", DvGetScore(dv));
+        //return EXIT_SUCCESS;
+        assert(DvGetScore(dv) == GAME_START_SCORE - 4 * SCORE_LOSS_DRACULA_TURN - SCORE_LOSS_HUNTER_HOSPITAL);
+        assert(DvGetHealth(dv, PLAYER_LORD_GODALMING) == 0);
+        assert(DvGetHealth(dv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - LIFE_LOSS_HUNTER_ENCOUNTER);
+        assert(DvGetPlayerLocation(dv,PLAYER_DRACULA)== BRUSSELS);
+        assert(DvGetPlayerLocation(dv,PLAYER_LORD_GODALMING) == ST_JOSEPH_AND_ST_MARY);
+
+        int numTraps = -1;
+        PlaceId *traps = DvGetTrapLocations(dv, &numTraps);
+        assert(numTraps == 1);
+        sortPlaces(traps, numTraps);
+        assert(traps[0] == STRASBOURG);
+        free(traps);
+        
+        printf("Test passed!\n");
+        DvFree(dv);
+    }
+*/
 
 	return EXIT_SUCCESS;
 }
