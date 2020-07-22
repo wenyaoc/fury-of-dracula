@@ -56,7 +56,7 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player);
 void HvEvent(GameView gv, char* play, PlaceId place, int player);
 void deleteTraps(GameView gv, PlaceId place);
 void deleteVampire(GameView gv);
-void revealLocation(HistoryNode list, PlaceId place);
+//void revealLocation(HistoryNode list, PlaceId place);
 
 void ListFree(HistoryNode node);
 HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed);
@@ -69,6 +69,7 @@ int getDoubleBackNum(HistoryNode list, PlaceId place);
 bool canDoubleBack(HistoryNode list);
 bool canHide(HistoryNode list);
 HistoryNode findDBCity(HistoryNode DBnode);
+PlaceId * addPlace(PlaceId * place, int * num, PlaceId newPlace);
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -103,7 +104,6 @@ GameView GvNew(char *pastPlays, Message messages[])
 			trailLoad(new, play);
 		}
 	}
-
 	free(play);
 	return new;
 }
@@ -155,37 +155,42 @@ PlaceId GvGetPlayerLocation(GameView gv, Player player)
 	else {
 		HistoryNode node = gv->data[player].first;
 		if (node->place == TELEPORT) return CASTLE_DRACULA;
-
 		if (placeIsLand(node->place)) {
-			if (node->revealed == true) return node->place;
-			else return CITY_UNKNOWN;
+			//if (node->revealed == true) 
+			return node->place;
+			//else return CITY_UNKNOWN;
 		} else if (placeIsSea(node->place)){
-			if (node->revealed == true) return node->place;
-			else return SEA_UNKNOWN;
+			//if (node->revealed == true) 
+			return node->place;
+			//else return SEA_UNKNOWN;
 		} else if (node->place == HIDE) {
 			HistoryNode real = node->next;
 			if (!placeIsReal(real->place)) {
 				real = findDBCity(real);
 			}
 			if (placeIsLand(real->place)){
-				if (node->revealed == true) return real->place;
-				else return CITY_UNKNOWN;
-			} else if (placeIsSea(node->next->place)){
-				if (node->revealed == true) return real->place;
-				else return SEA_UNKNOWN;
+				//if (node->revealed == true) 
+				return real->place;
+				//else return CITY_UNKNOWN;
+			} else if (placeIsSea(node->next->place)) {
+				//if (node->revealed == true) 
+				return real->place;
+				//else return SEA_UNKNOWN;
 			}
 		} else {
 			HistoryNode real = findDBCity(node);
 			
-			if (!placeIsReal(real->place)) {
+			if (real->place == HIDE) {
 				real = real->next;
 			}
 			if (placeIsLand(real->place)) {
-				if (node->revealed == true) return real->place;
-				else return CITY_UNKNOWN;
+				//if (node->revealed == true) 
+				return real->place;
+				//else return CITY_UNKNOWN;
 			} else if (placeIsSea(node->next->place)){
-				if (node->revealed == true) return real->place;
-				else return SEA_UNKNOWN;
+				//if (node->revealed == true) 
+				return real->place;
+				//else return SEA_UNKNOWN;
 			}
 		}
 	}
@@ -247,44 +252,102 @@ PlaceId *GvGetMoveHistory(GameView gv, Player player,
                           int *numReturnedMoves, bool *canFree)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedMoves = gv->data[player].turn;
-	PlaceId * move = malloc(*numReturnedMoves * sizeof(PlaceId));
-	for (int i = *numReturnedMoves - 1; i >= 0; i++) {
-		move[i] 
-	}
-	return NULL;
+	int numMoves = gv->data[player].turn;
+	return GvGetLastMoves(gv, player, numMoves, numReturnedMoves, canFree);
 }
 
 PlaceId *GvGetLastMoves(GameView gv, Player player, int numMoves,
                         int *numReturnedMoves, bool *canFree)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedMoves = gv->data[player].turn;
-	PlaceId * move = malloc(*numReturnedMoves * sizeof(PlaceId));
-	for (int i = *numReturnedMoves - 1; i >= 0; i++) {
-		move[i] 
-	}
-	
 	*canFree = true;
-	return NULL;
+	int totalNum = gv->data[player].turn;
+	if (totalNum == 0) return NULL;
+	if (totalNum < numMoves)
+		*numReturnedMoves = totalNum;
+	else
+		*numReturnedMoves = numMoves;
+
+	PlaceId * move = malloc(*numReturnedMoves * sizeof(PlaceId));
+
+	//if (player != PLAYER_DRACULA) {
+		HistoryNode curr = gv->data[player].first;
+		for (int i = *numReturnedMoves - 1; i >= 0; i--) {
+			move[i] = curr->place;
+			curr = curr->next;
+		}
+		return move;
+/*	} else {
+		HistoryNode curr = gv->data[player].first;
+		for (int i = *numReturnedMoves - 1; i >= 0; i--) {
+			if (curr->revealed == true || curr->place == HIDE || (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5)) {
+				move[i] = curr->place;
+			} else {
+				if (placeIsLand(curr->place)) 
+					move[i] = CITY_UNKNOWN;
+				else if (placeIsSea(curr->place))
+					move[i] = SEA_UNKNOWN;
+				
+				else if (curr->place == HIDE) {
+
+					if (placeIsLand(curr->place)) 
+						move[i] = CITY_UNKNOWN;
+					else if (placeIsSea(curr->place))
+						move[i] = SEA_UNKNOWN; 
+					else if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5) {
+						HistoryNode newCurr = findDBCity(curr->next);
+						if (placeIsLand(newCurr->place)) 
+							move[i] = CITY_UNKNOWN;
+						else if (placeIsSea(newCurr->place))
+							move[i] = SEA_UNKNOWN;
+					}
+				} else {
+					HistoryNode newCurr = findDBCity(curr->next) {
+
+					}
+				}*/
+		//	}
+		//	printf("%d ", i);
+		//	curr = curr->next;
+		//}
+	//}
+	//return move;
 }
 
 PlaceId *GvGetLocationHistory(GameView gv, Player player,
                               int *numReturnedLocs, bool *canFree)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedLocs = 0;
-	*canFree = false;
-	return NULL;
+	int numLocs = gv->data[player].turn;
+	return GvGetLastLocations(gv, player, numLocs, numReturnedLocs, canFree);
 }
 
 PlaceId *GvGetLastLocations(GameView gv, Player player, int numLocs,
                             int *numReturnedLocs, bool *canFree)
 {
+	PlaceId * place = GvGetLastMoves(gv, player, numLocs, numReturnedLocs, canFree);
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedLocs = 0;
-	*canFree = false;
-	return 0;
+	HistoryNode curr = gv->data[player].first;
+	for (int i = (*numReturnedLocs - 1); i >= 0; i--) {
+		if (place[i] == HIDE) {
+			if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5) 
+				place[i] = findDBCity(curr->next)->place;
+			else
+				place[i] = curr->next->place;
+		} else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
+			HistoryNode newCurr = findDBCity(curr);
+			if (newCurr->place == HIDE) 
+				place[i] = newCurr->next->place;
+			else
+				place[i] = newCurr->place;
+		}
+		
+		if (place[i] == TELEPORT)
+			place[i] = CASTLE_DRACULA;
+
+		curr = curr->next;
+	}
+	return place;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -303,79 +366,60 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedLocs = 0;
-	if (gv->data[player].turn == 0) return NULL;
 	Map m = MapNew();
 	ConnList connection;
-
-	connection = MapGetConnections(m, from);
 	
+	connection = MapGetConnections(m, from);
 	ConnList curr = connection;
 	PlaceId * place = NULL;
+	if (curr == NULL) return NULL;
 
 	if (player == PLAYER_DRACULA) {
 		while (curr != NULL) {
-		if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
-			if (canGo(gv->data[4].first, curr->p)) {
-				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-				place[*numReturnedLocs] = curr->p;
-				*numReturnedLocs = *numReturnedLocs + 1;
+			if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
+				if (curr->p != HOSPITAL_PLACE) {
+					place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+					place[*numReturnedLocs] = curr->p;
+					*numReturnedLocs = *numReturnedLocs + 1;
+				}
 			}
-			else if (getDoubleBackNum(gv->data[4].first, curr->p) > 0) {
-				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-				place[*numReturnedLocs] = curr->p;
-				*numReturnedLocs = *numReturnedLocs + 1;
-			}
+			curr = curr->next;
 		}
-		curr = curr->next;
-		}
-		if (canHide(gv->data[4].first)) {
-			place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-			place[*numReturnedLocs] = gv->data[4].first->place;
-			*numReturnedLocs = *numReturnedLocs + 1;
-		}
+		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+		place[*numReturnedLocs] = from;
+		*numReturnedLocs = *numReturnedLocs + 1;
 
 	} else {
 		while (curr != NULL) {
 			if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
-				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-				place[*numReturnedLocs] = gv->data[player].first->place;
-				*numReturnedLocs = *numReturnedLocs + 1;
-				continue;
-			}
-			if (curr->type == RAIL && rail == true && gv->round % 4 != 0) {
-				if (round % 4 == 1) {
-					place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-					place[*numReturnedLocs] = gv->data[player].first->place;
-					*numReturnedLocs = *numReturnedLocs + 1;
-					continue;
-				}
-
-				ConnList connection2 = MapGetConnections(m, curr->p);
-				ConnList curr2 = connection2;
-				while (curr2 != NULL) {
-					if (curr2->type == RAIL) {
-						place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-						place[*numReturnedLocs] = gv->data[player].first->place;
-						*numReturnedLocs = *numReturnedLocs + 1;
-						if (round % 4 == 3) {
-							ConnList connection3 = MapGetConnections(m, curr->p);
-							ConnList curr3 = connection3;
-							while (curr3 != NULL) {
-								if (curr3->type == RAIL) {
-									place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-									place[*numReturnedLocs] = gv->data[player].first->place;
-									*numReturnedLocs = *numReturnedLocs + 1;
+				place = addPlace(place, numReturnedLocs, curr->p);
+			} else if (curr->type == RAIL && rail == true && round % 4 != 0) {
+				place = addPlace(place, numReturnedLocs, curr->p);
+				if (round % 4 > 1) {
+					ConnList connection2 = MapGetConnections(m, curr->p);
+					ConnList curr2 = connection2;
+					while (curr2 != NULL) {
+						if (curr2->type == RAIL) {
+							place = addPlace(place, numReturnedLocs, curr2->p);
+							if (round % 4 == 3) {
+								ConnList connection3 = MapGetConnections(m, curr->p);
+								ConnList curr3 = connection3;
+								while (curr3 != NULL) {
+									if (curr3->type == RAIL) {
+										place = addPlace(place, numReturnedLocs, curr3->p);
+									}
+									curr3 = curr3->next;
 								}
-								curr3 = curr3->next;
 							}
 						}
+						curr2 = curr2->next;
 					}
-					curr2 = curr2->next;
 				}
 			}
 			curr = curr->next;
 		}
 	}
+	place = addPlace(place, numReturnedLocs, from);
 	return place;
 }
 
@@ -408,9 +452,9 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 
 	HistoryNode new = creatNode(place, vampire, trap, true);
 	gv->data[player] = addToHistory(gv->data[player], new);
-	
-	if (place == CASTLE_DRACULA || place == TELEPORT)
-		gv->data[player].first->revealed = true; 
+
+	if (place >= 100)
+		gv->data[player].first->revealed = true;
 
 	if (play[5] == 'M') {
 		HistoryNode curr = gv->data[PLAYER_DRACULA].first;
@@ -430,23 +474,31 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 			gv->data[player].health -= LIFE_LOSS_SEA;
 	}
 
-	if (place == CASTLE_DRACULA)
+	if (place == CASTLE_DRACULA || place == TELEPORT) {
 		gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA ;
-	else if(place == HIDE) {
+		//gv->data[player].first->revealed = true;
+	} else if(place == HIDE) {
 		HistoryNode node = gv->data[PLAYER_DRACULA].first->next;
-		if (node->place == CASTLE_DRACULA)
+		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) {
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-		else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
-			if (findDBCity(node->next)->place == CASTLE_DRACULA) 
+			//gv->data[player].first->revealed = true;
+		} else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
+			if (findDBCity(node->next)->place == CASTLE_DRACULA || findDBCity(node->next)->place == TELEPORT) {
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
+				//gv->data[player].first->revealed = true;
+			}
+				
 		}
 	} else if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5) {
 		HistoryNode node = findDBCity(gv->data[PLAYER_DRACULA].first->next);
-		if (node->place == CASTLE_DRACULA)
+		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) {
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-		else if (node->place == HIDE) {
-			if(node->next->place == CASTLE_DRACULA)
+			//gv->data[player].first->revealed = true;
+		} else if (node->place == HIDE) {
+			if(node->next->place == CASTLE_DRACULA || node->next->place == TELEPORT) {
+				//gv->data[player].first->revealed = true;
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
+			}
 		}
 	}
 	gv->score -= SCORE_LOSS_DRACULA_TURN;
@@ -459,9 +511,6 @@ void HvEvent(GameView gv, char* play, PlaceId place, int player)
 
 	HistoryNode new = creatNode(place, false, 0, true);
 	gv->data[player] = addToHistory(gv->data[player], new);
-
-	if (place != CASTLE_DRACULA)
-		revealLocation(gv->data[PLAYER_DRACULA].first, place);
 
 	int i = 3;
 	for(i = 3; play[i] == 'T'; i++){
@@ -550,7 +599,6 @@ void deleteTraps(GameView gv, PlaceId place) {
 						curr->trapNumber = 0;
 					return;
 				}
-				
 			}
 		}
 		curr = curr->next;
@@ -571,7 +619,7 @@ void deleteVampire(GameView gv) {
 		curr = curr->next;
 	}
 }
-
+/*
 void revealLocation(HistoryNode list, PlaceId place) {
 	HistoryNode curr = list;
     int counter = 0;
@@ -607,7 +655,7 @@ void revealLocation(HistoryNode list, PlaceId place) {
         curr = curr->next;
     }
 }
-
+*/
 
 void ListFree(HistoryNode node) {
     HistoryNode curr = node;
@@ -682,7 +730,8 @@ HistoryNode getLastN(playerData data, int n){
 }
 
 bool canGo(HistoryNode list, PlaceId place) {
-    if(list == NULL) return true;
+    if (list == NULL) return true;
+	if (place == HOSPITAL_PLACE) return false;
     HistoryNode curr = list;
     int counter = 0;
     while((curr != NULL) && counter < 5) {
@@ -754,4 +803,14 @@ HistoryNode findDBCity(HistoryNode DBnode) {
     if (curr->place == HIDE)
         return curr->next;
     return curr;
+}
+
+PlaceId * addPlace(PlaceId * place, int * num, PlaceId newPlace) {
+	for(int i = 0; i < *num; i++) {
+		if(place[i] == newPlace) return place;
+	}
+	place = realloc(place, (*num + 1) * sizeof(PlaceId));
+	place[*num] = newPlace;
+	*num = *num + 1;
+	return place;
 }
