@@ -220,7 +220,7 @@ int main(void)
     // extra test 3 : Hunter Die
     {///////////////////////////////////////////////////////////////////
     
-        printf("Test 3\n");
+        printf("Test Hunter Die\n");
         
         char *trail =
             "GGE.... SGE.... HGE.... MGE.... DST.V.. "
@@ -374,16 +374,68 @@ int main(void)
         DraculaView dv = DvNew(trail, messages);
         
         //return EXIT_SUCCESS;
-        assert(DvGetScore(dv) == GAME_START_SCORE - 4 * SCORE_LOSS_DRACULA_TURN);
-        assert(DvGetHealth(dv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - 2*LIFE_LOSS_SEA);
-        assert(DvGetPlayerLocation(dv,PLAYER_DRACULA)== NORTH_SEA);
+
+        assert(DvGetScore(dv) == GAME_START_SCORE - 7 * SCORE_LOSS_DRACULA_TURN - SCORE_LOSS_VAMPIRE_MATURES);
+        assert(DvGetHealth(dv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - LIFE_LOSS_SEA + LIFE_GAIN_CASTLE_DRACULA);
+        assert(DvGetPlayerLocation(dv,PLAYER_DRACULA)== CASTLE_DRACULA);
 
         int numTraps = -1;
         PlaceId *traps = DvGetTrapLocations(dv, &numTraps);
-        assert(numTraps == 1);
+        assert(numTraps == 5);
         sortPlaces(traps, numTraps);
-        assert(traps[0] == EDINBURGH);
-        assert(DvGetVampireLocation(dv) == AMSTERDAM);
+        assert(traps[0] == DUBLIN);
+        assert(traps[1] == DUBLIN);
+        assert(traps[2] == DUBLIN);
+        assert(traps[3] == GALWAY);
+        assert(traps[4] == SWANSEA);
+        
+       
+        assert(DvGetVampireLocation(dv) == NOWHERE);
+        free(traps);
+        
+        printf("Test passed!\n");
+        DvFree(dv);
+    }
+
+     // extra test 8 : Dracula trap vanishes
+    {///////////////////////////////////////////////////////////////////
+    
+        printf("Test 8\n");
+        
+        char *trail =
+           "GGE.... SGE.... HGE.... MGE.... DED.V.. "
+           "GST.... SST.... HST.... MST.... DMNT... "
+           "GGE.... SGE.... HGE.... MGE.... DLOT... "
+           "GST.... SST.... HST.... MST.... DSWT... "
+           "GGE.... SGE.... HGE.... MGE.... DLVT... "
+           "GST.... SST.... HST.... MST.... DIR.... "
+           "GGE.... SGE.... HGE.... MGE.... DDUT.V. "
+           "GST.... SST.... HST.... MST.... DGWT.M. "
+           "GGE.... SGE.... HGE.... MGE.... DHIT.M. "
+           "GST.... SST.... HST.... MST....";
+			
+        
+        Message messages[24] = {};
+        DraculaView dv = DvNew(trail, messages);
+        
+        //return EXIT_SUCCESS;
+
+        assert(DvGetScore(dv) == GAME_START_SCORE - 9 * SCORE_LOSS_DRACULA_TURN - SCORE_LOSS_VAMPIRE_MATURES);
+        assert(DvGetHealth(dv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - LIFE_LOSS_SEA);
+        assert(DvGetPlayerLocation(dv,PLAYER_DRACULA)== GALWAY);
+
+        int numTraps = -1;
+        PlaceId *traps = DvGetTrapLocations(dv, &numTraps);
+        assert(numTraps == 5);
+        sortPlaces(traps, numTraps);
+        assert(traps[0] == DUBLIN);
+        assert(traps[1] == GALWAY);
+        assert(traps[2] == GALWAY);
+        assert(traps[3] == LIVERPOOL);
+        assert(traps[4] == SWANSEA);
+        
+       
+        assert(DvGetVampireLocation(dv) == NOWHERE);
         free(traps);
         
         printf("Test passed!\n");
