@@ -453,7 +453,7 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 	HistoryNode new = creatNode(place, vampire, trap, true);
 	gv->data[player] = addToHistory(gv->data[player], new);
 
-	if (place >= 100)
+	if (place < 100)
 		gv->data[player].first->revealed = true;
 
 	if (play[5] == 'M') {
