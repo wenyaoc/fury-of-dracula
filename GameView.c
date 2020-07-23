@@ -469,7 +469,7 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 	if (placeIsSea(place))
 		gv->data[player].health -= LIFE_LOSS_SEA;
 	else if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5) {
-		HistoryNode node = findDBCity(gv->data[PLAYER_DRACULA].first->next);
+		HistoryNode node = findDBCity(gv->data[PLAYER_DRACULA].first);
 		if (placeIsSea(node->place))
 			gv->data[player].health -= LIFE_LOSS_SEA;
 	}
@@ -483,14 +483,14 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
 			//gv->data[player].first->revealed = true;
 		} else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
-			if (findDBCity(node->next)->place == CASTLE_DRACULA || findDBCity(node->next)->place == TELEPORT) {
+			if (findDBCity(node)->place == CASTLE_DRACULA || findDBCity(node)->place == TELEPORT) {
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
 				//gv->data[player].first->revealed = true;
 			}
 				
 		}
 	} else if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5) {
-		HistoryNode node = findDBCity(gv->data[PLAYER_DRACULA].first->next);
+		HistoryNode node = findDBCity(gv->data[PLAYER_DRACULA].first);
 		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) {
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
 			//gv->data[player].first->revealed = true;
@@ -800,8 +800,6 @@ HistoryNode findDBCity(HistoryNode DBnode) {
 		//printf("%s\n",placeIdToName(curr->place));
         curr = curr->next;
     }
-    if (curr->place == HIDE)
-        return curr->next;
     return curr;
 }
 
