@@ -25,8 +25,9 @@
 
 struct hunterView {
 	// TODO: ADD FIELDS HERE
-	Round round;
-	int score;
+	//Round round;
+	//int score;
+	GameView gv;
 
 };
 
@@ -42,12 +43,15 @@ HunterView HvNew(char *pastPlays, Message messages[])
 		exit(EXIT_FAILURE);
 	}
 
+	new->gv = GvNew(pastPlays, messages)
+
 	return new;
 }
 
 void HvFree(HunterView hv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+	GvFree(hv->gv);
 	free(hv);
 }
 
@@ -57,7 +61,7 @@ void HvFree(HunterView hv)
 Round HvGetRound(HunterView hv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return 0;
+	return GvGetRound(hv->gv);
 }
 
 Player HvGetPlayer(HunterView hv)
@@ -69,25 +73,25 @@ Player HvGetPlayer(HunterView hv)
 int HvGetScore(HunterView hv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return 0;
+	return GvGetScore(hv->gv);
 }
 
 int HvGetHealth(HunterView hv, Player player)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return 0;
+	return GvGetHealth(hv->gv, player);
 }
 
 PlaceId HvGetPlayerLocation(HunterView hv, Player player)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return NOWHERE;
+	return GvGetPlayerLocation(hv->gv, player);
 }
 
 PlaceId HvGetVampireLocation(HunterView hv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return NOWHERE;
+	return GvGetVampireLocation(hv->gv);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -114,8 +118,8 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 PlaceId *HvWhereCanIGo(HunterView hv, int *numReturnedLocs)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedLocs = 0;
-	return NULL;
+	//*numReturnedLocs = 0;
+	return DvWhereCanIGoByType(hv, true, true, numReturnedLocs);
 }
 
 PlaceId *HvWhereCanIGoByType(HunterView hv, bool road, bool rail,
