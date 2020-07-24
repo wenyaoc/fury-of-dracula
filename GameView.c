@@ -67,10 +67,6 @@ HistoryNode copyNode(HistoryNode prevNode);
 playerData addToHistory(playerData data, HistoryNode newNode);
 HistoryNode addToTail(HistoryNode list, HistoryNode newNode);
 HistoryNode getLastN(playerData data, int n);
-bool canGo(HistoryNode list, PlaceId place);
-int getDoubleBackNum(HistoryNode list, PlaceId place);
-bool canDoubleBack(HistoryNode list);
-bool canHide(HistoryNode list);
 HistoryNode findDBCity(HistoryNode DBnode);
 PlaceId * addPlace(PlaceId * place, int * num, PlaceId newPlace);
 ////////////////////////////////////////////////////////////////////////
@@ -807,71 +803,14 @@ HistoryNode getLastN(playerData data, int n){
     return newHead;
 }
 
-bool canGo(HistoryNode list, PlaceId place) {
-    if (list == NULL) return true;
-	if (place == HOSPITAL_PLACE) return false;
-    HistoryNode curr = list;
-    int counter = 0;
-    while((curr != NULL) && counter < 5) {
-        if(curr->place == place) {
-            return false;
-        } else if(curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
-            HistoryNode node = findDBCity(curr);
-            if(node != NULL) {
-                if(place == node->place) 
-                    return false;
-            }
-        }
-        counter++;
-        if(counter == 5 && curr->next != NULL) {   //if the 5th is HIDE
-            if(curr->place == HIDE && curr->next->place == place) return false;
-        }
-        curr = curr->next;
-    }
-    return true;
-}
-
-
-int getDoubleBackNum(HistoryNode list, PlaceId place) {
-    HistoryNode curr = list;
-    int counter = 0;
-    if (!canDoubleBack(list)) return 0;
-    while((curr != NULL) && counter < 5) {
-        if(curr->place == place) return counter + 1;
-        counter++;
-        curr = curr->next;
-    }
-    return 0;
-}
-
-bool canDoubleBack(HistoryNode list) {
-    HistoryNode curr = list;
-    int counter = 0;
-    while((curr != NULL) && counter < 5) {
-        if(curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) return false;
-        counter++;
-        curr = curr->next;
-    }
-    return true;
-}
-
-bool canHide(HistoryNode list) {
-    HistoryNode curr = list;
-    int counter = 0;
-    while((curr != NULL) && counter < 5) {
-        if(curr->place == HIDE) return false;
-        counter++;
-        curr = curr->next;
-    }
-    return true;
-}
-
 HistoryNode findDBCity(HistoryNode DBnode) {
     int DBNumber = DBnode->place - DOUBLE_BACK_1;
     int i = 0;
     HistoryNode curr = DBnode;
+		//printf("%d %d", node->place, node->next->place);
     while (curr != NULL && i <= DBNumber) {
         i++;
+		//printf("%s\n",placeIdToName(curr->place));
         curr = curr->next;
     }
 
