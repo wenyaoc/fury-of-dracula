@@ -19,9 +19,9 @@ Boyu Cai - Wenyao Chen - Ziyi Shao - Kexin Tian<br> <br>
 **zID:** z5183721<br> 
 **tutorial code:** W15B<br> 
 <br> 
-**GitHub username:** <br> 
-**real name:** <br> 
-**zID:**<br> 
+**GitHub username:** ZiyiShao<br> 
+**real name:** Ziyi Shao<br> 
+**zID:** z5174796<br> 
 **tutorial code:** W15B<br> 
 <br> 
 **GitHub username:** <br> 
