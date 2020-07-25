@@ -20,6 +20,7 @@
 #include "Map.h"
 #include "Places.h"
 // add your own #includes here
+#include "DraculaView.h"
 
 // TODO: ADD YOUR OWN STRUCTS HERE
 
@@ -67,7 +68,7 @@ Round HvGetRound(HunterView hv)
 Player HvGetPlayer(HunterView hv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return PLAYER_LORD_GODALMING;
+	return GvGetPlayer(hv->gv);
 }
 
 int HvGetScore(HunterView hv)
@@ -118,8 +119,8 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 PlaceId *HvWhereCanIGo(HunterView hv, int *numReturnedLocs)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	//*numReturnedLocs = 0;
-	return DvWhereCanIGoByType(hv, true, true, numReturnedLocs);
+
+	return HvWhereCanIGoByType(hv, true, true, true, numReturnedLocs);
 }
 
 PlaceId *HvWhereCanIGoByType(HunterView hv, bool road, bool rail,
@@ -127,15 +128,31 @@ PlaceId *HvWhereCanIGoByType(HunterView hv, bool road, bool rail,
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedLocs = 0;
-	return NULL;
+	PlaceId lastLocation = GvGetPlayerLocation(hv->gv, PLAYER_DRACULA);
+	if (lastLocation == NOWHERE) 
+		return NULL;
+
+	Map m = MapNew();
+	ConnList connection = MapGetConnections(m, lastLocation);
+	ConnList curr = connection;
+	PlaceId* place = NULL;
+	while (curr != NULL) {
+		if((curr->type == ROAD && road) || (curr->type == BOAT && boat) ||(curr->type == RAIL && rail)) {
+			place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+			place[*numReturnedLocs] = curr->p;
+			*numReturnedLocs = *numReturnedLocs + 1;
+		}
+		curr = curr->next;
+	}
+
+	return place;
 }
 
 PlaceId *HvWhereCanTheyGo(HunterView hv, Player player,
                           int *numReturnedLocs)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedLocs = 0;
-	return NULL;
+	return HvWhereCanTheyGoByType(hv, player, true, true, true, numReturnedLocs);
 }
 
 PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
@@ -143,7 +160,15 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
                                 int *numReturnedLocs)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	*numReturnedLocs = 0;
+	if (player == PLAYER_DRACULA) {
+		return DvWhereCanIGoByType(dv, road, boat, numReturnedLocs);
+	}else {
+		return HvWhereCanIGoByType(hv, road, rail, boat, numReturnedLocs)
+	}
+	/*PlaceId lastLocation = GvGetPlayerLocation(dv->gv, player);
+	if (lastLocation == NOWHERE)
+		return NULL;*/
+
 	return NULL;
 }
 
