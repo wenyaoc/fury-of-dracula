@@ -285,41 +285,7 @@ PlaceId* GvGetLastMoves(GameView gv, Player player, int numMoves,
 		curr = curr->next;
 	}
 	return move;
-	/*	} else {
-			HistoryNode curr = gv->data[player].first;
-			for (int counter = *numReturnedMoves - 1; counter >= 0; counter--) {
-				if (curr->revealed == true || curr->place == HIDE || (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5)) {
-					move[counter] = curr->place;
-				} else {
-					if (placeIsLand(curr->place))
-						move[counter] = CITY_UNKNOWN;
-					else if (placeIsSea(curr->place))
-						move[counter] = SEA_UNKNOWN;
 
-					else if (curr->place == HIDE) {
-
-						if (placeIsLand(curr->place))
-							move[counter] = CITY_UNKNOWN;
-						else if (placeIsSea(curr->place))
-							move[counter] = SEA_UNKNOWN;
-						else if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5) {
-							HistoryNode newCurr = findDBCity(curr->next);
-							if (placeIsLand(newCurr->place))
-								move[counter] = CITY_UNKNOWN;
-							else if (placeIsSea(newCurr->place))
-								move[counter] = SEA_UNKNOWN;
-						}
-					} else {
-						HistoryNode newCurr = findDBCity(curr->next) {
-
-						}
-					}*/
-					//	}
-					//	printf("%d ", counter);
-					//	curr = curr->next;
-					//}
-				//}
-				//return move;
 }
 
 PlaceId *GvGetLocationHistory(GameView gv, Player player,
@@ -399,19 +365,20 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 		*numReturnedLocs = *numReturnedLocs + 1;
 
 	} else {
+		int num = round + player;
 		while (curr != NULL) {
 			if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
 				place = addPlace(place, numReturnedLocs, curr->p);
-			} else if (curr->type == RAIL && rail == true && round % 4 != 0) {
+			} else if (curr->type == RAIL && rail == true && num % 4 != 0) {
 				place = addPlace(place, numReturnedLocs, curr->p);
-				if (round % 4 > 1) {
+				if (num % 4 > 1) {
 					ConnList connection2 = MapGetConnections(m, curr->p);
 					ConnList curr2 = connection2;
 					while (curr2 != NULL) {
 						if (curr2->type == RAIL) {
 							place = addPlace(place, numReturnedLocs, curr2->p);
-							if (round % 4 == 3) {
-								ConnList connection3 = MapGetConnections(m, curr->p);
+							if (num % 4 == 3) {
+								ConnList connection3 = MapGetConnections(m, curr2->p);
 								ConnList curr3 = connection3;
 								while (curr3 != NULL) {
 									if (curr3->type == RAIL) {

@@ -34,8 +34,8 @@ bool canGo(DraculaView dv, PlaceId place);
 int getDoubleBackNum(DraculaView dv, PlaceId place);
 bool canDoubleBack(DraculaView dv);
 bool canHide(DraculaView dv);
-bool UniqueLocation(PlaceId* list, PlaceId place, int num);
-PlaceId* MapGetLocation(Map m, ConnList connection, PlaceId p, PlaceId* pastLocation, int pastNum, int num, int* count);
+//bool UniqueLocation(PlaceId* list, PlaceId place, int num);
+//PlaceId* MapGetLocation(Map m, ConnList connection, PlaceId p, PlaceId* pastLocation, int pastNum, int num, int* count);
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -214,94 +214,13 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 		return DvWhereCanIGoByType(dv, road, boat, numReturnedLocs);
 
 	PlaceId lastLocation = GvGetPlayerLocation(dv->gv, player);
-	if (lastLocation == NOWHERE)
-		return NULL;
+	if (lastLocation == NOWHERE) return NULL;
 
-	int sum = GvGetRound(dv->gv) + 1 + player;
-	Map m = MapNew();
-	ConnList connection = MapGetConnections(m, lastLocation);
-	ConnList curr = connection;
-	PlaceId * place = NULL;
-
-	if (placeIsReal(lastLocation) && UniqueLocation(place, lastLocation, *numReturnedLocs)) {
-		//printf("<-0->Add Location: %s\n", placeIdToName(lastLocation));
-		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-		place[*numReturnedLocs] = lastLocation;
-		*numReturnedLocs = *numReturnedLocs + 1;
-	}
-
-	//printf("The new connection\n");
-	while (curr != NULL) {
-		//printf("The curr is : %s, The type is : %s\n", placeIdToName(curr->p), transportTypeToString(curr->type));
-		if (curr->type == RAIL && rail && sum % 4 > 0) {
-			for (int i = sum % 4 - 1; i > 0; i--) {
-				int numoflocs = 0;
-				PlaceId* new_place = MapGetLocation(m, curr, curr->p, place, *numReturnedLocs, i - 1, &numoflocs);
-				if (new_place == NULL && UniqueLocation(place, curr->p, *numReturnedLocs)) {
-					//printf("<-1->Add Location: %s\n", placeIdToName(curr->p));
-					place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-					place[*numReturnedLocs] = curr->p;
-					*numReturnedLocs = *numReturnedLocs + 1;
-					break;
-				}
-
-				//printf("num of locs in Rail : %d\n", numoflocs);
-
-				place = realloc(place, (*numReturnedLocs + numoflocs) * sizeof(PlaceId));
-				for (int j = *numReturnedLocs; j < *numReturnedLocs + numoflocs; j++) {
-					if (UniqueLocation(place, new_place[j - *numReturnedLocs], j)) {
-						place[j] = new_place[j - *numReturnedLocs];
-						//printf("<-2->Add Location: %s\n", placeIdToName(place[j]));
-					}
-				}
-				*numReturnedLocs = *numReturnedLocs + numoflocs;
-
-				free(new_place);
-			}
-		}
-		else if (((curr->type == ROAD && road) || (curr->type == BOAT && boat)) && UniqueLocation(place, curr->p, *numReturnedLocs)) {
-			//printf("<-3->Add Location: %s\n", placeIdToName(curr->p));
-			place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-			place[*numReturnedLocs] = curr->p;
-			*numReturnedLocs = *numReturnedLocs + 1;
-		}
-
-		/*
-		else if (curr->type == RAIL && rail == true && GvGetRound(dv->gv) % 4 != 0) {
-			if (GvGetRound(dv->gv) % 4 == 1) {
-				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-				place[*numReturnedLocs] = lastLocation;
-				*numReturnedLocs = *numReturnedLocs + 1;
-			}
-			else {
-				ConnList connection2 = MapGetConnections(m, curr->p);
-				ConnList curr2 = connection2;
-				while (curr2 != NULL) {
-					if (curr2->type == RAIL) {
-						place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-						place[*numReturnedLocs] = lastLocation;
-						*numReturnedLocs = *numReturnedLocs + 1;
-						if (GvGetRound(dv->gv) % 4 == 3) {
-							ConnList connection3 = MapGetConnections(m, curr->p);
-							ConnList curr3 = connection3;
-							while (curr3 != NULL) {
-								if (curr3->type == RAIL) {
-									place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-									place[*numReturnedLocs] = lastLocation;
-									*numReturnedLocs = *numReturnedLocs + 1;
-								}
-								curr3 = curr3->next;
-							}
-						}
-					}
-					curr2 = curr2->next;
-				}
-			}
-		}*/
-		curr = curr->next;
-	}
-
-	return place;
+	Player currPlayer = GvGetPlayer(dv->gv);
+	if (currPlayer < player)
+		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv), lastLocation, road, rail, boat, numReturnedLocs);
+	else
+		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv) + 1, lastLocation, road, rail, boat, numReturnedLocs);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -382,7 +301,7 @@ bool canHide(DraculaView dv) {
 	}
 	return true;
 }
-
+/*
 bool UniqueLocation(PlaceId* list, PlaceId place, int num)
 {
 	if (list == NULL) return true;
@@ -433,10 +352,11 @@ PlaceId* MapGetLocation(Map m, ConnList connection, PlaceId p, PlaceId* pastLoca
 		}
 		curr = curr->next;
 	}
-	/*
-	for (int i = 0; i < *count; i++) {
-		printf("<-Check Push-> %s\n", placeIdToName(place[i]));
-	}*/
+	
+	//for (int i = 0; i < *count; i++) {
+	//	printf("<-Check Push-> %s\n", placeIdToName(place[i]));
+	//}
 
 	return place;
 }
+*/
