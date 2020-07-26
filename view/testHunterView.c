@@ -547,7 +547,7 @@ int main(void)
 			"GPATD.. SGE.... HGE.... MGE.... DBUT... "
 			"GBUTD.. SGE.... HGE.... MGE.... DCOT...";
 		
-		Message messages[24] = {};
+		Message messages[16] = {};
 		HunterView hv = HvNew(trail, messages);
 		
 		{
@@ -595,9 +595,66 @@ int main(void)
 			assert(path[4] == CONSTANTA);
 			free(path);
 		}
-
 		HvFree(hv);
 		printf("Test passed!\n");
+	}
+
+	// extra test 3
+	// test last known location when dracula was teleport
+	{///////////////////////////////////////////////////////////////////
+	
+		printf("Testing Dracula's last known location 2\n");
+		
+		char *trail =
+			"GSW.... SLS.... HMR.... MHA.... DSJ.V.. "
+			"GLO.... SAL.... HCO.... MBR.... DBET... "
+			"GED.... SBO.... HLI.... MPR.... DKLT... "
+			"GLV.... SNA.... HNU.... MBD.... DCDT... "
+			"GIR.... SPA.... HPR.... MKLT... DHIT... "
+			"GAO.... SST.... HSZ.... MCDTTD. DGAT... "
+			"GMS.... SFL.... HKL.... MSZ.... DCNT.V. "
+			"GTS.... SRO.... HBC.... MCNTD.. DBS..M. "
+			"GIO.... SBI.... HCN.... MCN.... DIO.... "
+			"GIO.... SAS.... HBS.... MCN.... DTS.... "
+			"GTS.... SAS.... HIO.... MBS.... DMS.... "
+			"GMS.... SIO.... HTS.... MIO.... DAO..M. "
+			"GAO.... STS.... HMS.... MTS.... DNS.... "
+			"GBB.... SMS.... HAO.... MMS.... DED.V.. "
+			"GNA.... SAO.... HEC.... MAO.... DMNT... "
+			"GBO.... SIR.... HLE.... MEC.... DD2T... "
+			"GSR.... SDU.... HBU.... MPL.... DHIT... "
+			"GSN.... SIR.... HAM.... MLO.... DTPT... ";
+	
+		Message messages[72] = {};
+		HunterView hv = HvNew(trail, messages);
+		
+		assert(HvGetPlayerLocation(hv, PLAYER_DRACULA) == CASTLE_DRACULA);
+		Round round = -1;
+		assert(HvGetLastKnownDraculaLocation(hv, &round) == CASTLE_DRACULA);
+		assert(round == 17);
+		HvFree(hv);
+        printf("Test passed!\n");
+	}
+
+
+	// extra test 3
+	// test last known location when no place is revealed
+	{///////////////////////////////////////////////////////////////////
+	
+		printf("Testing Dracula's last known location 3\n");
+		
+		char *trail =
+			"GSW.... SLS.... HMR.... MHA.... DC?.V.. ";
+	
+		Message messages[4] = {};
+		HunterView hv = HvNew(trail, messages);
+		
+		assert(HvGetPlayerLocation(hv, PLAYER_DRACULA) == CITY_UNKNOWN);
+		Round round = -1;
+		assert(HvGetLastKnownDraculaLocation(hv, &round) == NOWHERE);
+		assert(round == -1);
+		HvFree(hv);
+        printf("Test passed!\n");
 	}
 
 	return EXIT_SUCCESS;
