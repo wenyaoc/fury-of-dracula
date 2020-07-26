@@ -425,3 +425,79 @@ int QueueIsEmpty (Queue Q)
 {
 	return (Q->head == NULL);
 }
+<<<<<<< HEAD
+=======
+/*
+Graph newGraph(int nV)
+{
+	assert(nV > 0);
+	int **e = malloc(nV * sizeof(int *));
+	assert(e != NULL);
+	for (int i = 0; i < nV; i++) {
+		e[i] = calloc(nV, sizeof(int));
+		assert(e[i] != NULL);
+	}
+	Graph g = malloc(sizeof(*g));
+	assert(g != NULL);
+	g->nV = nV;  g->nE = 0;  g->edges = e;
+	return g;
+}
+
+void  insertE(Graph g, int v, int w)
+{
+	assert(g != NULL);
+	assert(validV(g,v) && validV(g,w));
+	if (g->edges[v][w]) return;
+	g->edges[v][w] = 1;
+	g->edges[w][v] = 1;
+}
+
+// delete an edge
+void  removeE(Graph g, int v, int w)
+{
+	assert(g != NULL);
+	assert(validV(g,v) && validV(g,w));
+	if (!g->edges[v][w]) return;
+	g->edges[v][w] = 0;
+	g->edges[w][v] = 0;
+}
+
+void dropGraph(Graph g)
+{
+	assert(g != NULL);
+	for (int i = 0; i < g->nV; i++)
+		free(g->edges[i]);
+	free(g->edges);
+}
+
+bool adjacent(Graph g, int v, int w)
+{
+	assert(validV(g,v) && validV(g,w));
+	return (g->edges[v][w] != 0);
+}
+
+int validV(Graph g, int v)
+{
+	return (g != NULL && v >= 0 && v < g->nV);
+}
+
+void show(Graph g)
+{
+	assert(g != NULL);
+	printf("Graph has V=%d and E=%d\n",g->nV,g->nE);
+	printf("V    Connected to\n");
+	printf("--   ------------\n");
+	
+	int v, w;
+	for (v = 0; v < g->nV; v++) {
+		printf("%-3s ",placeIdToName(v));
+		for (w = 0; w < g->nV; w++) {
+			if (adjacent(g,v,w)) printf(" %s",placeIdToName(w));
+		}
+		printf("\n");
+	}
+}
+
+*/
+
+>>>>>>> 4573481f2b069ad1894ed969b0a9432cb54cd28b
