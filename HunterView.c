@@ -38,20 +38,18 @@ struct QueueRep {
 	QueueNode *head; // ptr to first node
 	QueueNode *tail; // ptr to last node
 };
-/*
 
-typedef struct GraphRep *Graph;
+typedef struct ShortestPath {
+	PlaceId src;
+	int * dist;
+	int * pred;
+} ShortestPath;
 
-struct GraphRep {
-   int   nV;    // #vertices
-   int   nE;    // #edges
-   int **edges; // matrix of 0/1
-};
-*/
+
 struct hunterView {
 	// TODO: ADD FIELDS HERE
 	GameView gv;
-	//Graph graph;
+	ShortestPath path[4];
 };
 
 
@@ -62,19 +60,10 @@ bool canHide(HunterView hv);
 
 Queue newQueue (void);			// create new empty queue
 void dropQueue (Queue Q);			// free memory used by queue
-void showQueue (Queue Q);			// display as 3 > 5 > 4 > ...
 void QueueJoin (Queue Q, int it);	// add int on queue
 int QueueLeave (Queue Q);		// remove item from queue
 int QueueIsEmpty (Queue Q);		// check for no items
-/*
-Graph newGraph(int nV);
-void  insertE(Graph g, int v, int w);
-void  removeE(Graph g, int v, int w);
-void dropGraph(Graph g);
-bool adjacent(Graph g, int v, int w);
-int validV(Graph g, int v);
-void show(Graph g);
-*/
+
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -87,21 +76,11 @@ HunterView HvNew(char *pastPlays, Message messages[])
 		exit(EXIT_FAILURE);
 	}
 	new->gv = GvNew(pastPlays, messages);
-	//new->graph = newGraph(MAX_REAL_PLACE + 1);
-
-	/*
-	ConnList connection;
-
-	for (int i = 0; i <= MAX_REAL_PLACE; i++) {
-		connection = MapGetConnections(m, i);
-		ConnList curr = connection;
-		while (curr != NULL) {
-			insertE(new->graph, i, curr->p);
-			curr = curr->next;
-		}
+	for (int i = 0; i < 4; i++) {
+		new->path[i].src = NOWHERE;
+		new->path[i].dist = NULL;
+		new->path[i].pred = NULL;
 	}
-	//show(new->graph);
-	*/
 	return new;
 }
 
@@ -192,46 +171,54 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 		path[0] = src;
 		return path;
 	}
-	Round round = HvGetRound(hv);
-	int dist[MAX_REAL_PLACE + 1];
-	int pred[MAX_REAL_PLACE + 1];
-	*pathLength = 0;
+	int w;
+	if (src != hv->path[hunter].src) {
+		hv->path[hunter].src = src;
+		Round round = HvGetRound(hv);
+		int * dist = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+		int * pred = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+		*pathLength = 0;
 
-	for (int i = 0; i < MAX_REAL_PLACE + 1; i++) {
-		dist[i] = INT_MAX;
-		pred[i] = -1;
-	}
-	Queue q = newQueue();
-	dist[src] = 0;
-	pred[src] = src;
-	QueueJoin(q, src);
-	int w, v;
-	while (!QueueIsEmpty(q)) {
-		w = QueueLeave(q);
-		//printf("%s  %d\n", placeIdToName(w), round + dist[w]);
-		int numReturnedLocs;
-		PlaceId * reachable = GvGetReachable(hv->gv, hunter, round + dist[w], w, &numReturnedLocs);
-		for (int i = 0; i < numReturnedLocs; i++) {
-			v = reachable[i];
-			if (w != v && pred[v] == -1) {
-				//printf("%d, %s\n", i, placeIdToName(v));
-				pred[v] = w;
-				dist[v] = dist[w] + 1;
-				QueueJoin(q, v);
-			}
+		for (int i = 0; i < MAX_REAL_PLACE + 1; i++) {
+			dist[i] = INT_MAX;
+			pred[i] = -1;
 		}
-		free(reachable);
-	}
-	dropQueue(q);
-	*pathLength = 0;
+		Queue q = newQueue();
+		dist[src] = 0;
+		pred[src] = src;
+		QueueJoin(q, src);
+		int v;
+		while (!QueueIsEmpty(q)) {
+			w = QueueLeave(q);
+			int numReturnedLocs;
+			PlaceId * reachable = GvGetReachable(hv->gv, hunter, round + dist[w], w, &numReturnedLocs);
+			for (int i = 0; i < numReturnedLocs; i++) {
+				v = reachable[i];
+				if (w != v && pred[v] == -1) {
+					pred[v] = w;
+					dist[v] = dist[w] + 1;
+					QueueJoin(q, v);
+				}
+			}
+			free(reachable);
+		}
+		dropQueue(q);
 
-	*pathLength = dist[dest];
+		if (hv->path[hunter].src != NOWHERE) {
+			free(hv->path[hunter].dist);
+			free(hv->path[hunter].pred);
+			hv->path[hunter].dist = dist;
+			hv->path[hunter].pred = pred;
+		}
+	} 
+
+	*pathLength = hv->path[hunter].dist[dest];
 	path = malloc((*pathLength) * sizeof(PlaceId));
 	w = dest;
-	path[dist[dest] - 1] = dest;
-	for (int i = dist[dest] - 2; i >= 0; i--) {
-		path[i] = pred[w];
-		w = pred[w];
+	path[*pathLength - 1] = dest;
+	for (int i = *pathLength - 2; i >= 0; i--) {
+		path[i] = hv->path[hunter].pred[w];
+		w = hv->path[hunter].pred[w];
 	}
 
 	return path;
@@ -401,20 +388,7 @@ void dropQueue (Queue Q)
 	}
 	free (Q);
 }
-/*
-// display as 3 > 5 > 4 > ...
-void showQueue (Queue Q)
-{
-	assert (Q != NULL);
 
-	for (QueueNode *curr = Q->head; curr != NULL; curr = curr->next) {
-		ItemShow (curr->value);
-		if (curr->next != NULL)
-			printf (">");
-	}
-	printf ("\n");
-}
-*/
 // add item at end of Queue
 void QueueJoin (Queue Q, int it)
 {
@@ -451,74 +425,3 @@ int QueueIsEmpty (Queue Q)
 {
 	return (Q->head == NULL);
 }
-/*
-Graph newGraph(int nV)
-{
-	assert(nV > 0);
-	int **e = malloc(nV * sizeof(int *));
-	assert(e != NULL);
-	for (int i = 0; i < nV; i++) {
-		e[i] = calloc(nV, sizeof(int));
-		assert(e[i] != NULL);
-	}
-	Graph g = malloc(sizeof(*g));
-	assert(g != NULL);
-	g->nV = nV;  g->nE = 0;  g->edges = e;
-	return g;
-}
-
-void  insertE(Graph g, int v, int w)
-{
-	assert(g != NULL);
-	assert(validV(g,v) && validV(g,w));
-	if (g->edges[v][w]) return;
-	g->edges[v][w] = 1;
-	g->edges[w][v] = 1;
-}
-
-// delete an edge
-void  removeE(Graph g, int v, int w)
-{
-	assert(g != NULL);
-	assert(validV(g,v) && validV(g,w));
-	if (!g->edges[v][w]) return;
-	g->edges[v][w] = 0;
-	g->edges[w][v] = 0;
-}
-
-void dropGraph(Graph g)
-{
-	assert(g != NULL);
-	for (int i = 0; i < g->nV; i++)
-		free(g->edges[i]);
-	free(g->edges);
-}
-
-bool adjacent(Graph g, int v, int w)
-{
-	assert(validV(g,v) && validV(g,w));
-	return (g->edges[v][w] != 0);
-}
-
-int validV(Graph g, int v)
-{
-	return (g != NULL && v >= 0 && v < g->nV);
-}
-
-void show(Graph g)
-{
-	assert(g != NULL);
-	printf("Graph has V=%d and E=%d\n",g->nV,g->nE);
-	printf("V    Connected to\n");
-	printf("--   ------------\n");
-	
-	int v, w;
-	for (v = 0; v < g->nV; v++) {
-		printf("%-3s ",placeIdToName(v));
-		for (w = 0; w < g->nV; w++) {
-			if (adjacent(g,v,w)) printf(" %s",placeIdToName(w));
-		}
-		printf("\n");
-	}
-}
-*/

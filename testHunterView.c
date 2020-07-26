@@ -471,6 +471,134 @@ int main(void)
 		HvFree(hv);
 		printf("Test passed!\n");	
 	}
+	
+
+	// extra test 1
+	// test shortest path
+	{///////////////////////////////////////////////////////////////////
+		
+		printf("Testing shortest path 2\n");
+		
+		char *trail =
+			"GLS.... SLS.... HSW.... MMR.... DCD.V..";
+		
+		Message messages[5] = {};
+		HunterView hv = HvNew(trail, messages);
+		
+		{
+			printf("\tLisbon -> Barcelona (Lord Godalming, Round 1)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
+			                                    BARCELONA, &pathLength);
+
+			assert(pathLength == 2);
+			assert(path[0] == MADRID);
+			assert(path[1] == BARCELONA);
+			free(path);
+		}
+		{
+			printf("\tLisbon -> Castle Cracula (Lord Godalming, Round 1)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
+			                                    CASTLE_DRACULA, &pathLength);
+
+			//printf("pathLength = %d\n", pathLength);
+			//for (int i = 0; i < pathLength; i++) {
+			//	printf("Locations = %s\n", placeIdToName(path[i]));
+			//}
+			
+			assert(pathLength == 8);
+			assert(path[0] == ATLANTIC_OCEAN);
+			assert(path[1] == NORTH_SEA);
+			assert(path[2] == HAMBURG);
+			assert(path[3] == BERLIN);
+			assert(path[4] == PRAGUE);
+			assert(path[5] == BUDAPEST);
+			assert(path[6] == GALATZ || path[6] == KLAUSENBURG);
+			assert(path[7] == CASTLE_DRACULA);
+			free(path);
+		}
+		{
+			printf("\tLisbon -> Frankfurt (Lord Godalming, Round 1)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
+			                                    FRANKFURT, &pathLength);
+			
+			assert(pathLength == 4);
+			assert(path[0] == MADRID);
+			assert(path[1] == BORDEAUX);
+			assert(path[2] == COLOGNE);
+			assert(path[3] == FRANKFURT);
+			free(path);
+		}
+		HvFree(hv);
+		printf("Test passed!\n");
+	}
+
+	// extra test 2
+	// test shortest path when hunter die
+	{///////////////////////////////////////////////////////////////////
+		
+		printf("Testing shortest path 3\n");
+		
+		char *trail =
+			"GGE.... SGE.... HGE.... MGE.... DST.V.. "
+			"GGE.... SGE.... HGE.... MGE.... DPAT... "
+			"GPATD.. SGE.... HGE.... MGE.... DBUT... "
+			"GBUTD.. SGE.... HGE.... MGE.... DCOT...";
+		
+		Message messages[24] = {};
+		HunterView hv = HvNew(trail, messages);
+		
+		{
+			printf("\thospital -> Constanta (Lord Godalming, Round 4)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
+													CONSTANTA, &pathLength);
+
+			assert(pathLength == 3);
+			assert(path[0] == SZEGED);
+			assert(path[1] == BUCHAREST);
+			assert(path[2] == CONSTANTA);
+			free(path);
+		}
+
+		{
+			printf("\tGenvea -> Constanta (Dr. Seward, Round 4)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD,
+													CONSTANTA, &pathLength);
+			assert(pathLength == 6);
+			assert(path[0] == MILAN);
+			assert(path[1] == VENICE || path[1] == GENOA);
+			assert(path[2] == SZEGED || path[2] == TYRRHENIAN_SEA);
+			assert(path[3] == KLAUSENBURG || path[3] == BELGRADE || path[3] == IONIAN_SEA);
+			assert(path[4] == GALATZ || path[4] == BUCHAREST  || path[4] == BLACK_SEA);
+			assert(path[5] == CONSTANTA);
+			free(path);
+		}
+
+		{
+			printf("\tGenvea -> Constanta (Van Gelsing, Round 4)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_VAN_HELSING,
+													CONSTANTA, &pathLength);
+			//printf("pathLength = %d\n", pathLength);
+			//for (int i = 0; i < pathLength; i++) {
+			//	printf("Locations = %s\n", placeIdToName(path[i]));
+			//}
+			assert(pathLength == 5);
+			assert(path[0] == MILAN);
+			assert(path[1] == MUNICH);
+			assert(path[2] == ZAGREB);
+			assert(path[3] == SZEGED);
+			assert(path[4] == CONSTANTA);
+			free(path);
+		}
+
+		HvFree(hv);
+		printf("Test passed!\n");
+	}
 
 	return EXIT_SUCCESS;
 }
