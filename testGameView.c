@@ -48,7 +48,7 @@ int main(void)
 		printf("Test passed!\n");
 		GvFree(dv);
 	}
-/*
+
 	{///////////////////////////////////////////////////////////////////
 	
 		printf("Basic initialisation\n");
@@ -519,6 +519,6 @@ int main(void)
 		GvFree(gv);
 		printf("Test passed!\n");
 	}
-*/
+
 	return EXIT_SUCCESS;
 }

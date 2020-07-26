@@ -477,6 +477,7 @@ int main(void)
 		{
 			int numLocs = -1;
 			PlaceId* locs = DvWhereCanTheyGo(dv, PLAYER_LORD_GODALMING, &numLocs);
+			
 			assert(numLocs == 4);
 			sortPlaces(locs, numLocs);
 			assert(locs[0] == IRISH_SEA);
@@ -489,6 +490,7 @@ int main(void)
 		{
 			int numLocs = -1;
 			PlaceId* locs = DvWhereCanTheyGo(dv, PLAYER_DR_SEWARD, &numLocs);
+			
 			assert(numLocs == 7);
 			sortPlaces(locs, numLocs);
 			assert(locs[0] == ALICANTE);
@@ -504,6 +506,7 @@ int main(void)
 		{
 			int numLocs = -1;
 			PlaceId* locs = DvWhereCanTheyGo(dv, PLAYER_VAN_HELSING, &numLocs);
+			
 			assert(numLocs == 14);
 			sortPlaces(locs, numLocs);
 			assert(locs[0] == BORDEAUX);
@@ -572,10 +575,10 @@ int main(void)
 			PlaceId* locs = DvWhereCanTheyGo(dv, PLAYER_DR_SEWARD, &numLocs);
 			assert(numLocs == 9);
 			sortPlaces(locs, numLocs);
-			/*printf("numLocations = %d\n", numLocs);
-			for (int i = 0; i < numLocs; i++) {
-				printf("Locations = %s\n", placeIdToName(locs[i]));
-			}*/
+			//printf("numLocations = %d\n", numLocs);
+			//for (int i = 0; i < numLocs; i++) {
+			//	printf("Locations = %s\n", placeIdToName(locs[i]));
+			//}
 			assert(locs[0] == ALICANTE);
 			assert(locs[1] == BARCELONA);
 			assert(locs[2] == BORDEAUX);
@@ -592,10 +595,10 @@ int main(void)
 			PlaceId* locs = DvWhereCanTheyGo(dv, PLAYER_VAN_HELSING, &numLocs);
 			assert(numLocs == 7);
 			sortPlaces(locs, numLocs);
-			/*printf("numLocations = %d\n", numLocs);
-			for (int i = 0; i < numLocs; i++) {
-				printf("Locations = %s\n", placeIdToName(locs[i]));
-			}*/
+			//printf("numLocations = %d\n", numLocs);
+			//for (int i = 0; i < numLocs; i++) {
+			//	printf("Locations = %s\n", placeIdToName(locs[i]));
+			//}
 			assert(locs[0] == AMSTERDAM);
 			assert(locs[1] == BRUSSELS);
 			assert(locs[2] == COLOGNE);
@@ -610,10 +613,10 @@ int main(void)
 			PlaceId* locs = DvWhereCanTheyGo(dv, PLAYER_MINA_HARKER, &numLocs);
 			assert(numLocs == 4);
 			sortPlaces(locs, numLocs);
-			/*printf("numLocations = %d\n", numLocs);
-			for (int i = 0; i < numLocs; i++) {
-				printf("Locations = %s\n", placeIdToName(locs[i]));
-			}*/
+			//printf("numLocations = %d\n", numLocs);
+			//for (int i = 0; i < numLocs; i++) {
+			//	printf("Locations = %s\n", placeIdToName(locs[i]));
+			//}
 			assert(locs[0] == BERLIN);
 			assert(locs[1] == HAMBURG);
 			assert(locs[2] == LEIPZIG);
