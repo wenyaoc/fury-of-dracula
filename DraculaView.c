@@ -217,6 +217,7 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 	if (lastLocation == NOWHERE) return NULL;
 
 	Player currPlayer = GvGetPlayer(dv->gv);
+	
 	if (currPlayer < player)
 		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv), lastLocation, road, rail, boat, numReturnedLocs);
 	else

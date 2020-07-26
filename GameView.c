@@ -348,7 +348,6 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 	ConnList curr = connection;
 	PlaceId * place = NULL;
 	if (curr == NULL) return NULL;
-
 	if (player == PLAYER_DRACULA) {
 		while (curr != NULL) {
 			if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
@@ -367,9 +366,9 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 	} else {
 		int num = round + player;
 		while (curr != NULL) {
-			if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
+			if ((curr->type == ROAD && road) || (curr->type == BOAT && boat)) {
 				place = addPlace(place, numReturnedLocs, curr->p);
-			} else if (curr->type == RAIL && rail == true && num % 4 != 0) {
+			} else if (curr->type == RAIL && rail && num % 4 != 0) {
 				place = addPlace(place, numReturnedLocs, curr->p);
 				if (num % 4 > 1) {
 					ConnList connection2 = MapGetConnections(m, curr->p);
@@ -386,15 +385,18 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 									}
 									curr3 = curr3->next;
 								}
+								//free(connection3);
 							}
 						}
 						curr2 = curr2->next;
 					}
+					//free(connection2);
 				}
 			}
 			curr = curr->next;
 		}
 	}
+	//free(connection);
 	place = addPlace(place, numReturnedLocs, from);
 	return place;
 }
