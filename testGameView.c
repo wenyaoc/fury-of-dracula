@@ -25,6 +25,30 @@
 
 int main(void)
 {
+	// extra test 4 : Dracula Doubleback to CD
+	{///////////////////////////////////////////////////////////////////
+
+		printf("Test 4\n");
+
+		char* trail =
+			"GGE.... SGE.... HGE.... MGE.... DGA.V.. "
+			"GGE.... SGE.... HGE.... MGE.... DCDT... "
+			"GGE.... SGE.... HGE.... MGE.... DKLT... "
+			"GGE.... SGE.... HGE.... MGE.... DD2T... "
+			"GGE.... SGE.... HGE.... MGE....";
+
+
+		Message messages[24];
+		GameView dv = GvNew(trail, messages);
+
+		assert(GvGetScore(dv) == GAME_START_SCORE - 4 * SCORE_LOSS_DRACULA_TURN);
+		assert(GvGetHealth(dv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS + 2 * LIFE_GAIN_CASTLE_DRACULA);
+		assert(GvGetPlayerLocation(dv, PLAYER_DRACULA) == CASTLE_DRACULA);
+
+		printf("Test passed!\n");
+		GvFree(dv);
+	}
+/*
 	{///////////////////////////////////////////////////////////////////
 	
 		printf("Basic initialisation\n");
@@ -495,6 +519,6 @@ int main(void)
 		GvFree(gv);
 		printf("Test passed!\n");
 	}
-
+*/
 	return EXIT_SUCCESS;
 }
