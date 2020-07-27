@@ -259,12 +259,17 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 		if (from == NOWHERE) return NULL;
 		
 		Player currPlayer = GvGetPlayer(hv->gv);
-		if (currPlayer < player)
+		if (currPlayer <= player) {
 			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv), from, road, rail, boat, numReturnedLocs);
-		else 
+		} else {
 			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + 1, from, road, rail, boat, numReturnedLocs);
+		}
 	} else {
 		PlaceId from = GvGetPlayerLocation(hv->gv, PLAYER_DRACULA);
+		if (!placeIsReal(from)) {
+			*numReturnedLocs = 0;
+			return NULL;
+		}
 		return GvGetReachableByType(hv->gv, PLAYER_DRACULA, GvGetRound(hv->gv), from, road, false, boat, numReturnedLocs);
 	}
 }

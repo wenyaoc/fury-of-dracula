@@ -30,8 +30,7 @@ typedef struct historyNode *HistoryNode;
 struct historyNode {
 	PlaceId place; //the real location
 	bool vampire;
-	int trapNumber;
-    bool revealed;
+	bool trap;
 	HistoryNode next;
 };
 
@@ -62,7 +61,7 @@ bool deleteLastTraps(HistoryNode node, PlaceId place, int num);
 //void revealLocation(HistoryNode list, PlaceId place);
 
 void ListFree(HistoryNode node);
-HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed);
+HistoryNode creatNode(PlaceId place, bool vampire, int trap);
 HistoryNode copyNode(HistoryNode prevNode);
 playerData addToHistory(playerData data, HistoryNode newNode);
 HistoryNode addToTail(HistoryNode list, HistoryNode newNode);
@@ -156,14 +155,10 @@ PlaceId GvGetPlayerLocation(GameView gv, Player player)
 
 		if (node->place == TELEPORT) return CASTLE_DRACULA;
 		if (placeIsLand(node->place)) {
-			//if (node->revealed == true) 
 			return node->place;
-			//else return CITY_UNKNOWN;
 		}
 		else if (placeIsSea(node->place)) {
-			//if (node->revealed == true) 
 			return node->place;
-			//else return SEA_UNKNOWN;
 		}
 		else if (node->place == HIDE) {
 			HistoryNode real = node->next;
@@ -171,14 +166,10 @@ PlaceId GvGetPlayerLocation(GameView gv, Player player)
 				real = findDBCity(real);
 			}
 			if (placeIsLand(real->place)) {
-				//if (node->revealed == true) 
 				return real->place;
-				//else return CITY_UNKNOWN;
 			}
 			else if (placeIsSea(node->next->place)) {
-				//if (node->revealed == true) 
 				return real->place;
-				//else return SEA_UNKNOWN;
 			}
 		}
 		else {
@@ -188,14 +179,10 @@ PlaceId GvGetPlayerLocation(GameView gv, Player player)
 				real = real->next;
 			}
 			if (placeIsLand(real->place)) {
-				//if (node->revealed == true) 
 				return real->place;
-				//else return CITY_UNKNOWN;
 			}
 			else if (placeIsSea(real->place)) {
-				//if (node->revealed == true) 
 				return real->place;
-				//else return SEA_UNKNOWN;
 			}
 		}
 	}
@@ -229,7 +216,7 @@ PlaceId* GvGetTrapLocations(GameView gv, int* numTraps)
 	int counter = 0;
 	PlaceId * place = NULL;
 	while (curr != NULL && counter < 6 && counter < gv->round) {
-		if (curr->trapNumber > 0) {
+		if (curr->trap > 0) {
 			place = realloc(place, (*numTraps + 1) * sizeof(PlaceId));
 			if (curr->place == HIDE) {
 				if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5)
@@ -428,18 +415,15 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 	if (play[4] == 'V')
 		vampire = true;
 
-	HistoryNode new = creatNode(place, vampire, trap, true);
+	HistoryNode new = creatNode(place, vampire, trap);
 	gv->data[player] = addToHistory(gv->data[player], new);
-
-	if (place < 100)
-		gv->data[player].first->revealed = true;
 
 	if (play[5] == 'M') {
 		HistoryNode curr = gv->data[PLAYER_DRACULA].first;
 		for (int counter = 0; curr != NULL && counter < 6; counter++) {
 			curr = curr->next;
 		}
-		curr->trapNumber = 0;
+		curr->trap = false;
 	}
 	else if (play[5] == 'V') {
 		gv->score -= SCORE_LOSS_VAMPIRE_MATURES;
@@ -455,19 +439,16 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 
 	if (place == CASTLE_DRACULA || place == TELEPORT) {
 		gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA ;
-		//gv->data[player].first->revealed = true;
 	}
 	else if (place == HIDE) {
 		HistoryNode node = gv->data[PLAYER_DRACULA].first->next;
 
 		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) {
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-			//gv->data[player].first->revealed = true;
 		}
 		else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
 			if (findDBCity(node)->place == CASTLE_DRACULA || findDBCity(node)->place == TELEPORT) {
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-				//gv->data[player].first->revealed = true;
 			}
 
 		}
@@ -477,11 +458,9 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 
 		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) {
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-			//gv->data[player].first->revealed = true;
 		}
 		else if (node->place == HIDE) {
 			if (node->next->place == CASTLE_DRACULA || node->next->place == TELEPORT) {
-				//gv->data[player].first->revealed = true;
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
 			}
 		}
@@ -495,7 +474,7 @@ void HvEvent(GameView gv, char* play, PlaceId place, int player)
 	if (gv->data[player].health == 0) 
 		gv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
 
-	HistoryNode new = creatNode(place, false, 0, true);
+	HistoryNode new = creatNode(place, false, 0);
 	gv->data[player] = addToHistory(gv->data[player], new);
 
 	int i = 3;
@@ -539,8 +518,8 @@ void deleteTraps(GameView gv, PlaceId place) {
 
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
 	for (int counter = 0; curr != NULL && counter < 6; counter++) {
-		if (curr->place == place && curr->trapNumber == 1) {
-			curr->trapNumber = 0;
+		if (curr->place == place && curr->trap == true) {
+			curr->trap = false;
 			return; 
 		}	
 		curr = curr->next;
@@ -551,27 +530,13 @@ void deleteTraps(GameView gv, PlaceId place) {
 		if (curr->place == HIDE) {
 			if (curr->next->place == place){
 				if (!deleteLastTraps(curr->next, place, counter))
-					curr->next->trapNumber = 0;
-				/*
-				if(curr->next->trapNumber == 1)
-					curr->next->trapNumber = 0;
-				else
-					curr->trapNumber = 0;
-				*/
+					curr->next->trap = false;
 				return; 
 			} else if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5) {
 				HistoryNode node = findDBCity(curr->next);
 				if (node->place == place) {
 					if (!deleteLastTraps(node, place, counter))
-						curr->next->trapNumber = 0;
-					/*
-					if (node->trapNumber == 1)
-						node->trapNumber = 0;
-					else if (curr->next->trapNumber == 1)
-						curr->next->trapNumber = 0;
-					else
-						curr->trapNumber = 0;
-					*/
+						curr->next->trap = false;
 					return; 
 				}
 			}
@@ -580,34 +545,20 @@ void deleteTraps(GameView gv, PlaceId place) {
 			HistoryNode node = findDBCity(curr);
 			if (node->place == place) {
 				if (!deleteLastTraps(node, place, counter))
-					curr->trapNumber = 0;
-				/*
-				if (node->trapNumber == 1)
-					node->trapNumber = 0;
-				else
-					curr->trapNumber = 0;
-				*/
+					curr->trap = false;
 				return;
 			} 
 			else if (node->place == HIDE) {
 				if (node->next->place == place) {
 					if (!deleteLastTraps(node, place, counter))
-						curr->trapNumber = 0;
-					/*
-					if (node->next->trapNumber == 1)
-						node->next->trapNumber = 0;
-					else if (node->trapNumber == 1)
-						node->trapNumber = 0;
-					else
-						curr->trapNumber = 0;
-					*/
+						curr->trap = false;
 					return;
 				}
 			}
 		}
 		else if (curr->place == TELEPORT)
 			if (!deleteLastTraps(curr, place, counter))
-				curr->trapNumber = 0;
+				curr->trap = false;
 		curr = curr->next;
 	}
 }
@@ -624,33 +575,10 @@ bool deleteLastTraps(HistoryNode node, PlaceId place, int num) {
 	if (result == NULL)
 		return false;
 
-	result->trapNumber = 0;
+	result->trap = false;
 	return true;
 }
-/*
-bool deleteHideTraps(HistoryNode node, PlaceId place, int num) {
-	if (node->place == HIDE) {
-		if (node->next->place == place) {
-			if (!deleteLastTraps(node->next, place, num))
-				node->next->trapNumber = 0;
-			return true;
-		}
-	}
-	return false;
-}
 
-bool deleteDBTraps(HistoryNode node, PlaceId place, int num) {
-	if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
-		HistoryNode curr = findDBCity(node);
-		if (curr->place == place) {
-			if (!deleteLastTraps(curr, place, num))
-				node->trapNumber = 0;
-			return true;
-		}
-	}
-	return false;
-}
-*/
 void deleteVampire(GameView gv) {
 
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
@@ -662,43 +590,6 @@ void deleteVampire(GameView gv) {
 		curr = curr->next;
 	}
 }
-/*
-void revealLocation(HistoryNode list, PlaceId place) {
-	HistoryNode curr = list;
-    int counter = 0;
-    while((curr != NULL) && counter < 5) {
-        if (curr->place == place) 
-			curr->revealed = true;
-		else if (curr->place == HIDE) {
-			if (curr->next->place == place) {
-				curr->revealed = true;
-				curr->next->revealed = true;
-			} else if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5) {
-				HistoryNode newCurr = findDBCity(curr->next);
-				if(newCurr->place == place) {
-					newCurr->revealed = true;
-					curr->next->revealed = true;
-					curr->revealed = true;
-				}
-			}
-		} else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
-			HistoryNode newCurr = findDBCity(curr);
-			if (newCurr->place == place) {
-				newCurr->revealed = true;
-				curr->revealed = true;
-			} else if (newCurr->place == HIDE) {
-				if (newCurr->next->place == place) {
-					newCurr->next->revealed = true;
-					newCurr->revealed = true;
-					curr->revealed = true;
-				}
-			}
-		}
-        counter++;
-        curr = curr->next;
-    }
-}
-*/
 
 void ListFree(HistoryNode node) {
     HistoryNode curr = node;
@@ -710,12 +601,11 @@ void ListFree(HistoryNode node) {
     }
 }
 
-HistoryNode creatNode(PlaceId place, bool vampire, int trap, bool revealed){
+HistoryNode creatNode(PlaceId place, bool vampire, int trap){
     HistoryNode new = malloc(sizeof(* new));
     new->place = place;
     new->vampire = vampire;
-    new->trapNumber = trap;
-    new->revealed = revealed; 
+    new->trap = trap;
     new->next = NULL;
     return new;
 }
@@ -724,8 +614,7 @@ HistoryNode copyNode(HistoryNode prevNode) {
     HistoryNode new = malloc(sizeof(* new));
     new->place = prevNode->place;
     new->vampire = prevNode->vampire;
-    new->trapNumber = prevNode->trapNumber;
-    new->revealed = prevNode->revealed;
+    new->trap = prevNode->trap;
     new->next = NULL;
     return new;
 }
@@ -776,10 +665,8 @@ HistoryNode findDBCity(HistoryNode DBnode) {
     int DBNumber = DBnode->place - DOUBLE_BACK_1;
     int i = 0;
     HistoryNode curr = DBnode;
-		//printf("%d %d", node->place, node->next->place);
     while (curr != NULL && i <= DBNumber) {
         i++;
-		//printf("%s\n",placeIdToName(curr->place));
         curr = curr->next;
     }
 
