@@ -204,12 +204,9 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 		}
 		dropQueue(q);
 
-		if (hv->path[hunter].src != NOWHERE) {
-			free(hv->path[hunter].dist);
-			free(hv->path[hunter].pred);
-			hv->path[hunter].dist = dist;
-			hv->path[hunter].pred = pred;
-		}
+		hv->path[hunter].dist = dist;
+		hv->path[hunter].pred = pred;
+
 	} 
 
 	*pathLength = hv->path[hunter].dist[dest];
@@ -262,32 +259,18 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 		if (from == NOWHERE) return NULL;
 		
 		Player currPlayer = GvGetPlayer(hv->gv);
-		if (currPlayer < player)
+		if (currPlayer <= player) {
 			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv), from, road, rail, boat, numReturnedLocs);
-		else 
+		} else {
 			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + 1, from, road, rail, boat, numReturnedLocs);
-	} else {
-		PlaceId * place = NULL;
-		PlaceId from = GvGetPlayerLocation(hv->gv, PLAYER_DRACULA);
-		place = GvGetReachableByType(hv->gv, PLAYER_DRACULA, GvGetRound(hv->gv), from, road, rail, boat, numReturnedLocs);
-		int newNum = 0;
-		PlaceId * newPlace = calloc(*numReturnedLocs, sizeof(PlaceId));
-
-		for (int i = 0; i < *numReturnedLocs; i++) {
-			if (canGo(hv, place[i])) {
-				newPlace[newNum] = place[i];
-				newNum = newNum + 1;
-			} else if (getDoubleBackNum(hv, place[i]) > 0) {
-				newPlace[newNum] = place[i];
-				newNum = newNum + 1;
-			} else if (i == *numReturnedLocs - 1 && canHide(hv)) {
-				newPlace[newNum] = place[i];
-				newNum = newNum + 1;
-			}
 		}
-		*numReturnedLocs = newNum;
-		free(place);
-		return newPlace;
+	} else {
+		PlaceId from = GvGetPlayerLocation(hv->gv, PLAYER_DRACULA);
+		if (!placeIsReal(from)) {
+			*numReturnedLocs = 0;
+			return NULL;
+		}
+		return GvGetReachableByType(hv->gv, PLAYER_DRACULA, GvGetRound(hv->gv), from, road, false, boat, numReturnedLocs);
 	}
 }
 
