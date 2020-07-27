@@ -34,8 +34,7 @@ bool canGo(DraculaView dv, PlaceId place);
 int getDoubleBackNum(DraculaView dv, PlaceId place);
 bool canDoubleBack(DraculaView dv);
 bool canHide(DraculaView dv);
-//bool UniqueLocation(PlaceId* list, PlaceId place, int num);
-//PlaceId* MapGetLocation(Map m, ConnList connection, PlaceId p, PlaceId* pastLocation, int pastNum, int num, int* count);
+
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -109,22 +108,22 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves)
 	*numReturnedMoves = 0;
 
 	PlaceId lastLocation = GvGetPlayerLocation(dv->gv, PLAYER_DRACULA);
-	if (lastLocation == NOWHERE) 
+	if (lastLocation == NOWHERE) // Dracula has no movement yet
 		return NULL;
 
 	int DBnumber = 0;
-	Map m = MapNew();
+	Map m = MapNew(); // creat the map
 	ConnList connection = MapGetConnections(m, lastLocation);
 	ConnList curr = connection;
 	PlaceId* move = NULL;
 	while (curr != NULL) {
 		if (curr->type == ROAD || curr->type == BOAT) {
-			if (canGo(dv, curr->p)) {
+			if (canGo(dv, curr->p)) { // dracula can directly go to that city 
 				move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
 				move[*numReturnedMoves] = curr->p;
 				*numReturnedMoves = *numReturnedMoves + 1;
 			}
-			else if ((DBnumber = getDoubleBackNum(dv, curr->p)) > 0) {
+			else if ((DBnumber = getDoubleBackNum(dv, curr->p)) > 0) { // dracula can double back to that city 
 				move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
 				move[*numReturnedMoves] = DOUBLE_BACK_1 + DBnumber - 1;
 				*numReturnedMoves = *numReturnedMoves + 1;
@@ -133,25 +132,16 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves)
 		curr = curr->next;
 	}
 
-	//Same with Hide, Map cannot get the current location, cannot do double back
-	if (canDoubleBack(dv)) {
+	if (canDoubleBack(dv)) { // dracula can double back to the current location
 		move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
 		move[*numReturnedMoves] = DOUBLE_BACK_1;
 		*numReturnedMoves = *numReturnedMoves + 1;
 	}
-	if (canHide(dv)) {
+	if (canHide(dv)) { // dracula can hide in the current location
 		move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
 		move[*numReturnedMoves] = HIDE;
 		*numReturnedMoves = *numReturnedMoves + 1;
 	}
-
-	//TP
-
-	/*
-	for (int j = 0; j < *numReturnedMoves; j++) {
-		printf("%s ", placeIdToName(move[j]));
-	}
-	*/
 	return move;
 }
 
@@ -166,8 +156,8 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedLocs = 0;
-	PlaceId lastLocation = GvGetPlayerLocation(dv->gv, PLAYER_DRACULA);
-	if (lastLocation == NOWHERE) 
+	PlaceId lastLocation = GvGetPlayerLocation(dv->gv, PLAYER_DRACULA); // get current location
+	if (lastLocation == NOWHERE) // Dracula has no movement yet
 		return NULL;
 
 	Map m = MapNew();
@@ -176,12 +166,12 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 	PlaceId* place = NULL;
 	while (curr != NULL) {
 		if ((curr->type == ROAD && road) || (curr->type == BOAT && boat)) {
-			if (canGo(dv, curr->p)) {
+			if (canGo(dv, curr->p)) { // dracula can directly move to that location
 				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 				place[*numReturnedLocs] = curr->p;
 				*numReturnedLocs = *numReturnedLocs + 1;
 			}
-			else if (getDoubleBackNum(dv, curr->p) > 0) {
+			else if (getDoubleBackNum(dv, curr->p) > 0) { // dracula can double back to that location
 				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 				place[*numReturnedLocs] = curr->p;
 				*numReturnedLocs = *numReturnedLocs + 1;
@@ -189,9 +179,13 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 		}
 		curr = curr->next;
 	}
-	if (canHide(dv)) {
+	if (canHide(dv)) { // dracula can hide in the current location
 		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 		place[*numReturnedLocs] = lastLocation;
+		*numReturnedLocs = *numReturnedLocs + 1;
+	} else if (canDoubleBack(dv)) { // dracula can double back to the current location
+		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+		place[*numReturnedLocs] = DOUBLE_BACK_1;
 		*numReturnedLocs = *numReturnedLocs + 1;
 	}
 	return place;
@@ -210,17 +204,18 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedLocs = 0;
-	if (player == PLAYER_DRACULA)
+	if (player == PLAYER_DRACULA) // player is dracula, call whereCanIMove
 		return DvWhereCanIGoByType(dv, road, boat, numReturnedLocs);
 
 	PlaceId lastLocation = GvGetPlayerLocation(dv->gv, player);
-	if (lastLocation == NOWHERE) return NULL;
+	if (lastLocation == NOWHERE) // the player has no movement yet
+		return NULL;
 
-	Player currPlayer = GvGetPlayer(dv->gv);
+	Player currPlayer = GvGetPlayer(dv->gv); // get the current player
 	
-	if (currPlayer < player)
+	if (currPlayer < player) // the player haven't made a move in the current turn
 		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv), lastLocation, road, rail, boat, numReturnedLocs);
-	else
+	else // the player alreade made a move in the current turn
 		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv) + 1, lastLocation, road, rail, boat, numReturnedLocs);
 }
 
@@ -229,135 +224,90 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 
 // TODO
 
+// determine whether the player can directly go to a place
+// input: DraculaView, place
+// output: ture if the place is allowed to go, false otherwise
 bool canGo(DraculaView dv, PlaceId place) {
-
-	//Begin the game
-	if (place == NOWHERE) return true;
-
-	//Cannot in hospital
-	if (place == HOSPITAL_PLACE) return false;
+	if (place == NOWHERE) // Dracula has no movement yet
+		return true;
+	if (place == HOSPITAL_PLACE) // Dracula cannot goto hospital
+		return false;
 
 	int num = -1;
 	bool canFree = false;
+	bool go = true;
 	PlaceId* list = GvGetLocationHistory(dv->gv, PLAYER_DRACULA, &num, &canFree);
-
-	//Cannot be the same location
 	for (int i = 0; i < num && i < 6; i++) {
-
-		if (list[i] == place)
-			return false;
-
-		if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5 && list[i] - DOUBLE_BACK_1 < num) {
-			if (list[list[i] - DOUBLE_BACK_1] == place)
-				return false;
-		}
-
-		if (i + 1 == 6 && num >= 6) {
-			if (list[i] == HIDE && list[i + 1] == place)
-				return false;
+		if (list[i] == place) // the place is already in the trail
+			go = false;
+		else if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5 && list[i] - DOUBLE_BACK_1 < num) {
+			if (list[list[i] - DOUBLE_BACK_1] == place) // Dracula already double back to that place before
+				go = false;
+		} else if (i + 1 == 6 && num >= 6) {
+			if (list[i] == HIDE && list[i + 1] == place) // Dracula already hide in that place before
+				go = false;
 		}
 	}
-
-	return true;
+	if (canFree)
+		free(list); // free the location list
+	return go;
 }
 
+// calculate the number of the DOUBLE_BACK move
+// input: DraculaView, place
+// output: 0: cannot double back, #1-5: # for DOUBLE_BACK
 int getDoubleBackNum(DraculaView dv, PlaceId place) {
 
 	int num = -1;
 	bool canFree = false;
+	int doubleBackNum = 0;
 	PlaceId* list = GvGetLocationHistory(dv->gv, PLAYER_DRACULA, &num, &canFree);
 
-	if (!canDoubleBack(dv)) 
-		return 0;
-
-	for (int i = 0; i < num && i < 6; i++) {
-		if (list[i] == place) return i + 1;
+	if (canDoubleBack(dv)) { // dracula is allowed to double back
+		for (int i = 0; i < num && i < 6; i++) { // calculate the number
+			if (list[i] == place) 
+				doubleBackNum = i + 1;
+		}
 	}
-
-	return 0;
+	if (canFree)
+		free(list);
+	return doubleBackNum;
 }
 
+// determine whether Dracula can double back in the curretnt turn
+// input: DraculaView
+// output: true if dracula can double back, false otherwise
 bool canDoubleBack(DraculaView dv) {
 	
 	int num = -1;
 	bool canFree = false;
+	bool doubleBack = true;
 	PlaceId* list = GvGetMoveHistory(dv->gv, PLAYER_DRACULA, &num, &canFree);
 
 	for (int i = 0; i < num && i < 6; i++) {
 		if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5)
-			return false;
+			doubleBack = false; // there exist a double back move in the trail
 	}
-	return true;
+	if (canFree)
+		free(list);
+	return doubleBack;
 }
 
+// determine whether Dracula can hide in the curretnt turn
+// input: HunterView
+// output: true if dracula can HIDE, false otherwise
 bool canHide(DraculaView dv) {
 
 	int num = -1;
 	bool canFree = false;
+	bool hide = true;
 	PlaceId* list = GvGetMoveHistory(dv->gv, PLAYER_DRACULA, &num, &canFree);
 
 	for (int i = 0; i < num && i < 6; i++) {
-		if (list[i] == HIDE)
-			return false;
+		if (list[i] == HIDE) // there exist a HIDE move in the trail
+			hide = false;
 	}
-	return true;
+	if (canFree)
+		free(list);
+	return hide;
 }
-/*
-bool UniqueLocation(PlaceId* list, PlaceId place, int num)
-{
-	if (list == NULL) return true;
-	if (num == 0) return true;
-	for (int i = 0; i < num; i++) {
-		if (list[i] == place)
-			return false;
-	}
-	return true;
-}
-
-PlaceId* MapGetLocation(Map m, ConnList connection, PlaceId p, PlaceId* pastLocation, int pastNum, int num, int* count)
-{
-	PlaceId* place = NULL;
-	PlaceId* temp = NULL;
-
-	*count = 0;
-	int localcount = 0;
-	ConnList curr = MapGetConnections(m, p);
-	//printf("Num of Rail Can Move: %d, in : %s\n", num, placeIdToName(p));
-	while (curr != NULL) {
-		//printf("   Rail curr is : %s, The type is : %s\n", placeIdToName(curr->p), transportTypeToString(curr->type));
-		if (curr->type == RAIL && num > 0 && curr->p != p && UniqueLocation(pastLocation, curr->p, pastNum)) {
-			//printf("<Go> next Location :【 %s 】\n", placeIdToName(curr->p));
-			temp = MapGetLocation(m, curr, curr->p, pastLocation, pastNum, num - 1, &localcount);
-
-			//need to unique and combine together
-			place = realloc(place, (*count + localcount) * sizeof(PlaceId));
-			int total = *count + localcount;
-			for (int j = *count; j < total; j++) {
-				if (UniqueLocation(place, temp[j - *count], j)) {
-					place[j] = temp[j - *count];
-					//printf("<-Finall Push->Add Location: %s\n", placeIdToName(place[j]));
-				}
-				else {
-					j = j - 1;
-					*count = *count - 1;
-				}
-				
-			}
-			*count = *count + localcount;
-		}
-		else if (curr->type == RAIL && curr->p != p && UniqueLocation(pastLocation, curr->p, pastNum)) {
-			place = realloc(place, (*count + 1) * sizeof(PlaceId));
-			place[*count] = curr->p;
-			//printf("<-Push-> %s\n", placeIdToName(curr->p));
-			*count = *count + 1;
-		}
-		curr = curr->next;
-	}
-	
-	//for (int i = 0; i < *count; i++) {
-	//	printf("<-Check Push-> %s\n", placeIdToName(place[i]));
-	//}
-
-	return place;
-}
-*/
