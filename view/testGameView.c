@@ -499,7 +499,7 @@ int main(void)
 	// extra test 1 : Dracula Doubleback to CD
 	{///////////////////////////////////////////////////////////////////
 
-		printf("Test 4\n");
+		printf("Dracula Doubleback to CD\n");
 
 		char* trail =
 			"GGE.... SGE.... HGE.... MGE.... DGA.V.. "
@@ -510,15 +510,93 @@ int main(void)
 
 
 		Message messages[24];
-		GameView dv = GvNew(trail, messages);
+		GameView gv = GvNew(trail, messages);
 
-		assert(GvGetScore(dv) == GAME_START_SCORE - 4 * SCORE_LOSS_DRACULA_TURN);
-		assert(GvGetHealth(dv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS + 2 * LIFE_GAIN_CASTLE_DRACULA);
-		assert(GvGetPlayerLocation(dv, PLAYER_DRACULA) == CASTLE_DRACULA);
+		assert(GvGetScore(gv) == GAME_START_SCORE - 4 * SCORE_LOSS_DRACULA_TURN);
+		assert(GvGetHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS + 2 * LIFE_GAIN_CASTLE_DRACULA);
+		assert(GvGetPlayerLocation(gv, PLAYER_DRACULA) == CASTLE_DRACULA);
 
 		printf("Test passed!\n");
-		GvFree(dv);
+		GvFree(gv);
+	}
+	// extra test 2 : test GvGetVampireLocation
+	{///////////////////////////////////////////////////////////////////
+
+		printf("test GvGetVampireLocation\n");
+
+		char* trail =
+			"GGE.... SGE.... HGE.... MGE.... DED.V.. "
+			"GST.... SST.... HST.... MST.... DMNT... "
+			"GGE.... SGE.... HGE.... MGE.... DLOT... "
+			"GST.... SST.... HST.... MST.... DSWT... "
+			"GGE.... SGE.... HGE.... MGE.... DLVT... "
+			"GST.... SST.... HST.... MST....";
+
+
+		Message messages[24];
+		GameView gv = GvNew(trail, messages);
+		
+		assert(GvGetVampireLocation(gv) == EDINBURGH);
+		
+		printf("Test passed!\n");
+		GvFree(gv);
 	}
 
+	// extra test 2 : test GvGetVampireLocation after HIDE and Double Back
+	{///////////////////////////////////////////////////////////////////
+	
+		printf("Testing GvGetTrapLocations 1'\n");
+		
+		char *trail =
+			"GGE.... SGE.... HGE.... MGE.... DC?.V.. "
+			"GGE.... SGE.... HGE.... MGE.... DSTT... "
+			"GGE.... SGE.... HGE.... MGE.... DHIT... "
+			"GGE.... SGE.... HGE.... MGE.... DD1T... ";
+		
+		Message messages[21] = {};
+		GameView gv = GvNew(trail, messages);
+		
+		int numTraps = 0;
+		PlaceId *traps = GvGetTrapLocations(gv, &numTraps);
+		assert(numTraps == 3);
+		
+		sortPlaces(traps, numTraps);
+			/*printf("numLTraps = %d\n", numTraps);
+			for (int i = 0; i < numTraps; i++) {
+				printf("Locations = %s\n", placeIdToName(traps[i]));
+			}
+			*/
+		assert(traps[0] == STRASBOURG && traps[1] == STRASBOURG && traps[2] == STRASBOURG);
+		free(traps);
+		
+		GvFree(gv);
+		printf("Test passed!\n");
+	}
+
+	// extra test 3 : test GvGetVampireLocation after Double Back and HIDE
+	{///////////////////////////////////////////////////////////////////
+	
+		printf("Testing GvGetTrapLocations 2'\n");
+		
+		char *trail =
+			"GGE.... SGE.... HGE.... MGE.... DC?.V.. "
+			"GGE.... SGE.... HGE.... MGE.... DSTT... "
+			"GGE.... SGE.... HGE.... MGE.... DD1T... "
+			"GGE.... SGE.... HGE.... MGE.... DHIT... ";
+		
+		Message messages[21] = {};
+		GameView gv = GvNew(trail, messages);
+		
+		int numTraps = 0;
+		PlaceId *traps = GvGetTrapLocations(gv, &numTraps);
+		assert(numTraps == 3);
+		sortPlaces(traps, numTraps);
+
+		assert(traps[0] == STRASBOURG && traps[1] == STRASBOURG && traps[2] == STRASBOURG);
+		free(traps);
+		
+		GvFree(gv);
+		printf("Test passed!\n");
+	}
 	return EXIT_SUCCESS;
 }

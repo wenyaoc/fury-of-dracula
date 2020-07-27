@@ -53,16 +53,11 @@ struct hunterView {
 };
 
 
-bool canGo(HunterView hv, PlaceId place);
-int getDoubleBackNum(HunterView hv, PlaceId place);
-bool canDoubleBack(HunterView hv);
-bool canHide(HunterView hv);
-
-Queue newQueue (void);			// create new empty queue
-void dropQueue (Queue Q);			// free memory used by queue
-void QueueJoin (Queue Q, int it);	// add int on queue
-int QueueLeave (Queue Q);		// remove item from queue
-int QueueIsEmpty (Queue Q);		// check for no items
+Queue newQueue (void); // create new empty queue, from lab07
+void dropQueue (Queue Q); // free memory used by queue, from lab07
+void QueueJoin (Queue Q, int it); // add int on queue, from lab07
+int QueueLeave (Queue Q); // remove item from queue, from lab07
+int QueueIsEmpty (Queue Q); // check for no items, from lab07
 
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
@@ -88,6 +83,12 @@ void HvFree(HunterView hv)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	GvFree(hv->gv);
+	for (int i = 0; i < 4; i++) {
+		if (hv->path[i].src != NOWHERE) {
+			free(hv->path[i].pred);
+			free(hv->path[i].dist);
+		}
+	}
 	free(hv);
 }
 
@@ -142,18 +143,16 @@ PlaceId HvGetLastKnownDraculaLocation(HunterView hv, Round *round)
 	PlaceId LastKnownPlace;
 	int known = 0;
 	for (int i = number - 1; i >= 0; i--) {
-		if(placeIsReal(place[i])) {
-			//printf("%s\n", placeIdToName(place[i]));
+		if(placeIsReal(place[i])) { // find a revealed location
 			*round = i;
 			LastKnownPlace = place[i];
 			known = 1;
-			//printf("%d %s\n",*round, placeIdToName(LastKnownPlace));
 			break;
 		}
 	}
 	if (canFree)
 		free(place);
-	if (!known) return NOWHERE;
+	if (!known) return NOWHERE; // Dracula's location has never been reveled
                              
 	return LastKnownPlace;
 }
@@ -166,23 +165,25 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 
 	PlaceId * path = NULL;
 	*pathLength = 0;
-	if (src == dest) {
+	if (src == dest) { // if the hunter is at that location
 		path = malloc((*pathLength + 1) * sizeof(PlaceId));
 		path[0] = src;
 		return path;
 	}
 	int w;
-	if (src != hv->path[hunter].src) {
+
+	if (src != hv->path[hunter].src) { // if HvGetShortestPathTo haven't been called brfore
+		// initialise values
 		hv->path[hunter].src = src;
 		Round round = HvGetRound(hv);
 		int * dist = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
 		int * pred = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
 		*pathLength = 0;
-
 		for (int i = 0; i < MAX_REAL_PLACE + 1; i++) {
-			dist[i] = INT_MAX;
+			dist[i] = INT_MAX;  //infinity
 			pred[i] = -1;
 		}
+		// bfs to the map
 		Queue q = newQueue();
 		dist[src] = 0;
 		pred[src] = src;
@@ -203,12 +204,10 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 			free(reachable);
 		}
 		dropQueue(q);
-
 		hv->path[hunter].dist = dist;
 		hv->path[hunter].pred = pred;
-
 	} 
-
+	// store the paths into array
 	*pathLength = hv->path[hunter].dist[dest];
 	path = malloc((*pathLength) * sizeof(PlaceId));
 	w = dest;
@@ -217,7 +216,6 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 		path[i] = hv->path[hunter].pred[w];
 		w = hv->path[hunter].pred[w];
 	}
-
 	return path;
 }
 
@@ -235,9 +233,9 @@ PlaceId *HvWhereCanIGoByType(HunterView hv, bool road, bool rail,
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedLocs = 0;
-	Player player = GvGetPlayer(hv->gv);
+	Player player = GvGetPlayer(hv->gv); // get current player
 	PlaceId from = GvGetPlayerLocation(hv->gv, player);
-	if (from == NOWHERE) return NULL;
+	if (from == NOWHERE) return NULL; // hunter has no movement yet
 	return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + player, from, road, rail, boat, numReturnedLocs);
 }
 
@@ -253,20 +251,20 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
                                 int *numReturnedLocs)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	if (player != PLAYER_DRACULA) {
+	if (player != PLAYER_DRACULA) { // player is a hunter
 		*numReturnedLocs = 0;
 		PlaceId from = GvGetPlayerLocation(hv->gv, player);
-		if (from == NOWHERE) return NULL;
+		if (from == NOWHERE) return NULL; // hunter has no movement yet
 		
 		Player currPlayer = GvGetPlayer(hv->gv);
-		if (currPlayer <= player) {
+		if (currPlayer <= player) { // he player haven't made a movement in the current turn
 			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv), from, road, rail, boat, numReturnedLocs);
-		} else {
+		} else { // the player already made a movement in the current turn
 			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + 1, from, road, rail, boat, numReturnedLocs);
 		}
-	} else {
+	} else { // player is Dracula
 		PlaceId from = GvGetPlayerLocation(hv->gv, PLAYER_DRACULA);
-		if (!placeIsReal(from)) {
+		if (!placeIsReal(from)) {  // Dracula's current location is not revealed
 			*numReturnedLocs = 0;
 			return NULL;
 		}
@@ -279,80 +277,7 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 
 // TODO
 
-bool canGo(HunterView hv, PlaceId place) {
-
-	//Begin the game
-	if (place == NOWHERE) return true;
-
-	//Cannot in hospital
-	if (place == HOSPITAL_PLACE) return false;
-
-	int num = -1;
-	bool canFree = false;
-	PlaceId* list = GvGetLocationHistory(hv->gv, PLAYER_DRACULA, &num, &canFree);
-
-	//Cannot be the same location
-	for (int i = 0; i < num && i < 6; i++) {
-
-		if (list[i] == place)
-			return false;
-
-		if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5 && list[i] - DOUBLE_BACK_1 < num) {
-			if (list[list[i] - DOUBLE_BACK_1] == place)
-				return false;
-		}
-
-		if (i + 1 == 6 && num >= 6) {
-			if (list[i] == HIDE && list[i + 1] == place)
-				return false;
-		}
-	}
-
-	return true;
-}
-
-int getDoubleBackNum(HunterView hv, PlaceId place) {
-
-	int num = -1;
-	bool canFree = false;
-	PlaceId* list = GvGetLocationHistory(hv->gv, PLAYER_DRACULA, &num, &canFree);
-
-	if (!canDoubleBack(hv)) 
-		return 0;
-
-	for (int i = 0; i < num && i < 6; i++) {
-		if (list[i] == place) return i + 1;
-	}
-
-	return 0;
-}
-
-bool canDoubleBack(HunterView hv) {
-	
-	int num = -1;
-	bool canFree = false;
-	PlaceId* list = GvGetMoveHistory(hv->gv, PLAYER_DRACULA, &num, &canFree);
-
-	for (int i = 0; i < num && i < 6; i++) {
-		if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5)
-			return false;
-	}
-	return true;
-}
-
-bool canHide(HunterView hv) {
-
-	int num = -1;
-	bool canFree = false;
-	PlaceId* list = GvGetMoveHistory(hv->gv, PLAYER_DRACULA, &num, &canFree);
-
-	for (int i = 0; i < num && i < 6; i++) {
-		if (list[i] == HIDE)
-			return false;
-	}
-	return true;
-}
-
+// Queue operations
 // create new empty Queue
 Queue newQueue (void)
 {
@@ -362,6 +287,7 @@ Queue newQueue (void)
 	return new;
 }
 
+// free the Queue
 void dropQueue (Queue Q)
 {
 	assert (Q != NULL);
