@@ -232,6 +232,7 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 // input: DraculaView, place
 // output: ture if the place is allowed to go, false otherwise
 bool canGo(DraculaView dv, PlaceId place) {
+
 	if (place == NOWHERE) // Dracula has no movement yet
 		return true;
 	if (place == HOSPITAL_PLACE) // Dracula cannot goto hospital
@@ -240,8 +241,9 @@ bool canGo(DraculaView dv, PlaceId place) {
 	int num = -1;
 	bool canFree = false;
 	bool go = true;
-	PlaceId* list = GvGetLocationHistory(dv->gv, PLAYER_DRACULA, &num, &canFree);
-	for (int i = 0; i < num && i < 6; i++) {
+	PlaceId* list = GvGetLastLocations(dv->gv, PLAYER_DRACULA, 5, &num, &canFree);
+
+	for (int i = 0; i < num; i++) {	
 		if (list[i] == place) // the place is already in the trail
 			go = false;
 		else if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5 && list[i] - DOUBLE_BACK_1 < num) {
@@ -262,16 +264,18 @@ bool canGo(DraculaView dv, PlaceId place) {
 // output: 0: cannot double back, #1-5: # for DOUBLE_BACK
 int getDoubleBackNum(DraculaView dv, PlaceId place) {
 
+	if (!canDoubleBack(dv)) // there exist a double back move in history
+		return 0;
+
 	int num = -1;
 	bool canFree = false;
 	int doubleBackNum = 0;
-	PlaceId* list = GvGetLocationHistory(dv->gv, PLAYER_DRACULA, &num, &canFree);
+	
+	PlaceId* list = GvGetLastLocations(dv->gv, PLAYER_DRACULA, 5, &num, &canFree);
 
-	if (canDoubleBack(dv)) { // dracula is allowed to double back
-		for (int i = 0; i < num && i < 6; i++) { // calculate the number
-			if (list[i] == place) 
-				doubleBackNum = i + 1;
-		}
+	for (int i = num - 1; i >= 0; i--) { // calculate the number
+		if (list[i] == place) 
+			doubleBackNum = num - i;
 	}
 	if (canFree)
 		free(list);
@@ -286,9 +290,9 @@ bool canDoubleBack(DraculaView dv) {
 	int num = -1;
 	bool canFree = false;
 	bool doubleBack = true;
-	PlaceId* list = GvGetMoveHistory(dv->gv, PLAYER_DRACULA, &num, &canFree);
+	PlaceId* list = GvGetLastMoves(dv->gv, PLAYER_DRACULA, 5, &num, &canFree);
 
-	for (int i = 0; i < num && i < 6; i++) {
+	for (int i = 0; i < num; i++) {
 		if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5)
 			doubleBack = false; // there exist a double back move in the trail
 	}
@@ -301,13 +305,12 @@ bool canDoubleBack(DraculaView dv) {
 // input: HunterView
 // output: true if dracula can HIDE, false otherwise
 bool canHide(DraculaView dv) {
-
 	int num = -1;
 	bool canFree = false;
 	bool hide = true;
-	PlaceId* list = GvGetMoveHistory(dv->gv, PLAYER_DRACULA, &num, &canFree);
+	PlaceId* list = GvGetLastMoves(dv->gv, PLAYER_DRACULA, 5, &num, &canFree);
 
-	for (int i = 0; i < num && i < 6; i++) {
+	for (int i = 0; i < num; i++) {
 		if (list[i] == HIDE) // there exist a HIDE move in the trail
 			hide = false;
 	}
