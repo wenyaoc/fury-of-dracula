@@ -545,7 +545,7 @@ int main(void)
 	// extra test 2 : test GvGetTrapLocations after HIDE and Double Back
 	{///////////////////////////////////////////////////////////////////
 	
-		printf("Testing GvGetTrapLocations 1'\n");
+		printf("Testing GvGetTrapLocations 1\n");
 		
 		char *trail =
 			"GGE.... SGE.... HGE.... MGE.... DC?.V.. "
@@ -596,7 +596,7 @@ int main(void)
 	// extra test 3 : hunter enconters trap after dracula was teleport to castel
 	{///////////////////////////////////////////////////////////////////
 
-		printf("Testing GvGetTrapLocations 3\n");
+		printf("hunter enconters trap\n");
 
 		char* trail =
 			"GKL.... SGE.... HGE.... MGE.... DSW.V.. "
@@ -611,19 +611,70 @@ int main(void)
 
 		Message messages[45] = {};
 		GameView gv = GvNew(trail, messages);
+		{
+			printf("\tChecking trap locations\n");
+			int numTraps = 0;
+			PlaceId *traps = GvGetTrapLocations(gv, &numTraps);
 
-		int numTraps = 0;
-		PlaceId *traps = GvGetTrapLocations(gv, &numTraps);
+			assert(numTraps == 5);
+			sortPlaces(traps, numTraps);
+			assert(traps[0] == CONSTANTA);
+			assert(traps[1] == DUBLIN);
+			assert(traps[2] == DUBLIN);
+			assert(traps[3] == GALATZ);
+			assert(traps[4] == GALWAY); 
+			free(traps);
+		}
 
-		assert(numTraps == 5);
-		sortPlaces(traps, numTraps);
-		assert(traps[0] == CONSTANTA);
-		assert(traps[1] == DUBLIN);
-		assert(traps[2] == DUBLIN);
-		assert(traps[3] == GALATZ);
-		assert(traps[4] == GALWAY); 
-		free(traps);
+		{
+			printf("\tChecking location history 1\n");
+			int numLocs = 0; bool canFree = false;
+			PlaceId *locs = GvGetLocationHistory(gv, PLAYER_DRACULA,
+			                                     &numLocs, &canFree);
+			assert(numLocs == 9);
+			assert(locs[0] == SWANSEA);
+			assert(locs[1] == IRISH_SEA);
+			assert(locs[2] == DUBLIN);
+			assert(locs[3] == GALWAY);
+			assert(locs[4] == DUBLIN);
+			assert(locs[5] == DUBLIN);
+			assert(locs[6] == CASTLE_DRACULA);
+			assert(locs[7] == GALATZ);
+			assert(locs[8] == CONSTANTA);
+			if (canFree) free(locs);
+		}
+
+		{
+			printf("\tChecking location history 1\n");
+			int numLocs = 0; bool canFree = false;
+			PlaceId *locs = GvGetLastLocations(gv, PLAYER_DRACULA, 15,
+			                                     &numLocs, &canFree);
+			assert(numLocs == 9);
+			assert(locs[0] == SWANSEA);
+			assert(locs[1] == IRISH_SEA);
+			assert(locs[2] == DUBLIN);
+			assert(locs[3] == GALWAY);
+			assert(locs[4] == DUBLIN);
+			assert(locs[5] == DUBLIN);
+			assert(locs[6] == CASTLE_DRACULA);
+			assert(locs[7] == GALATZ);
+			assert(locs[8] == CONSTANTA);
+			if (canFree) free(locs);
+		}
 		
+		{
+			printf("\tChecking location history 3\n");
+			int numLocs = 0; bool canFree = false;
+			PlaceId *locs = GvGetLastLocations(gv, PLAYER_DRACULA, 5,
+			                                     &numLocs, &canFree);
+			assert(numLocs == 5);
+			assert(locs[0] == DUBLIN);
+			assert(locs[1] == DUBLIN);
+			assert(locs[2] == CASTLE_DRACULA);
+			assert(locs[3] == GALATZ);
+			assert(locs[4] == CONSTANTA);
+			if (canFree) free(locs);
+		}
 		GvFree(gv);
 		printf("Test passed!\n");
 	}

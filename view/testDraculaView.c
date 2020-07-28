@@ -598,10 +598,6 @@ int main(void)
 			PlaceId* locs = DvWhereCanTheyGo(dv, PLAYER_VAN_HELSING, &numLocs);
 			assert(numLocs == 7);
 			sortPlaces(locs, numLocs);
-			//printf("numLocations = %d\n", numLocs);
-			//for (int i = 0; i < numLocs; i++) {
-			//	printf("Locations = %s\n", placeIdToName(locs[i]));
-			//}
 			assert(locs[0] == AMSTERDAM);
 			assert(locs[1] == BRUSSELS);
 			assert(locs[2] == COLOGNE);
@@ -616,10 +612,6 @@ int main(void)
 			PlaceId* locs = DvWhereCanTheyGo(dv, PLAYER_MINA_HARKER, &numLocs);
 			assert(numLocs == 4);
 			sortPlaces(locs, numLocs);
-			//printf("numLocations = %d\n", numLocs);
-			//for (int i = 0; i < numLocs; i++) {
-			//	printf("Locations = %s\n", placeIdToName(locs[i]));
-			//}
 			assert(locs[0] == BERLIN);
 			assert(locs[1] == HAMBURG);
 			assert(locs[2] == LEIPZIG);
@@ -691,6 +683,99 @@ int main(void)
 		assert(numTraps == 0);
 		assert(DvGetVampireLocation(dv) == NOWHERE);
 		free(traps);
+
+		printf("Test passed!\n");
+		DvFree(dv);
+	}
+	// extra test 13 : test DvWhereCanIGo and DvGetValidMoves
+	{///////////////////////////////////////////////////////////////////
+
+		printf("Test for DvWhereCanIGo and DvGetValidMoves 1\n");
+
+		char* trail =
+			"GGE.... SGE.... HGE.... MGE.... DKL.V.. "
+			"GGE.... SGE.... HGE.... MGE....";
+
+		Message messages[9] = {};
+		DraculaView dv = DvNew(trail, messages);
+
+		int numLocs = -1;
+		PlaceId* locs = DvWhereCanIGo(dv, &numLocs);
+		assert(numLocs == 7);
+		sortPlaces(locs, numLocs);
+		assert(locs[0] == BELGRADE);
+		assert(locs[1] == BUCHAREST);
+		assert(locs[2] == BUDAPEST);
+		assert(locs[3] == CASTLE_DRACULA);
+		assert(locs[4] == GALATZ);
+		assert(locs[5] == KLAUSENBURG);
+		assert(locs[6] == SZEGED);
+		free(locs);
+
+		int numMoves = -1;
+		PlaceId* move = DvGetValidMoves(dv, &numMoves);
+		assert(numMoves == 8);
+		sortPlaces(move, numMoves);
+		/*
+			printf("numLocations = %d\n", numMoves);
+			for (int i = 0; i < numMoves; i++) {
+				printf("Locations = %s\n", placeIdToName(move[i]));
+			}*/
+		assert(move[0] == BELGRADE);
+		assert(move[1] == BUCHAREST);
+		assert(move[2] == BUDAPEST);
+		assert(move[3] == CASTLE_DRACULA);
+		assert(move[4] == GALATZ);
+		assert(move[5] == SZEGED);
+		assert(move[6] == HIDE);
+		assert(move[7] == DOUBLE_BACK_1);
+		free(move);
+
+
+		printf("Test passed!\n");
+		DvFree(dv);
+	}
+
+	// extra test 14 : test DvWhereCanIGo and DvGetValidMoves
+	{///////////////////////////////////////////////////////////////////
+
+		printf("Test for DvWhereCanIGo and DvGetValidMoves 2\n");
+
+		char* trail =
+			"GGE.... SGE.... HGE.... MGE.... DKL.V.. "
+			"GGE.... SGE.... HGE.... MGE.... DHIT... ";
+
+		Message messages[10] = {};
+		DraculaView dv = DvNew(trail, messages);
+
+		int numLocs = -1;
+		PlaceId* locs = DvWhereCanIGo(dv, &numLocs);
+
+		assert(numLocs == 7);
+		sortPlaces(locs, numLocs);
+
+		assert(locs[0] == BELGRADE);
+		assert(locs[1] == BUCHAREST);
+		assert(locs[2] == BUDAPEST);
+		assert(locs[3] == CASTLE_DRACULA);
+		assert(locs[4] == GALATZ);
+		assert(locs[5] == KLAUSENBURG);
+		assert(locs[6] == SZEGED);
+		free(locs);
+
+		int numMoves = -1;
+		PlaceId* move = DvGetValidMoves(dv, &numMoves);
+		assert(numMoves == 8);
+		sortPlaces(move, numMoves);
+		assert(move[0] == BELGRADE);
+		assert(move[1] == BUCHAREST);
+		assert(move[2] == BUDAPEST);
+		assert(move[3] == CASTLE_DRACULA);
+		assert(move[4] == GALATZ);
+		assert(move[5] == SZEGED);
+		assert(move[6] == DOUBLE_BACK_1);
+		assert(move[7] == DOUBLE_BACK_2);
+		free(move);
 
 		printf("Test passed!\n");
 		DvFree(dv);
