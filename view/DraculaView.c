@@ -122,8 +122,7 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves)
 				move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
 				move[*numReturnedMoves] = curr->p;
 				*numReturnedMoves = *numReturnedMoves + 1;
-			}
-			else if ((DBnumber = getDoubleBackNum(dv, curr->p)) > 0) { // dracula can double back to that city 
+			} else if ((DBnumber = getDoubleBackNum(dv, curr->p)) > 0) { // dracula can double back to that city 
 				move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
 				move[*numReturnedMoves] = DOUBLE_BACK_1 + DBnumber - 1;
 				*numReturnedMoves = *numReturnedMoves + 1;
@@ -170,8 +169,7 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 				place[*numReturnedLocs] = curr->p;
 				*numReturnedLocs = *numReturnedLocs + 1;
-			}
-			else if (getDoubleBackNum(dv, curr->p) > 0) { // dracula can double back to that location
+			} else if (getDoubleBackNum(dv, curr->p) > 0) { // dracula can double back to that location
 				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 				place[*numReturnedLocs] = curr->p;
 				*numReturnedLocs = *numReturnedLocs + 1;

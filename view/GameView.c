@@ -524,13 +524,9 @@ void deleteTraps(GameView gv, PlaceId place) {
 			curr->trap = false;
 			return; 
 		}
-		// else if (place == CASTLE_DRACULA && curr->place == TELEPORT && curr->trap == true) {
-		//	curr->trap = false;
-		//	return; 
-		//}
 		curr = curr->next;
 	}
-
+	// the place is not real
 	curr = gv->data[PLAYER_DRACULA].first;
 	for (int counter = 0; curr != NULL && counter < 6; counter++) {
 		if (curr->place == HIDE) { // the move is HIDE
@@ -562,7 +558,7 @@ void deleteTraps(GameView gv, PlaceId place) {
 				}
 			}
 		}
-		else if (curr->place == TELEPORT)
+		else if (curr->place == TELEPORT) // the move is teleport
 			if (!deleteLastTraps(curr, place, counter))
 				curr->trap = false;
 		curr = curr->next;
