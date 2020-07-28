@@ -781,5 +781,36 @@ int main(void)
 		DvFree(dv);
 	}
 
+	// extra test 15 : test DvWhereCanIGo and DvGetValidMoves
+	{///////////////////////////////////////////////////////////////////
+
+		printf("Test for DvWhereCanIGo and DvGetValidMoves 3\n");
+
+		char* trail =
+			"GGE.... SGE.... HGE.... MGE.... DSW.V.. "
+			"GGE.... SGE.... HGE.... MGE.... DIR.... "
+			"GGE.... SGE.... HGE.... MGE.... DDUT... "
+			"GGE.... SGE.... HGE.... MGE.... DGWT... "
+			"GGE.... SGE.... HGE.... MGE.... DD2T... "
+			"GGE.... SGE.... HGE.... MGE.... DHIT... "
+			"GGE.... SGE.... HGE.... MGE....";
+
+		Message messages[39] = {};
+		DraculaView dv = DvNew(trail, messages);
+
+		int numLocs = -1;
+		PlaceId* locs = DvWhereCanIGo(dv, &numLocs);
+		assert(numLocs == 0);
+		assert(locs == NULL);
+
+		int numMoves = -1;
+		PlaceId* move = DvGetValidMoves(dv, &numMoves);
+		assert(numMoves == 0);
+		assert(move == NULL);
+		
+		printf("Test passed!\n");
+		DvFree(dv);
+	}
+
 	return EXIT_SUCCESS;
 }
