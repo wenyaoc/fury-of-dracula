@@ -106,41 +106,51 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves)
 {
 	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	*numReturnedMoves = 0;
-
+	// get all the locations in the history
 	PlaceId lastLocation = GvGetPlayerLocation(dv->gv, PLAYER_DRACULA);
 	if (lastLocation == NOWHERE) // Dracula has no movement yet
 		return NULL;
-
-	int DBnumber = 0;
-	Map m = MapNew(); // creat the map
-	ConnList connection = MapGetConnections(m, lastLocation);
-	ConnList curr = connection;
-	PlaceId* move = NULL;
-	while (curr != NULL) {
-		if (curr->type == ROAD || curr->type == BOAT) {
-			if (canGo(dv, curr->p)) { // dracula can directly go to that city 
-				move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
-				move[*numReturnedMoves] = curr->p;
-				*numReturnedMoves = *numReturnedMoves + 1;
-			} else if ((DBnumber = getDoubleBackNum(dv, curr->p)) > 0) { // dracula can double back to that city 
-				move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
-				move[*numReturnedMoves] = DOUBLE_BACK_1 + DBnumber - 1;
-				*numReturnedMoves = *numReturnedMoves + 1;
+	
+	int numReachable;
+	// get all the reachable places for Dracula
+    PlaceId * reachable = GvGetReachable(dv->gv, PLAYER_DRACULA, GvGetRound(dv->gv), lastLocation,&numReachable);
+	PlaceId * move = NULL;
+	// search through all the reachable locations
+	for (int i = 0; i < numReachable; i++) {
+		if (canGo(dv, reachable[i])) { // dracula can directly move to that location
+			move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
+			move[*numReturnedMoves] = reachable[i];
+			*numReturnedMoves = *numReturnedMoves + 1;
+		} else if (getDoubleBackNum(dv, reachable[i]) > 0) { // dracula can double back to that location
+			int DBnumber = getDoubleBackNum(dv, reachable[i]);
+			// if there is no double back in the trail and the last move was HIDE
+			// Dracula can go either DOUBLE_BACK_1 or DOUBLE_BACK_2
+			if (DBnumber == 2) { 
+				bool canFree;
+				int numReturned = 0;
+				// get the last move in the history
+				PlaceId * lastMove = GvGetLastMoves(dv->gv, PLAYER_DRACULA, 1, &numReturned, &canFree);
+				if (numReturned > 0){
+					if (lastMove[0] == HIDE) { // if the last move is HIDE, add DOUBLE_BACK_1 to valid moves
+						move= realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
+						move[*numReturnedMoves] = DOUBLE_BACK_1;
+						*numReturnedMoves = *numReturnedMoves + 1;
+					}
+					free(lastMove);
+				}
 			}
+			// add DOUBLE_BACK_# to the history
+			move= realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
+			move[*numReturnedMoves] = DOUBLE_BACK_1 + DBnumber - 1;
+			*numReturnedMoves = *numReturnedMoves + 1;
 		}
-		curr = curr->next;
-	}
-
-	if (canDoubleBack(dv)) { // dracula can double back to the current location
-		move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
-		move[*numReturnedMoves] = DOUBLE_BACK_1;
-		*numReturnedMoves = *numReturnedMoves + 1;
 	}
 	if (canHide(dv)) { // dracula can hide in the current location
 		move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
 		move[*numReturnedMoves] = HIDE;
 		*numReturnedMoves = *numReturnedMoves + 1;
 	}
+	free(reachable);
 	return move;
 }
 
@@ -158,34 +168,30 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 	PlaceId lastLocation = GvGetPlayerLocation(dv->gv, PLAYER_DRACULA); // get current location
 	if (lastLocation == NOWHERE) // Dracula has no movement yet
 		return NULL;
-
-	Map m = MapNew();
-	ConnList connection = MapGetConnections(m, lastLocation);
-	ConnList curr = connection;
-	PlaceId* place = NULL;
-	while (curr != NULL) {
-		if ((curr->type == ROAD && road) || (curr->type == BOAT && boat)) {
-			if (canGo(dv, curr->p)) { // dracula can directly move to that location
-				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-				place[*numReturnedLocs] = curr->p;
-				*numReturnedLocs = *numReturnedLocs + 1;
-			} else if (getDoubleBackNum(dv, curr->p) > 0) { // dracula can double back to that location
-				place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-				place[*numReturnedLocs] = curr->p;
-				*numReturnedLocs = *numReturnedLocs + 1;
-			}
+    
+	int numReachable;
+	// get all the reachable places for Dracula
+    PlaceId * reachable = GvGetReachableByType(dv->gv, PLAYER_DRACULA, GvGetRound(dv->gv), lastLocation, road, false, boat, &numReachable);
+	PlaceId * place = NULL;
+	// search through all the reachable locations
+	for (int i = 0; i < numReachable; i++) {
+		if (canGo(dv, reachable[i])) { // dracula can directly move to that location
+			place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+			place[*numReturnedLocs] = reachable[i];
+			*numReturnedLocs = *numReturnedLocs + 1;
+		} else if (getDoubleBackNum(dv, reachable[i]) > 0) { // dracula can double back to that location
+			place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
+			place[*numReturnedLocs] = reachable[i];
+			*numReturnedLocs = *numReturnedLocs + 1;
 		}
-		curr = curr->next;
 	}
-	if (canHide(dv)) { // dracula can hide in the current location
+	// dracula can hide in the current location & the location haven't been added
+	if (canHide(dv) && !getDoubleBackNum(dv, lastLocation)) { 
 		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 		place[*numReturnedLocs] = lastLocation;
 		*numReturnedLocs = *numReturnedLocs + 1;
-	} else if (canDoubleBack(dv)) { // dracula can double back to the current location
-		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
-		place[*numReturnedLocs] = DOUBLE_BACK_1;
-		*numReturnedLocs = *numReturnedLocs + 1;
-	}
+	} 
+	free (reachable);
 	return place;
 }
 
