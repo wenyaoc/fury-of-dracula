@@ -145,7 +145,7 @@ int main(void)
 			"GGE.... SGE.... HGE.... MGE.... DCOT... "
 			"GSTT... SGE.... HGE.... MGE....";
 
-		Message messages[24];
+		Message messages[14];
 		DraculaView dv = DvNew(trail, messages);
 
 
@@ -173,7 +173,7 @@ int main(void)
 			"GGE.... SGE.... HGE.... MGE.... DCOT... "
 			"GSTT... SGE.... HGE.... MGE....";
 
-		Message messages[24];
+		Message messages[19];
 		DraculaView dv = DvNew(trail, messages);
 
 		assert(DvGetScore(dv) == GAME_START_SCORE - 3 * SCORE_LOSS_DRACULA_TURN);
@@ -273,7 +273,7 @@ int main(void)
 			"GGE.... SGE.... HGE.... MGE....";
 
 
-		Message messages[24];
+		Message messages[29];
 		DraculaView dv = DvNew(trail, messages);
 
 		//return EXIT_SUCCESS;
@@ -345,7 +345,7 @@ int main(void)
 			"GGE.... SGE.... HGE.... MGE....";
 
 
-		Message messages[24];
+		Message messages[39];
 		DraculaView dv = DvNew(trail, messages);
 
 		//return EXIT_SUCCESS;
@@ -389,7 +389,7 @@ int main(void)
 			"GST.... SST.... HST.... MST....";
 
 
-		Message messages[24];
+		Message messages[49] = {};
 		DraculaView dv = DvNew(trail, messages);
 
 		//return EXIT_SUCCESS;
@@ -416,6 +416,7 @@ int main(void)
 		DvFree(dv);
 	}
 
+	// extra test 8 : no valid move for Dracula
 	{///////////////////////////////////////////////////////////////////
 
 		printf("Test for Dracula's valid moves 0\n");
@@ -423,7 +424,7 @@ int main(void)
 		char* trail =
 			"GGE.... SGE.... HGE.... MGE.... ";
 
-		Message messages[9];
+		Message messages[4];
 		DraculaView dv = DvNew(trail, messages);
 
 		int numMoves = -1;
@@ -435,6 +436,7 @@ int main(void)
 		DvFree(dv);
 	}
 
+	// extra test 9 : test DvWhereCanIGo
 	{///////////////////////////////////////////////////////////////////
 
 		printf("Test for DvWhereCanIGo 1\n");
@@ -446,7 +448,7 @@ int main(void)
 			"GGE.... SGE.... HGE.... MGE.... DHIT... "
 			"GGE.... SGE.... HGE.... MGE....";
 
-		Message messages[24];
+		Message messages[24] = {};
 		DraculaView dv = DvNew(trail, messages);
 
 		int numLocs = -1;
@@ -463,7 +465,7 @@ int main(void)
 		DvFree(dv);
 	}
 
-	// extra test 9 : Where can they go
+	// extra test 10 : Where can they go
 	{///////////////////////////////////////////////////////////////////
 
 		printf("Test for DvWhereCanTheyGo 1\n");
@@ -544,6 +546,7 @@ int main(void)
 		DvFree(dv);
 	}
 
+	// extra test 11 : DvWhereCanTheyGo
 	{///////////////////////////////////////////////////////////////////
 
 		printf("Test for DvWhereCanTheyGo 2\n");
@@ -552,7 +555,7 @@ int main(void)
 			"GSW.... SLS.... HMR.... MHA.... DSJ.V.. "
 			"GLO.... SAL.... HCO.... MBR....";
 
-		Message messages[24];
+		Message messages[9] = {};
 		DraculaView dv = DvNew(trail, messages);
 
 		//Not Done Yet
@@ -628,7 +631,7 @@ int main(void)
 		DvFree(dv);
 	}
 
-	// extra test 10 Finall Game : a complete game
+	// extra test 12 Finall Game : a complete game
 	{///////////////////////////////////////////////////////////////////
 
 		printf("Test complete game\n");
@@ -665,7 +668,7 @@ int main(void)
 			"GSZ.... SSOTD.. HBC.... MSOD...";
 
 
-		Message messages[24];
+		Message messages[139] = {};
 		DraculaView dv = DvNew(trail, messages);
 
 		//return EXIT_SUCCESS;

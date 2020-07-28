@@ -547,7 +547,7 @@ int main(void)
 			"GPATD.. SGE.... HGE.... MGE.... DBUT... "
 			"GBUTD.. SGE.... HGE.... MGE.... DCOT...";
 		
-		Message messages[16] = {};
+		Message messages[20] = {};
 		HunterView hv = HvNew(trail, messages);
 		
 		{
@@ -625,7 +625,7 @@ int main(void)
 			"GSR.... SDU.... HBU.... MPL.... DHIT... "
 			"GSN.... SIR.... HAM.... MLO.... DTPT... ";
 	
-		Message messages[72] = {};
+		Message messages[90] = {};
 		HunterView hv = HvNew(trail, messages);
 		
 		assert(HvGetPlayerLocation(hv, PLAYER_DRACULA) == CASTLE_DRACULA);
@@ -646,7 +646,7 @@ int main(void)
 		char *trail =
 			"GSW.... SLS.... HMR.... MHA.... DC?.V.. ";
 	
-		Message messages[4] = {};
+		Message messages[5] = {};
 		HunterView hv = HvNew(trail, messages);
 		
 		assert(HvGetPlayerLocation(hv, PLAYER_DRACULA) == CITY_UNKNOWN);
@@ -669,7 +669,7 @@ int main(void)
 			"GLO.... SAL.... HCO.... MBR.... DD2T... "
 			"GLO.... SAL.... HCO.... MBR.... DHIT... "
 			"GLO....";
-		Message messages[1] = {};
+		Message messages[21] = {};
 		HunterView hv = HvNew(trail, messages);
 		{
 			printf("\tDracula: road only\n");
@@ -734,7 +734,7 @@ int main(void)
 			"GLO.... SAL.... HCO.... MBR.... DC?T... "
 			"GLO.... SMA.... HCO.... MBR.... DD2T... "
 			"GLO....";
-		Message messages[1] = {};
+		Message messages[16] = {};
 		HunterView hv = HvNew(trail, messages);	
 		
 		{
@@ -804,7 +804,7 @@ int main(void)
 	}
 
 
-	// extra test 6
+	// extra test 7
 	// test HvWhereCanTheyGo for Dracula
 	{///////////////////////////////////////////////////////////////////
 	
@@ -815,7 +815,7 @@ int main(void)
 			"GLO.... SAL.... HCO.... MBR.... DC?T... "
 			"GLO.... SAL.... HCO.... MBR.... DD2T... "
 			"GLO.... SAL.... HCO.... MBR.... DHIT... ";
-		Message messages[1] = {};
+		Message messages[20] = {};
 		HunterView hv = HvNew(trail, messages);
 
 		int numLocs = -1;
