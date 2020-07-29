@@ -115,7 +115,8 @@ Round GvGetRound(GameView gv) {
 
 Player GvGetPlayer(GameView gv) {	
 	for (int i = 0; i < 5; i++) {
-		if(gv->data[i].turn < gv->round + 1) return i;
+		if(gv->data[i].turn < gv->round + 1) 
+		    return i;
 	}
 	return 0;
 }
@@ -467,7 +468,7 @@ void HvEvent(GameView gv, char* play, PlaceId place, int player) {
 		}
 	}
 	if (gv->data[player].turn > 1 
-        && gv->data[player].first->place == gv->data[player].first->next->place) {
+	    && gv->data[player].first->place == gv->data[player].first->next->place) {
 		gv->data[player].health += LIFE_GAIN_REST;
 		// if health > 9, set back to 9
 		if (gv->data[player].health > GAME_START_HUNTER_LIFE_POINTS) 
@@ -574,7 +575,7 @@ bool deleteLastTraps(HistoryNode node, PlaceId place, int num) {
 void deleteVampire(GameView gv) {
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
 	for (int counter = 0; curr != NULL && counter < 6 
-         && counter < gv->round; counter++) {
+	     && counter < gv->round; counter++) {
 		if (curr->vampire){ 
 			curr->vampire = false;
 			return;
