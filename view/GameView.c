@@ -18,13 +18,13 @@
 #include "GameView.h"
 #include "Map.h"
 #include "Places.h"
-// add your own #includes here
+// our own #includes
 #include <string.h>
 
 #define MAXCHAR 8
 #define MAXLINE 40
 
-// TODO: ADD YOUR OWN STRUCTS HERE
+// OUR OWN STRUCTS
 typedef struct historyNode *HistoryNode;
 
 struct historyNode {
@@ -43,7 +43,6 @@ typedef struct _playerData {
 
 
 struct gameView {
-	// TODO: ADD FIELDS HERE
 	Round round; // current round number
 	int score; // current score
 	playerData data[5]; // data[0-3]:hunter  data[4]:dracula
@@ -65,9 +64,7 @@ PlaceId * addPlace(PlaceId * place, int * num, PlaceId newPlace);
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
-GameView GvNew(char* pastPlays, Message messages[])
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+GameView GvNew(char* pastPlays, Message messages[]) {
 	GameView new = malloc(sizeof(*new));
 	if (new == NULL) {
 		fprintf(stderr, "Couldn't allocate GameView!\n");
@@ -102,9 +99,7 @@ GameView GvNew(char* pastPlays, Message messages[])
 	return new;
 }
 
-void GvFree(GameView gv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+void GvFree(GameView gv) {	
 	for (int i = 0; i < 5; i++) {
 		ListFree(gv->data[i].first);
 	}
@@ -114,36 +109,26 @@ void GvFree(GameView gv)
 ////////////////////////////////////////////////////////////////////////
 // Game State Information
 
-Round GvGetRound(GameView gv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+Round GvGetRound(GameView gv) {
 	return gv->round;
 }
 
-Player GvGetPlayer(GameView gv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+Player GvGetPlayer(GameView gv) {	
 	for (int i = 0; i < 5; i++) {
 		if(gv->data[i].turn < gv->round + 1) return i;
 	}
 	return 0;
 }
 
-int GvGetScore(GameView gv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+int GvGetScore(GameView gv) {	
 	return gv->score;
 }
 
-int GvGetHealth(GameView gv, Player player)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+int GvGetHealth(GameView gv, Player player) {	
 	return gv->data[player].health < 0 ? 0 : gv->data[player].health;
 }
 
-PlaceId GvGetPlayerLocation(GameView gv, Player player)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+PlaceId GvGetPlayerLocation(GameView gv, Player player) {	
 	if (gv->data[player].turn == 0) // no movement has been made
 		return NOWHERE;
 	else if (player != PLAYER_DRACULA) // player is hunter, dircetly return the place
@@ -178,9 +163,7 @@ PlaceId GvGetPlayerLocation(GameView gv, Player player)
 	return UNKNOWN_PLACE;
 }
 
-PlaceId GvGetVampireLocation(GameView gv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+PlaceId GvGetVampireLocation(GameView gv) {	
 	if (gv->data[PLAYER_DRACULA].turn == 0)
 		return NOWHERE;
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
@@ -194,9 +177,7 @@ PlaceId GvGetVampireLocation(GameView gv)
 	return NOWHERE; // there is no vampire
 }
 
-PlaceId* GvGetTrapLocations(GameView gv, int* numTraps)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+PlaceId* GvGetTrapLocations(GameView gv, int* numTraps) {	
 	*numTraps = 0;
 	if (gv->data[PLAYER_DRACULA].turn == 0) return NULL;
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
@@ -209,12 +190,14 @@ PlaceId* GvGetTrapLocations(GameView gv, int* numTraps)
 			// if place is not real, find the rel place name
 			if (curr->place == HIDE) { // the move is HIDE
 				// the move is DOUBLE_BACK# + HIDE
-				if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5)
+				if (curr->next->place >= DOUBLE_BACK_1 
+					&& curr->next->place <= DOUBLE_BACK_5)
 					place[*numTraps] = findDBCity(curr->next)->place;
 				else
 					place[*numTraps] = curr->next->place;
 
-			} else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) { // the move is DOUBLE_BACK#
+			} else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) { 
+				// the move is DOUBLE_BACK#
 				HistoryNode realPlace = findDBCity(curr);
 				if (realPlace->place == HIDE) // the move is HIDE + DOUBLE_BACK#
 					place[*numTraps] = realPlace->next->place;
@@ -237,17 +220,13 @@ PlaceId* GvGetTrapLocations(GameView gv, int* numTraps)
 // Game History
 
 PlaceId *GvGetMoveHistory(GameView gv, Player player,
-                          int *numReturnedMoves, bool *canFree)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+                          int *numReturnedMoves, bool *canFree) {	
 	int numMoves = gv->data[player].turn; // get the total turn
 	return GvGetLastMoves(gv, player, numMoves, numReturnedMoves, canFree);
 }
 
 PlaceId* GvGetLastMoves(GameView gv, Player player, int numMoves,
-						  int* numReturnedMoves, bool* canFree)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+						  int* numReturnedMoves, bool* canFree) {	
 	*canFree = true;
 	int totalNum = gv->data[player].turn;
 	if (totalNum == 0) return NULL; // no move has been done yet
@@ -269,18 +248,17 @@ PlaceId* GvGetLastMoves(GameView gv, Player player, int numMoves,
 }
 
 PlaceId *GvGetLocationHistory(GameView gv, Player player,
-                              int *numReturnedLocs, bool *canFree)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+                              int *numReturnedLocs, bool *canFree) {	
 	int numLocs = gv->data[player].turn;
-	return GvGetLastLocations(gv, player, numLocs, numReturnedLocs, canFree);
+	return GvGetLastLocations(gv, player, numLocs, numReturnedLocs, 
+							  canFree);
 }
 
 PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
-							  int* numReturnedLocs, bool* canFree)
-{
-	PlaceId* place = GvGetLastMoves(gv, player, numLocs, numReturnedLocs, canFree);
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+							  int* numReturnedLocs, bool* canFree) {
+	PlaceId* place = GvGetLastMoves(gv, player, numLocs, 
+									numReturnedLocs, canFree);
+	
 	HistoryNode curr = gv->data[player].first;
 	for (int i = (*numReturnedLocs - 1); i >= 0; i--) {
 		if (place[i] == HIDE) { // if the move is HIDE
@@ -289,8 +267,7 @@ PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
 				place[i] = findDBCity(curr->next)->place;
 			else
 				place[i] = curr->next->place;
-		}
-		else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
+		} else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) {
 			HistoryNode newCurr = findDBCity(curr);
 			// if the move is HIDE + DOUBLE_BACK#
 			if (newCurr->place == HIDE) 
@@ -311,17 +288,14 @@ PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
 // Making a Move
 
 PlaceId *GvGetReachable(GameView gv, Player player, Round round,
-                        PlaceId from, int *numReturnedLocs)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-	return GvGetReachableByType(gv, player, round, from, true, true, true, numReturnedLocs);
+                        PlaceId from, int *numReturnedLocs) {
+	return GvGetReachableByType(gv, player, round, from, 
+								true, true, true, numReturnedLocs);
 }
 
 PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
                               PlaceId from, bool road, bool rail,
-                              bool boat, int *numReturnedLocs)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+                              bool boat, int *numReturnedLocs) {	
 	*numReturnedLocs = 0;
 	Map m = MapNew(); // creat a map
 	ConnList connection;
@@ -332,8 +306,10 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 	if (curr == NULL) return NULL;
 	if (player == PLAYER_DRACULA) {  // If  the  given player is Dracula
 		while (curr != NULL) {
-			if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
-				if (curr->p != HOSPITAL_PLACE) {  // make sure the place is not St Joseph and St Mary.
+			if ((curr->type == ROAD && road == true) 
+				 || (curr->type == BOAT && boat == true)) {
+				// make sure the place is not St Joseph and St Mary.
+				if (curr->p != HOSPITAL_PLACE) {  
 					place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 					place[*numReturnedLocs] = curr->p;
 					*numReturnedLocs = *numReturnedLocs + 1;
@@ -341,7 +317,8 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 			}
 			curr = curr->next;
 		}
-		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));  // add the current place
+		// add the current place
+		place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId)); 
 		place[*numReturnedLocs] = from;
 		*numReturnedLocs = *numReturnedLocs + 1;
 
@@ -352,17 +329,21 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 				place = addPlace(place, numReturnedLocs, curr->p);
 			} else if (curr->type == RAIL && rail && num % 4 != 0) {
 				place = addPlace(place, numReturnedLocs, curr->p);
-				if (num % 4 > 1) {  // if num % 4 == 2 or num % 4 == 3, find more connections
+				if (num % 4 > 1) {  
+					// if num % 4 == 2 or num % 4 == 3, find more connections
 					ConnList connection2 = MapGetConnections(m, curr->p);
 					ConnList curr2 = connection2;
 					while (curr2 != NULL) {
-						if (curr2->type == RAIL) {
+						// find all the RAIL conntctions
+						if (curr2->type == RAIL) { 
 							place = addPlace(place, numReturnedLocs, curr2->p);
-							if (num % 4 == 3) { // if num % 4 == 3, find more connections
+							if (num % 4 == 3) { 
+								// if num % 4 == 3, find more connections
 								ConnList connection3 = MapGetConnections(m, curr2->p);
 								ConnList curr3 = connection3;
 								while (curr3 != NULL) {
-									if (curr3->type == RAIL) {
+									// find all the RAIL conntctions
+									if (curr3->type == RAIL) { 
 										place = addPlace(place, numReturnedLocs, curr3->p);
 									}
 									curr3 = curr3->next;
@@ -381,9 +362,7 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 }
 
 ////////////////////////////////////////////////////////////////////////
-// Your own interface functions
-
-// TODO
+// our own interface functions
 
 // add a play to GameView
 // input: GameView, a hunter play or a dracula play
@@ -403,8 +382,7 @@ void trailLoad(GameView gv, char* play) {
 
 // add a dracula's play to GameView
 // input: GameView, a dracula's play, place, PLAYER_DRACULA
-void DvEvent(GameView gv, char* play, PlaceId place, int player)
-{
+void DvEvent(GameView gv, char* play, PlaceId place, int player) {
 	bool vampire = false;
 	int trap = false;
 	if (play[3] == 'T')
@@ -440,27 +418,23 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 	else if (place == HIDE) { // dracula hide in this turn
 		HistoryNode node = gv->data[PLAYER_DRACULA].first->next;
 
-		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) { // hide at castle
+		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) // hide at castle
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-		}
 		else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
 			// hide and double back at castle
-			if (findDBCity(node)->place == CASTLE_DRACULA || findDBCity(node)->place == TELEPORT) {
+			if (findDBCity(node)->place == CASTLE_DRACULA 
+				|| findDBCity(node)->place == TELEPORT)
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-			}
-
 		}
 	}
 	else if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5) { // dracula double back in this turn
 		HistoryNode node = findDBCity(gv->data[PLAYER_DRACULA].first);
 
-		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) { // double back to castle
+		if (node->place == CASTLE_DRACULA || node->place == TELEPORT) // double back to castle
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-		}
 		else if (node->place == HIDE) { //double back and hide at castle
-			if (node->next->place == CASTLE_DRACULA || node->next->place == TELEPORT) {
+			if (node->next->place == CASTLE_DRACULA || node->next->place == TELEPORT) 
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
-			}
 		}
 	}
 	gv->score -= SCORE_LOSS_DRACULA_TURN;
@@ -468,8 +442,7 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player)
 
 // add a hunter's play to GameView
 // input: GameView, a hunter play, place, hunter's name
-void HvEvent(GameView gv, char* play, PlaceId place, int player)
-{
+void HvEvent(GameView gv, char* play, PlaceId place, int player) {
 	if (gv->data[player].health == 0) // if the hunter die last turn, set the health back
 		gv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
 
@@ -478,7 +451,7 @@ void HvEvent(GameView gv, char* play, PlaceId place, int player)
 	gv->data[player] = addToHistory(gv->data[player], new);
 
 	int i = 3;
-	for(i = 3; play[i] == 'T'; i++){ //encounters traps
+	for(i = 3; play[i] == 'T'; i++) { //encounters traps
 		deleteTraps(gv, place);
 		gv->data[player].health -= LIFE_LOSS_TRAP_ENCOUNTER;
 	}
@@ -492,7 +465,8 @@ void HvEvent(GameView gv, char* play, PlaceId place, int player)
 			gv->data[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
 		}
 	}
-	if (gv->data[player].turn > 1 && gv->data[player].first->place == gv->data[player].first->next->place) {
+	if (gv->data[player].turn > 1 
+		&& gv->data[player].first->place == gv->data[player].first->next->place) {
 		gv->data[player].health += LIFE_GAIN_REST;
 		if (gv->data[player].health > GAME_START_HUNTER_LIFE_POINTS) // if health > 9, set back to 9
 			gv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
@@ -507,7 +481,7 @@ void HvEvent(GameView gv, char* play, PlaceId place, int player)
 // get the player id
 // input: the character representing the player
 // output: the player id
-Player getPlayer(char c){
+Player getPlayer(char c) {
 	if (c == 'G') return PLAYER_LORD_GODALMING;
 	if (c == 'S') return PLAYER_DR_SEWARD;
 	if (c == 'H') return PLAYER_VAN_HELSING;
@@ -534,36 +508,36 @@ void deleteTraps(GameView gv, PlaceId place) {
 		if (curr->place == HIDE) { // the move is HIDE
 			if (curr->next->place == place){ 
 				if (!deleteLastTraps(curr->next, place, counter)) // delete the trap in the real place
-					curr->next->trap = false; // on trap in real place, delete the trap in the current place
+					curr->next->trap = false; // if no trap, delete the trap in the current place
 				return; 
-			} else if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5) {
+			} else if (curr->next->place >= DOUBLE_BACK_1 
+					   && curr->next->place <= DOUBLE_BACK_5) {
 				// the move is double back + hide
 				HistoryNode node = findDBCity(curr->next);
 				if (node->place == place) {
 					if (!deleteLastTraps(node, place, counter)) // delete the trap in the real place
-						curr->next->trap = false; // on trap in real place, delete the trap in the current place
+						curr->next->trap = false; // if no trap, delete the trap in the current place
 					return; 
 				}
 			}
-		}
-		else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) { // the move is Double Back
+		} else if (curr->place >= DOUBLE_BACK_1 && curr->place <= DOUBLE_BACK_5) { 
+			// the move is Double Back
 			HistoryNode node = findDBCity(curr);
 			if (node->place == place) {
 				if (!deleteLastTraps(node, place, counter)) // delete the trap in the real place
-					curr->trap = false;  // on trap in real place, delete the trap in the current place
+					curr->trap = false;  // if no trap, delete the trap in the current place
 				return;
 			} 
 			else if (node->place == HIDE) { // the move is hide + double back
 				if (node->next->place == place) {
 					if (!deleteLastTraps(node, place, counter)) // delete the trap in the real place
-						curr->trap = false; // on trap in real place, delete the trap in the current place
+						curr->trap = false; // if no trap, delete the trap in the current place
 					return;
 				}
 			}
-		}
-		else if (curr->place == TELEPORT) // the move is teleport
+		} else if (curr->place == TELEPORT) // the move is teleport
 			if (!deleteLastTraps(curr, place, counter)) // delete the trap in the real place
-				curr->trap = false; // on trap in real place, delete the trap in the current place
+				curr->trap = false; // if no trap, delete the trap in the current place
 		curr = curr->next;
 	}
 }
@@ -592,7 +566,8 @@ bool deleteLastTraps(HistoryNode node, PlaceId place, int num) {
 // input: GameView
 void deleteVampire(GameView gv) {
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
-	for (int counter = 0; curr != NULL && counter < 6 && counter < gv->round; counter++) {
+	for (int counter = 0; curr != NULL && counter < 6 
+		 && counter < gv->round; counter++) {
 		if (curr->vampire){ 
 			curr->vampire = false;
 			return;
@@ -646,7 +621,7 @@ void ListFree(HistoryNode node) {
 }
 
 // create a new node
-HistoryNode creatNode(PlaceId place, bool vampire, int trap){
+HistoryNode creatNode(PlaceId place, bool vampire, int trap) {
     HistoryNode new = malloc(sizeof(* new));
     new->place = place;
     new->vampire = vampire;
