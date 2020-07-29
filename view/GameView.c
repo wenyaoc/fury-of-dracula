@@ -302,8 +302,7 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 	if (curr == NULL) return NULL;
 	if (player == PLAYER_DRACULA) {  // If  the  given player is Dracula
 		while (curr != NULL) {
-			if ((curr->type == ROAD && road == true) 
-                 || (curr->type == BOAT && boat == true)) {
+			if ((curr->type == ROAD && road == true) || (curr->type == BOAT && boat == true)) {
 				// make sure the place is not St Joseph and St Mary.
 				if (curr->p != HOSPITAL_PLACE) {  
 					place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
@@ -460,8 +459,7 @@ void HvEvent(GameView gv, char* play, PlaceId place, int player) {
 			gv->data[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
 		}
 	}
-	if (gv->data[player].turn > 1 
-		&& gv->data[player].first->place == gv->data[player].first->next->place) {
+	if (gv->data[player].turn > 1 && gv->data[player].first->place == gv->data[player].first->next->place) {
 		gv->data[player].health += LIFE_GAIN_REST;
 		if (gv->data[player].health > GAME_START_HUNTER_LIFE_POINTS) // if health > 9, set back to 9
 			gv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
@@ -505,8 +503,7 @@ void deleteTraps(GameView gv, PlaceId place) {
 				if (!deleteLastTraps(curr->next, place, counter)) // delete the trap in the real place
 					curr->next->trap = false; // if no trap, delete the trap in the current place
 				return; 
-			} else if (curr->next->place >= DOUBLE_BACK_1 
-					   && curr->next->place <= DOUBLE_BACK_5) {
+			} else if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5) {
 				// the move is double back + hide
 				HistoryNode node = findDBCity(curr->next);
 				if (node->place == place) {

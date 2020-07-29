@@ -150,7 +150,7 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
     
 	int numReachable;
 	// get all the reachable places for Dracula
-    PlaceId * reachable = GvGetReachableByType(dv->gv, PLAYER_DRACULA, GvGetRound(dv->gv), lastLocation, road, false, boat, &numReachable);
+	PlaceId * reachable = GvGetReachableByType(dv->gv, PLAYER_DRACULA, GvGetRound(dv->gv), lastLocation, road, false, boat, &numReachable);
 	PlaceId * place = NULL;
 	// search through all the reachable locations
 	for (int i = 0; i < numReachable; i++) {
