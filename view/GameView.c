@@ -191,7 +191,7 @@ PlaceId* GvGetTrapLocations(GameView gv, int* numTraps) {
 			if (curr->place == HIDE) { // the move is HIDE
 				// the move is DOUBLE_BACK# + HIDE
 				if (curr->next->place >= DOUBLE_BACK_1 
-					&& curr->next->place <= DOUBLE_BACK_5)
+                    && curr->next->place <= DOUBLE_BACK_5)
 					place[*numTraps] = findDBCity(curr->next)->place;
 				else
 					place[*numTraps] = curr->next->place;
