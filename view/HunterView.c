@@ -152,8 +152,8 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 		return path;
 	}
 	int w;
-
-	if (src != hv->path[hunter].src) { // if HvGetShortestPathTo haven't been called brfore
+    // if HvGetShortestPathTo haven't been called brfore
+	if (src != hv->path[hunter].src) { 
 		// initialise values
 		hv->path[hunter].src = src;
 		Round round = HvGetRound(hv);
