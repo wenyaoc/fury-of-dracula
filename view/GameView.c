@@ -531,21 +531,21 @@ void deleteTraps(GameView gv, PlaceId place) {
 			if (node->place == place) {
 			    // delete the trap in the real place
 				if (!deleteLastTraps(node, place, counter)) 
-					curr->trap = false;  // if no trap, delete the trap in the current place
+					curr->trap = false;  // delete the trap in the current place
 				return;
 			} 
 			else if (node->place == HIDE) { // the move is hide + double back
 				if (node->next->place == place) {
 				    // delete the trap in the real place
 					if (!deleteLastTraps(node, place, counter)) 
-						curr->trap = false; // if no trap, delete the trap in the current place
+						curr->trap = false; // delete the trap in the current place
 					return;
 				}
 			}
 		} else if (curr->place == TELEPORT) // the move is teleport
 		    // delete the trap in the real place
 			if (!deleteLastTraps(curr, place, counter)) 
-				curr->trap = false; // if no trap, delete the trap in the current place
+				curr->trap = false; // delete the trap in the current place
 		curr = curr->next;
 	}
 }

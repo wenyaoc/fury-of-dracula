@@ -199,7 +199,7 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 
 	Player currPlayer = GvGetPlayer(dv->gv); // get the current player
 	
-	if (currPlayer < player) // the player haven't made a move in the current turn
+	if (currPlayer < player) // haven't made a move in the current turn
 		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv), 
 		                            lastLocation, road, rail, 
 		                            boat, numReturnedLocs);
@@ -232,6 +232,7 @@ bool canGo(DraculaView dv, PlaceId place) {
 			go = false;
 		else if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5 
 		         && list[i] - DOUBLE_BACK_1 < num) {
+		         
 			if (list[list[i] - DOUBLE_BACK_1] == place) // already double back before
 				go = false;
 		} else if (i + 1 == 6 && num >= 6) {
