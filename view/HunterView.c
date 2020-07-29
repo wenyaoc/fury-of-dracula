@@ -19,13 +19,13 @@
 #include "HunterView.h"
 #include "Map.h"
 #include "Places.h"
-// add your own #includes here
+// our own #includes 
 #include <limits.h>
 #include <string.h>
 
 #define MAXCHAR 8
 #define MAXLINE 40
-// TODO: ADD YOUR OWN STRUCTS HERE
+// OUR OWN STRUCTS
 typedef struct QueueRep *Queue;
 
 typedef struct QueueNode {
@@ -47,7 +47,6 @@ typedef struct ShortestPath {
 
 
 struct hunterView {
-	// TODO: ADD FIELDS HERE
 	GameView gv;
 	ShortestPath path[4];
 };
@@ -62,9 +61,7 @@ int QueueIsEmpty (Queue Q); // check for no items, from lab07
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
-HunterView HvNew(char *pastPlays, Message messages[])
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+HunterView HvNew(char *pastPlays, Message messages[]) {
 	HunterView new = malloc(sizeof(*new));
 	if (new == NULL) {
 		fprintf(stderr, "Couldn't allocate HunterView!\n");
@@ -72,16 +69,16 @@ HunterView HvNew(char *pastPlays, Message messages[])
 	}
 	new->gv = GvNew(pastPlays, messages);
 	for (int i = 0; i < 4; i++) {
-		new->path[i].src = NOWHERE;
+		// set src to NOWHERE if shortest haven't been called
+		new->path[i].src = NOWHERE; 
 		new->path[i].dist = NULL;
 		new->path[i].pred = NULL;
 	}
 	return new;
 }
 
-void HvFree(HunterView hv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+void HvFree(HunterView hv) {
+	
 	GvFree(hv->gv);
 	for (int i = 0; i < 4; i++) {
 		if (hv->path[i].src != NOWHERE) {
@@ -95,51 +92,38 @@ void HvFree(HunterView hv)
 ////////////////////////////////////////////////////////////////////////
 // Game State Information
 
-Round HvGetRound(HunterView hv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+Round HvGetRound(HunterView hv) {	
 	return GvGetRound(hv->gv);
 }
 
-Player HvGetPlayer(HunterView hv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+Player HvGetPlayer(HunterView hv) {
 	return GvGetPlayer(hv->gv);
 }
 
-int HvGetScore(HunterView hv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+int HvGetScore(HunterView hv) {
 	return GvGetScore(hv->gv);
 }
 
-int HvGetHealth(HunterView hv, Player player)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+int HvGetHealth(HunterView hv, Player player) {	
 	return GvGetHealth(hv->gv, player);
 }
 
-PlaceId HvGetPlayerLocation(HunterView hv, Player player)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+PlaceId HvGetPlayerLocation(HunterView hv, Player player) {
 	return GvGetPlayerLocation(hv->gv, player);
 }
 
-PlaceId HvGetVampireLocation(HunterView hv)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+PlaceId HvGetVampireLocation(HunterView hv) {
 	return GvGetVampireLocation(hv->gv);
 }
 
 ////////////////////////////////////////////////////////////////////////
 // Utility Functions
 
-PlaceId HvGetLastKnownDraculaLocation(HunterView hv, Round *round)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+PlaceId HvGetLastKnownDraculaLocation(HunterView hv, Round *round) {
 	int number;
 	bool canFree;
-	PlaceId * place = GvGetLocationHistory(hv->gv, PLAYER_DRACULA, &number, &canFree);
+	PlaceId * place = GvGetLocationHistory(hv->gv, PLAYER_DRACULA, 
+										   &number, &canFree);
 	PlaceId LastKnownPlace;
 	int known = 0;
 	for (int i = number - 1; i >= 0; i--) {
@@ -158,9 +142,7 @@ PlaceId HvGetLastKnownDraculaLocation(HunterView hv, Round *round)
 }
 
 PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
-                             int *pathLength)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+                             int *pathLength) {
 	PlaceId src = HvGetPlayerLocation(hv, hunter);
 
 	PlaceId * path = NULL;
@@ -192,7 +174,8 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 		while (!QueueIsEmpty(q)) {
 			w = QueueLeave(q);
 			int numReturnedLocs;
-			PlaceId * reachable = GvGetReachable(hv->gv, hunter, round + dist[w], w, &numReturnedLocs);
+			PlaceId * reachable = GvGetReachable(hv->gv, hunter, round + dist[w], 
+												 w, &numReturnedLocs);
 			for (int i = 0; i < numReturnedLocs; i++) {
 				v = reachable[i];
 				if (w != v && pred[v] == -1) {
@@ -204,6 +187,7 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 			free(reachable);
 		}
 		dropQueue(q);
+		// store the array into HunterView
 		hv->path[hunter].dist = dist;
 		hv->path[hunter].pred = pred;
 	} 
@@ -222,45 +206,40 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest,
 ////////////////////////////////////////////////////////////////////////
 // Making a Move
 
-PlaceId *HvWhereCanIGo(HunterView hv, int *numReturnedLocs)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+PlaceId *HvWhereCanIGo(HunterView hv, int *numReturnedLocs) {
 	return HvWhereCanIGoByType(hv, true, true, true, numReturnedLocs);
 }
 
 PlaceId *HvWhereCanIGoByType(HunterView hv, bool road, bool rail,
-                             bool boat, int *numReturnedLocs)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+                             bool boat, int *numReturnedLocs) {
 	*numReturnedLocs = 0;
 	Player player = GvGetPlayer(hv->gv); // get current player
 	PlaceId from = GvGetPlayerLocation(hv->gv, player);
 	if (from == NOWHERE) return NULL; // hunter has no movement yet
-	return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + player, from, road, rail, boat, numReturnedLocs);
+	return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + player, 
+								from, road, rail, boat, numReturnedLocs);
 }
 
 PlaceId *HvWhereCanTheyGo(HunterView hv, Player player,
-                          int *numReturnedLocs)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+                          int *numReturnedLocs) {	
 	return HvWhereCanTheyGoByType(hv, player, true, true, true, numReturnedLocs);
 }
 
 PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
                                 bool road, bool rail, bool boat,
-                                int *numReturnedLocs)
-{
-	// TODO: REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+                                int *numReturnedLocs) {	
 	if (player != PLAYER_DRACULA) { // player is a hunter
 		*numReturnedLocs = 0;
 		PlaceId from = GvGetPlayerLocation(hv->gv, player);
 		if (from == NOWHERE) return NULL; // hunter has no movement yet
 		
 		Player currPlayer = GvGetPlayer(hv->gv);
-		if (currPlayer <= player) { // he player haven't made a movement in the current turn
-			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv), from, road, rail, boat, numReturnedLocs);
+		if (currPlayer <= player) { // haven't made a movement in the current turn
+			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv), 
+										from, road, rail, boat, numReturnedLocs);
 		} else { // the player already made a movement in the current turn
-			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + 1, from, road, rail, boat, numReturnedLocs);
+			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + 1, 
+										from, road, rail, boat, numReturnedLocs);
 		}
 	} else { // player is Dracula
 		PlaceId from = GvGetPlayerLocation(hv->gv, PLAYER_DRACULA);
@@ -268,19 +247,17 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 			*numReturnedLocs = 0;
 			return NULL;
 		}
-		return GvGetReachableByType(hv->gv, PLAYER_DRACULA, GvGetRound(hv->gv), from, road, false, boat, numReturnedLocs);
+		return GvGetReachableByType(hv->gv, PLAYER_DRACULA, GvGetRound(hv->gv), 
+									from, road, false, boat, numReturnedLocs);
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////
-// Your own interface functions
-
-// TODO
+// Our own interface functions
 
 // Queue operations
 // create new empty Queue
-Queue newQueue (void)
-{
+Queue newQueue (void) {
 	Queue new = malloc (sizeof *new);
 	new->head = NULL;
 	new->tail = NULL;
@@ -288,8 +265,7 @@ Queue newQueue (void)
 }
 
 // free the Queue
-void dropQueue (Queue Q)
-{
+void dropQueue (Queue Q) {
 	assert (Q != NULL);
 	for (QueueNode *curr = Q->head, *next; curr != NULL; curr = next) {
 		next = curr->next;
@@ -299,8 +275,7 @@ void dropQueue (Queue Q)
 }
 
 // add item at end of Queue
-void QueueJoin (Queue Q, int it)
-{
+void QueueJoin (Queue Q, int it) {
 	assert (Q != NULL);
 
 	QueueNode *new = malloc (sizeof *new);
@@ -316,8 +291,7 @@ void QueueJoin (Queue Q, int it)
 }
 
 // remove item from front of Queue
-int QueueLeave (Queue Q)
-{
+int QueueLeave (Queue Q) {
 	assert (Q != NULL);
 	assert (Q->head != NULL);
 	int it = Q->head->value;
@@ -330,7 +304,6 @@ int QueueLeave (Queue Q)
 }
 
 // check for no items
-int QueueIsEmpty (Queue Q)
-{
+int QueueIsEmpty (Queue Q) {
 	return (Q->head == NULL);
 }
