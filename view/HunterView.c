@@ -122,7 +122,8 @@ PlaceId HvGetVampireLocation(HunterView hv) {
 PlaceId HvGetLastKnownDraculaLocation(HunterView hv, Round *round) {
 	int number;
 	bool canFree;
-	PlaceId * place = GvGetLocationHistory(hv->gv, PLAYER_DRACULA, &number, &canFree);
+	PlaceId * place = GvGetLocationHistory(hv->gv, PLAYER_DRACULA, 
+                                           &number, &canFree);
 	PlaceId LastKnownPlace;
 	int known = 0;
 	for (int i = number - 1; i >= 0; i--) {
@@ -172,7 +173,8 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 		while (!QueueIsEmpty(q)) {
 			w = QueueLeave(q);
 			int numReturnedLocs;
-			PlaceId * reachable = GvGetReachable(hv->gv, hunter, round + dist[w], w, &numReturnedLocs);
+			PlaceId * reachable = GvGetReachable(hv->gv, hunter, round + dist[w], 
+                                                 w, &numReturnedLocs);
 			for (int i = 0; i < numReturnedLocs; i++) {
 				v = reachable[i];
 				if (w != v && pred[v] == -1) {
@@ -213,7 +215,8 @@ PlaceId *HvWhereCanIGoByType(HunterView hv, bool road, bool rail,
 	Player player = GvGetPlayer(hv->gv); // get current player
 	PlaceId from = GvGetPlayerLocation(hv->gv, player);
 	if (from == NOWHERE) return NULL; // hunter has no movement yet
-	return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + player, from, road, rail, boat, numReturnedLocs);
+	return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + player, from, 
+                                road, rail, boat, numReturnedLocs);
 }
 
 PlaceId *HvWhereCanTheyGo(HunterView hv, Player player,
@@ -231,9 +234,11 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 		
 		Player currPlayer = GvGetPlayer(hv->gv);
 		if (currPlayer <= player) { // haven't made a movement in the current turn
-			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv), from, road, rail, boat, numReturnedLocs);
+			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv), from, 
+                                        road, rail, boat, numReturnedLocs);
 		} else { // the player already made a movement in the current turn
-			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + 1, from, road, rail, boat, numReturnedLocs);
+			return GvGetReachableByType(hv->gv, player, GvGetRound(hv->gv) + 1, 
+                                        from, road, rail, boat, numReturnedLocs);
 		}
 	} else { // player is Dracula
 		PlaceId from = GvGetPlayerLocation(hv->gv, PLAYER_DRACULA);
@@ -241,7 +246,8 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 			*numReturnedLocs = 0;
 			return NULL;
 		}
-		return GvGetReachableByType(hv->gv, PLAYER_DRACULA, GvGetRound(hv->gv), from, road, false, boat, numReturnedLocs);
+		return GvGetReachableByType(hv->gv, PLAYER_DRACULA, GvGetRound(hv->gv), 
+                                    from, road, false, boat, numReturnedLocs);
 	}
 }
 

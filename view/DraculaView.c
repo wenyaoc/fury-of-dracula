@@ -231,7 +231,7 @@ bool canGo(DraculaView dv, PlaceId place) {
 		if (list[i] == place) // the place is already in the trail
 			go = false;
 		else if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5 
-				 && list[i] - DOUBLE_BACK_1 < num) {
+		         && list[i] - DOUBLE_BACK_1 < num) {
 			if (list[list[i] - DOUBLE_BACK_1] == place) // already double back before
 				go = false;
 		} else if (i + 1 == 6 && num >= 6) {
