@@ -227,7 +227,7 @@ PlaceId *GvGetMoveHistory(GameView gv, Player player,
 }
 
 PlaceId* GvGetLastMoves(GameView gv, Player player, int numMoves,
-						  int* numReturnedMoves, bool* canFree) {	
+                        int* numReturnedMoves, bool* canFree) {	
 	*canFree = true;
 	int totalNum = gv->data[player].turn;
 	if (totalNum == 0) return NULL; // no move has been done yet
@@ -255,7 +255,7 @@ PlaceId *GvGetLocationHistory(GameView gv, Player player,
 }
 
 PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
-							  int* numReturnedLocs, bool* canFree) {
+                            int* numReturnedLocs, bool* canFree) {
 	PlaceId* place = GvGetLastMoves(gv, player, numLocs, numReturnedLocs, canFree);
 	
 	HistoryNode curr = gv->data[player].first;
@@ -290,7 +290,7 @@ PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
 PlaceId *GvGetReachable(GameView gv, Player player, Round round,
                         PlaceId from, int *numReturnedLocs) {
 	return GvGetReachableByType(gv, player, round, from, 
-                                true, true, true, numReturnedLocs);
+	                            true, true, true, numReturnedLocs);
 }
 
 PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
@@ -423,7 +423,7 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player) {
 		else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
 			// hide and double back at castle
 			if (findDBCity(node)->place == CASTLE_DRACULA 
-                || findDBCity(node)->place == TELEPORT)
+			    || findDBCity(node)->place == TELEPORT)
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
 		}
 	} else if (place >= DOUBLE_BACK_1 && place <= DOUBLE_BACK_5) { 
@@ -514,7 +514,7 @@ void deleteTraps(GameView gv, PlaceId place) {
 					curr->next->trap = false; // if no trap, delete the trap in the current place
 				return; 
 			} else if (curr->next->place >= DOUBLE_BACK_1 
-                       && curr->next->place <= DOUBLE_BACK_5) {
+			           && curr->next->place <= DOUBLE_BACK_5) {
 				// the move is double back + hide
 				HistoryNode node = findDBCity(curr->next);
 				if (node->place == place) {
