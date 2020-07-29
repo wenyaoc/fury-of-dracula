@@ -190,8 +190,7 @@ PlaceId* GvGetTrapLocations(GameView gv, int* numTraps) {
 			// if place is not real, find the rel place name
 			if (curr->place == HIDE) { // the move is HIDE
 				// the move is DOUBLE_BACK# + HIDE
-				if (curr->next->place >= DOUBLE_BACK_1 
-                    && curr->next->place <= DOUBLE_BACK_5)
+				if (curr->next->place >= DOUBLE_BACK_1 && curr->next->place <= DOUBLE_BACK_5)
 					place[*numTraps] = findDBCity(curr->next)->place;
 				else
 					place[*numTraps] = curr->next->place;
@@ -250,14 +249,12 @@ PlaceId* GvGetLastMoves(GameView gv, Player player, int numMoves,
 PlaceId *GvGetLocationHistory(GameView gv, Player player,
                               int *numReturnedLocs, bool *canFree) {	
 	int numLocs = gv->data[player].turn;
-	return GvGetLastLocations(gv, player, numLocs, numReturnedLocs, 
-                              canFree);
+	return GvGetLastLocations(gv, player, numLocs, numReturnedLocs, canFree);
 }
 
 PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
 							  int* numReturnedLocs, bool* canFree) {
-	PlaceId* place = GvGetLastMoves(gv, player, numLocs, 
-                                    numReturnedLocs, canFree);
+	PlaceId* place = GvGetLastMoves(gv, player, numLocs, numReturnedLocs, canFree);
 	
 	HistoryNode curr = gv->data[player].first;
 	for (int i = (*numReturnedLocs - 1); i >= 0; i--) {
@@ -289,8 +286,7 @@ PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
 
 PlaceId *GvGetReachable(GameView gv, Player player, Round round,
                         PlaceId from, int *numReturnedLocs) {
-	return GvGetReachableByType(gv, player, round, from, 
-                                true, true, true, numReturnedLocs);
+	return GvGetReachableByType(gv, player, round, from, true, true, true, numReturnedLocs);
 }
 
 PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
@@ -422,8 +418,7 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player) {
 			gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
 		else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
 			// hide and double back at castle
-			if (findDBCity(node)->place == CASTLE_DRACULA 
-                || findDBCity(node)->place == TELEPORT)
+			if (findDBCity(node)->place == CASTLE_DRACULA || findDBCity(node)->place == TELEPORT)
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
 		}
 	}
@@ -566,8 +561,7 @@ bool deleteLastTraps(HistoryNode node, PlaceId place, int num) {
 // input: GameView
 void deleteVampire(GameView gv) {
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
-	for (int counter = 0; curr != NULL && counter < 6 
-		 && counter < gv->round; counter++) {
+	for (int counter = 0; curr != NULL && counter < 6 && counter < gv->round; counter++) {
 		if (curr->vampire){ 
 			curr->vampire = false;
 			return;

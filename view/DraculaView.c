@@ -93,8 +93,7 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves) {
 	
 	int numReachable;
 	// get all the reachable places for Dracula
-    PlaceId * reachable = GvGetReachable(dv->gv, PLAYER_DRACULA, GvGetRound(dv->gv), 
-										 lastLocation, &numReachable);
+    PlaceId * reachable = GvGetReachable(dv->gv, PLAYER_DRACULA, GvGetRound(dv->gv), lastLocation, &numReachable);
 	PlaceId * move = NULL;
 	// search through all the reachable locations
 	for (int i = 0; i < numReachable; i++) {
@@ -111,8 +110,7 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves) {
 				bool canFree;
 				int numReturned = 0;
 				// get the last move in the history
-				PlaceId * lastMove = GvGetLastMoves(dv->gv, PLAYER_DRACULA, 1, 
-													&numReturned, &canFree);
+				PlaceId * lastMove = GvGetLastMoves(dv->gv, PLAYER_DRACULA, 1, &numReturned, &canFree);
 				if (numReturned > 0){
 					if (lastMove[0] == HIDE) { 
 						// if the last move is HIDE, add DOUBLE_BACK_1 to moves
@@ -152,9 +150,7 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
     
 	int numReachable;
 	// get all the reachable places for Dracula
-    PlaceId * reachable = GvGetReachableByType(dv->gv, PLAYER_DRACULA, 
-											   GvGetRound(dv->gv), lastLocation, 
-											   road, false, boat, &numReachable);
+    PlaceId * reachable = GvGetReachableByType(dv->gv, PLAYER_DRACULA, GvGetRound(dv->gv), lastLocation, road, false, boat, &numReachable);
 	PlaceId * place = NULL;
 	// search through all the reachable locations
 	for (int i = 0; i < numReachable; i++) {
@@ -199,11 +195,9 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 	Player currPlayer = GvGetPlayer(dv->gv); // get the current player
 	
 	if (currPlayer < player) // the player haven't made a move in the current turn
-		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv), 
-									lastLocation, road, rail, boat, numReturnedLocs);
+		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv), lastLocation, road, rail, boat, numReturnedLocs);
 	else // the player alreade made a move in the current turn
-		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv) + 1, 
-									lastLocation, road, rail, boat, numReturnedLocs);
+		return GvGetReachableByType(dv->gv, player, GvGetRound(dv->gv) + 1, lastLocation, road, rail, boat, numReturnedLocs);
 }
 
 ////////////////////////////////////////////////////////////////////////
