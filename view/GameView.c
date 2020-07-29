@@ -251,13 +251,13 @@ PlaceId *GvGetLocationHistory(GameView gv, Player player,
                               int *numReturnedLocs, bool *canFree) {	
 	int numLocs = gv->data[player].turn;
 	return GvGetLastLocations(gv, player, numLocs, numReturnedLocs, 
-							  canFree);
+                              canFree);
 }
 
 PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
 							  int* numReturnedLocs, bool* canFree) {
 	PlaceId* place = GvGetLastMoves(gv, player, numLocs, 
-									numReturnedLocs, canFree);
+                                    numReturnedLocs, canFree);
 	
 	HistoryNode curr = gv->data[player].first;
 	for (int i = (*numReturnedLocs - 1); i >= 0; i--) {
@@ -290,7 +290,7 @@ PlaceId* GvGetLastLocations(GameView gv, Player player, int numLocs,
 PlaceId *GvGetReachable(GameView gv, Player player, Round round,
                         PlaceId from, int *numReturnedLocs) {
 	return GvGetReachableByType(gv, player, round, from, 
-								true, true, true, numReturnedLocs);
+                                true, true, true, numReturnedLocs);
 }
 
 PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
@@ -307,7 +307,7 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 	if (player == PLAYER_DRACULA) {  // If  the  given player is Dracula
 		while (curr != NULL) {
 			if ((curr->type == ROAD && road == true) 
-				 || (curr->type == BOAT && boat == true)) {
+                 || (curr->type == BOAT && boat == true)) {
 				// make sure the place is not St Joseph and St Mary.
 				if (curr->p != HOSPITAL_PLACE) {  
 					place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
@@ -423,7 +423,7 @@ void DvEvent(GameView gv, char* play, PlaceId place, int player) {
 		else if (node->place >= DOUBLE_BACK_1 && node->place <= DOUBLE_BACK_5) {
 			// hide and double back at castle
 			if (findDBCity(node)->place == CASTLE_DRACULA 
-				|| findDBCity(node)->place == TELEPORT)
+                || findDBCity(node)->place == TELEPORT)
 				gv->data[player].health += LIFE_GAIN_CASTLE_DRACULA;
 		}
 	}
