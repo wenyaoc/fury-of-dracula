@@ -16,6 +16,9 @@
 
 #include "Places.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 /*
 typedef mode {
 	CHASING,	
@@ -64,8 +67,8 @@ const char * decideLordGodalmingMove(HunterView hv) {
 	if (predictLocation(hv) == NOWHERE) {
 		int numReturnedLocs;
 		PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
-		int num = rand() % numReturnedLocs;
-		newPlace = places[num];
+		srand(time(0));
+		newPlace = places[rand() % numReturnedLocs];
 		free(places);
 	}
 	return placeIdToAbbrev(newPlace);
@@ -79,8 +82,8 @@ const char * decideDrSewardMove(HunterView hv) {
 	if (predictLocation(hv) == NOWHERE) {
 		int numReturnedLocs;
 		PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
-		int num = rand() % numReturnedLocs;
-		newPlace = places[num];
+		srand(time(0));
+		newPlace = places[rand() % numReturnedLocs];
 		free(places);
 	}
 	return placeIdToAbbrev(newPlace);
@@ -94,8 +97,8 @@ const char * decideVanHelsingMove(HunterView hv) {
 	if (predictLocation(hv) == NOWHERE) {
 		int numReturnedLocs;
 		PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
-		int num = rand() % numReturnedLocs;
-		newPlace = places[num];
+		srand(time(0));
+		newPlace = places[rand() % numReturnedLocs];
 		free(places);
 	}
 	return placeIdToAbbrev(newPlace);
