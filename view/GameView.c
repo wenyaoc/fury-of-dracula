@@ -116,7 +116,7 @@ Round GvGetRound(GameView gv) {
 Player GvGetPlayer(GameView gv) {	
 	for (int i = 0; i < 5; i++) {
 		if(gv->data[i].turn < gv->round + 1) 
-		    return i;
+			return i;
 	}
 	return 0;
 }
