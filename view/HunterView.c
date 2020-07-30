@@ -303,13 +303,13 @@ void QueueJoin (Queue Q, int it) {
 int QueueLeave (Queue Q) {
 	assert (Q != NULL);
 	assert (Q->head != NULL);
-	int it = Q->head->value;
+	int item = Q->head->value;
 	QueueNode *old = Q->head;
 	Q->head = old->next;
 	if (Q->head == NULL)
 		Q->tail = NULL;
 	free (old);
-	return it;
+	return item;
 }
 
 // check for no items
