@@ -51,10 +51,8 @@ struct gameView {
 
 Player getPlayer(char c);
 void trailLoad(GameView gv, char * play, Message message);
-void draculaEvent(GameView gv, char* play, PlaceId place, 
-                  int player, Message message);
-void hunterEvent(GameView gv, char* play, PlaceId place, 
-                 int player, Message message);
+void draculaEvent(GameView gv, char* play, PlaceId place, int player, Message message);
+void hunterEvent(GameView gv, char* play, PlaceId place, int player, Message message);
 void deleteTraps(GameView gv, PlaceId place);
 void deleteVampire(GameView gv);
 bool deleteLastTraps(HistoryNode node, PlaceId place, int num);
@@ -389,8 +387,7 @@ void trailLoad(GameView gv, char* play, Message message) {
 
 // add a dracula's play to GameView
 // input: GameView, a dracula's play, place, PLAYER_DRACULA
-void draculaEvent(GameView gv, char* play, PlaceId place, 
-                  int player, Message message) {
+void draculaEvent(GameView gv, char* play, PlaceId place, int player, Message message) {
 	bool vampire = false;
 	int trap = false;
 	if (play[3] == 'T')
@@ -449,8 +446,7 @@ void draculaEvent(GameView gv, char* play, PlaceId place,
 
 // add a hunter's play to GameView
 // input: GameView, a hunter play, place, hunter's name
-void hunterEvent(GameView gv, char* play, PlaceId place, 
-                 int player, Message message) {
+void hunterEvent(GameView gv, char* play, PlaceId place, int player, Message message) {
     // if the hunter die last turn, set the health back
 	if (gv->data[player].health == 0) 
 		gv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
