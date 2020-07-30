@@ -21,7 +21,7 @@
 // our own #includes
 #include <string.h>
 
-#define MAXCHAR 8
+#define MAXPLAY 8
 #define MAXLINE 40
 
 // OUR OWN STRUCTS
@@ -31,7 +31,6 @@ struct historyNode {
 	PlaceId place; // move
 	bool vampire; 
 	bool trap;
-	Message message;
 	HistoryNode next;
 };
 
@@ -46,19 +45,20 @@ typedef struct _playerData {
 struct gameView {
 	Round round; // current round number
 	int score; // current score
+	Message * messages; // the messages for each player 
 	playerData data[5]; // data[0-3]:hunter  data[4]:dracula
 };
 
 Player getPlayer(char c);
-void trailLoad(GameView gv, char * play, Message message);
-void draculaEvent(GameView gv, char* play, PlaceId place, int player, Message message);
-void hunterEvent(GameView gv, char* play, PlaceId place, int player, Message message);
+void trailLoad(GameView gv, char * play);
+void draculaEvent(GameView gv, char* play, PlaceId place, int player);
+void hunterEvent(GameView gv, char* play, PlaceId place, int player);
 void deleteTraps(GameView gv, PlaceId place);
 void deleteVampire(GameView gv);
 bool deleteLastTraps(HistoryNode node, PlaceId place, int num);
 
 void ListFree(HistoryNode node);
-HistoryNode creatNode(PlaceId place, bool vampire, bool trap, Message message);
+HistoryNode creatNode(PlaceId place, bool vampire, bool trap);
 playerData addToHistory(playerData data, HistoryNode newNode);
 HistoryNode findDBCity(HistoryNode DBnode);
 PlaceId * addPlace(PlaceId * place, int * num, PlaceId newPlace);
@@ -71,9 +71,16 @@ GameView GvNew(char* pastPlays, Message messages[]) {
 		fprintf(stderr, "Couldn't allocate GameView!\n");
 		exit(EXIT_FAILURE);
 	}
-
+	// calculate the total turns for all the player
 	int totalLength = strlen(pastPlays);
-	new->round = (totalLength + 1) / MAXLINE; // get the current round number
+	int totalTurn = (totalLength + 1) / MAXPLAY;
+	new->messages = malloc(totalTurn * sizeof(* new->messages));
+	// store messages into GameView
+	for (int i = 0; i < totalTurn; i++) {
+			strcpy(new->messages[i], messages[i]);
+	}
+	// calculate the current round number
+	new->round = (totalLength + 1) / MAXLINE; 
 	new->score = GAME_START_SCORE; // initialise score
 
 	// initialise playerData
@@ -85,17 +92,15 @@ GameView GvNew(char* pastPlays, Message messages[]) {
 	}
 	new->data[PLAYER_DRACULA].health = GAME_START_BLOOD_POINTS;
 
-	if (totalLength + 1 < MAXCHAR) // no movement in pastPlays
+	if (totalLength + 1 < MAXPLAY) // no movement in pastPlays
 		return new;
 	
 	// tokenise each play, and store into history
-	char* play = calloc(MAXCHAR, sizeof(char));
-	int num = 0;
+	char* play = calloc(MAXPLAY, sizeof(char));
 	for (int i = 0; i <= totalLength; i++) {
 		play[i % 8] = pastPlays[i];
 		if ((i % 8) == 7) {
-			trailLoad(new, play, messages[num]);
-			num++;
+			trailLoad(new, play);
 		}
 	}
 	free(play);
@@ -106,6 +111,7 @@ void GvFree(GameView gv) {
 	for (int i = 0; i < 5; i++) {
 		ListFree(gv->data[i].first);
 	}
+	free(gv->messages);
 	free(gv);
 }
 
@@ -371,7 +377,7 @@ PlaceId *GvGetReachableByType(GameView gv, Player player, Round round,
 
 // add a play to GameView
 // input: GameView, a hunter play or a dracula play
-void trailLoad(GameView gv, char* play, Message message) {
+void trailLoad(GameView gv, char* play) {
 
 	Player player = getPlayer(play[0]); // get the player name
 	char abbrev[3];
@@ -380,14 +386,14 @@ void trailLoad(GameView gv, char* play, Message message) {
 	abbrev[2] = '\0';
 	PlaceId place = placeAbbrevToId(abbrev); // get the location number
 	if (player == PLAYER_DRACULA)
-		draculaEvent(gv, play, place, player, message);
+		draculaEvent(gv, play, place, player);
 	else
-		hunterEvent(gv, play, place, player, message);
+		hunterEvent(gv, play, place, player);
 }
 
 // add a dracula's play to GameView
 // input: GameView, a dracula's play, place, PLAYER_DRACULA
-void draculaEvent(GameView gv, char* play, PlaceId place, int player, Message message) {
+void draculaEvent(GameView gv, char* play, PlaceId place, int player) {
 	bool vampire = false;
 	int trap = false;
 	if (play[3] == 'T')
@@ -396,7 +402,7 @@ void draculaEvent(GameView gv, char* play, PlaceId place, int player, Message me
 		vampire = true;
 
 	// create a new node and add to history
-	HistoryNode new = creatNode(place, vampire, trap, message);
+	HistoryNode new = creatNode(place, vampire, trap);
 	gv->data[player] = addToHistory(gv->data[player], new);
 
 	if (play[5] == 'M') { // trap leave the trail
@@ -446,13 +452,13 @@ void draculaEvent(GameView gv, char* play, PlaceId place, int player, Message me
 
 // add a hunter's play to GameView
 // input: GameView, a hunter play, place, hunter's name
-void hunterEvent(GameView gv, char* play, PlaceId place, int player, Message message) {
+void hunterEvent(GameView gv, char* play, PlaceId place, int player) {
     // if the hunter die last turn, set the health back
 	if (gv->data[player].health == 0) 
 		gv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
 
 	// create a new node and add to history
-	HistoryNode new = creatNode(place, false, false, message);
+	HistoryNode new = creatNode(place, false, false);
 	gv->data[player] = addToHistory(gv->data[player], new);
 
 	int i = 3;
@@ -634,12 +640,11 @@ void ListFree(HistoryNode node) {
 }
 
 // create a new node
-HistoryNode creatNode(PlaceId place, bool vampire, bool trap, Message message) {
+HistoryNode creatNode(PlaceId place, bool vampire, bool trap) {
     HistoryNode new = malloc(sizeof(* new));
     new->place = place;
     new->vampire = vampire;
     new->trap = trap;
-	strcpy(new->message, message);
     new->next = NULL;
     return new;
 }
