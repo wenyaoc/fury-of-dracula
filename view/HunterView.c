@@ -45,12 +45,10 @@ typedef struct ShortestPath {
 	int * pred;
 } ShortestPath;
 
-
 struct hunterView {
 	GameView gv;
 	ShortestPath path[4];
 };
-
 
 Queue newQueue (void); // create new empty queue, from lab07
 void dropQueue (Queue Q); // free memory used by queue, from lab07

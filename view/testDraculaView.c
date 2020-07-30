@@ -64,7 +64,7 @@ int main(void)
 			"GGEVD.. SAO.... HCD.... MAO....";
 
 		Message messages[] = {
-			"Hello", "Goodbye", "Stuff", "...", "Mwahahah",
+			"Hell", "Goodbye", "Stuff", "...", "Mwahahah",
 			"Aha!", "", "", ""
 		};
 
@@ -76,7 +76,7 @@ int main(void)
 		assert(DvGetHealth(dv, PLAYER_DRACULA) == 30);
 		assert(DvGetPlayerLocation(dv, PLAYER_LORD_GODALMING) == GENEVA);
 		assert(DvGetPlayerLocation(dv, PLAYER_DRACULA) == GENEVA);
-		//assert(DvGetVampireLocation(dv) == NOWHERE);
+		assert(DvGetVampireLocation(dv) == NOWHERE);
 		printf("Test passed!\n");
 		DvFree(dv);
 	}
@@ -665,7 +665,7 @@ int main(void)
 			"GSZ.... SSOTD.. HBC.... MSOD...";
 
 
-		Message messages[139] = {};
+		Message messages[149] = {};
 		DraculaView dv = DvNew(trail, messages);
 
 		//return EXIT_SUCCESS;
