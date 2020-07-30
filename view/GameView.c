@@ -573,14 +573,14 @@ bool deleteLastTraps(HistoryNode node, PlaceId place, int num) {
 }
 
 
-// delete the vampire
+// if a hunter encountered the vampire, delete the vampire
 // input: GameView
 void deleteVampire(GameView gv) {
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
 	for (int counter = 0; curr != NULL && counter < 6 
 	     && counter < gv->round; counter++) {
-		if (curr->vampire){ 
-			curr->vampire = false;
+		if (curr->vampire){ // the current place has vampire
+			curr->vampire = false; // delete the vampire
 			return;
 		}
 		curr = curr->next;
@@ -608,8 +608,10 @@ HistoryNode findDBCity(HistoryNode DBnode) {
 // output: the new PlaceId array
 PlaceId * addPlace(PlaceId * place, int * num, PlaceId newPlace) {
 	for(int i = 0; i < *num; i++) {
+	    // the given PlaceId is already in the array
 		if(place[i] == newPlace) return place;
 	}
+	// allocate more memorys for the array
 	place = realloc(place, (*num + 1) * sizeof(PlaceId));
 	place[*num] = newPlace;
 	*num = *num + 1;
@@ -642,7 +644,7 @@ HistoryNode creatNode(PlaceId place, bool vampire, bool trap) {
 }
 
 
-// add the node to history 
+// add the node to history (add to the front)
 playerData addToHistory(playerData data, HistoryNode newNode) {
     if(data.first == NULL){
         data.first = newNode;
