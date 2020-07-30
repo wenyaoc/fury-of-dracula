@@ -110,20 +110,9 @@ const char * decideVanHelsingMove(HunterView hv, Message message) {
 }
 
 const char * decideMinaHarkerMove(HunterView hv, Message message){
-	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_MINA_HARKER);
-	if (currPlace == NOWHERE) 
-		return "CD";
-	PlaceId newPlace = CASTLE_DRACULA;
-	if (currPlace != CASTLE_DRACULA) {
-		int pathLength;
-		PlaceId * places = HvGetShortestPathTo(hv, PLAYER_MINA_HARKER, CASTLE_DRACULA, &pathLength);
-		newPlace = places[0];
-		free(places);
-	}
-	strcpy(message, "I Like Dracula");
-	return placeIdToAbbrev(newPlace);
-
+	return "CD";
 }
+
 
 PlaceId predictLocation(HunterView hv, Message message) {
 	strcpy(message, "2-2-2-")
