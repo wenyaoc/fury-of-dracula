@@ -33,7 +33,7 @@ const char * decideMinaHarkerMove(HunterView hv);
 PlaceId predictLocation(HunterView hv);
 
 void decideHunterMove(HunterView hv) {
-	// TODO: Replace this with something better!
+
 	Player player = HvGetPlayer(hv);
 	const char * place;
     switch (player) {
@@ -122,6 +122,3 @@ PlaceId predictLocation(HunterView hv) {
 	return NOWHERE;
 }
 
-//char * decideDrSewardMove(HunterView hv);
-//char * decideVanHelsingMove(HunterView hv);
-//char * decideMinaHarkerMove(HunterView hv);
