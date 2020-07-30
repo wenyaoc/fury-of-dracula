@@ -45,7 +45,6 @@ typedef struct _playerData {
 struct gameView {
 	Round round; // current round number
 	int score; // current score
-	Message * messages; // the messages for each player 
 	playerData data[5]; // data[0-3]:hunter  data[4]:dracula
 };
 
@@ -73,12 +72,6 @@ GameView GvNew(char* pastPlays, Message messages[]) {
 	}
 	// calculate the total turns for all the player
 	int totalLength = strlen(pastPlays);
-	int totalTurn = (totalLength + 1) / MAXPLAY;
-	new->messages = malloc(totalTurn * sizeof(* new->messages));
-	// store messages into GameView
-	for (int i = 0; i < totalTurn; i++) {
-			strcpy(new->messages[i], messages[i]);
-	}
 	// calculate the current round number
 	new->round = (totalLength + 1) / MAXLINE; 
 	new->score = GAME_START_SCORE; // initialise score
@@ -111,7 +104,6 @@ void GvFree(GameView gv) {
 	for (int i = 0; i < 5; i++) {
 		ListFree(gv->data[i].first);
 	}
-	free(gv->messages);
 	free(gv);
 }
 
