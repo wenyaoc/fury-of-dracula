@@ -26,41 +26,40 @@ typedef mode {
 	RESEARCH	
 } Mode;
 */
-const char * decideLordGodalmingMove(HunterView hv, Message message);
-const char * decideDrSewardMove(HunterView hv, Message message);
-const char * decideVanHelsingMove(HunterView hv, Message message);
-const char * decideMinaHarkerMove(HunterView hv, Message message);
-PlaceId predictLocation(HunterView hv, Message message);
-int * readGodalmingmessage(HunterView hv, Player player);
+const char * decideLordGodalmingMove(HunterView hv);
+const char * decideDrSewardMove(HunterView hv);
+const char * decideVanHelsingMove(HunterView hv);
+const char * decideMinaHarkerMove(HunterView hv);
+PlaceId predictLocation(HunterView hv);
+
 
 void decideHunterMove(HunterView hv) {
 
 	Player player = HvGetPlayer(hv);
 	const char * place;
-	Message message = "\0";
     switch (player) {
         case PLAYER_LORD_GODALMING:
-            place = decideLordGodalmingMove(hv, message);
+            place = decideLordGodalmingMove(hv);
         break;
         case PLAYER_DR_SEWARD:
-            place = decideDrSewardMove(hv, message);
+            place = decideDrSewardMove(hv);
         break;
         case PLAYER_VAN_HELSING:
-            place = decideVanHelsingMove(hv, message);
+            place = decideVanHelsingMove(hv);
         break;
         case PLAYER_MINA_HARKER:
-            place = decideMinaHarkerMove(hv, message);
+            place = decideMinaHarkerMove(hv);
         break;
 		default:
 		break;
     }
 	char * newPlace = malloc(2 * sizeof(char));
 	strcpy(newPlace, place);
-	registerBestPlay(newPlace, message);
+	registerBestPlay(newPlace, "I like Dracula");
 }
 
 
-const char * decideLordGodalmingMove(HunterView hv, Message message) {
+const char * decideLordGodalmingMove(HunterView hv) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_LORD_GODALMING);
 	if (currPlace == NOWHERE) return "ED";
 
@@ -73,69 +72,45 @@ const char * decideLordGodalmingMove(HunterView hv, Message message) {
 		newPlace = places[rand() % numReturnedLocs];
 		free(places);
 	}
-	strcpy(message, "I Like Dracula");
 	return placeIdToAbbrev(newPlace);
 }
 
-const char * decideDrSewardMove(HunterView hv, Message message) {
+const char * decideDrSewardMove(HunterView hv) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_DR_SEWARD);
 	if (currPlace == NOWHERE) return "BD";
 
 	PlaceId newPlace = currPlace;
-	if (readGodalmingmessage(hv) == NOWHERE) {
+	if (predictLocation(hv) == NOWHERE) {
 		int numReturnedLocs;
 		PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
 		srand(time(0));
 		newPlace = places[rand() % numReturnedLocs];
 		free(places);
 	}
-	strcpy(message, "I Like Dracula");
 	return placeIdToAbbrev(newPlace);
 }
 
-const char * decideVanHelsingMove(HunterView hv, Message message) {
+const char * decideVanHelsingMove(HunterView hv) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_VAN_HELSING);
 	if (currPlace == NOWHERE) return "PA";
 
 	PlaceId newPlace = currPlace;
-	if (readGodalmingmessage(hv) == NOWHERE) {
+	if (predictLocation(hv) == NOWHERE) {
 		int numReturnedLocs;
 		PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
 		srand(time(0));
 		newPlace = places[rand() % numReturnedLocs];
 		free(places);
 	}
-	strcpy(message, "I Like Dracula");
 	return placeIdToAbbrev(newPlace);
 }
 
-const char * decideMinaHarkerMove(HunterView hv, Message message){
+const char * decideMinaHarkerMove(HunterView hv){
 	return "CD";
 }
 
-
-PlaceId predictLocation(HunterView hv, Message message) {
-	strcpy(message, "2-2-2-")
+PlaceId predictLocation(HunterView hv) {
 	return NOWHERE;
 }
 
-
-
-int readGodalmingmessage(HunterView hv, Player player) {
-	char place[2];
-	int round = HvGetRound(hv);
-    switch (player) {
-        case PLAYER_DR_SEWARD:
-            place[0] = hv->;
-        break;
-        case PLAYER_VAN_HELSING:
-            place = decideVanHelsingMove(hv, message);
-        break;
-        case PLAYER_MINA_HARKER:
-            place = decideMinaHarkerMove(hv, message);
-        break;
-		default:
-		break;
-    }	
-}
 
