@@ -531,6 +531,15 @@ int main(void)
 			assert(path[3] == FRANKFURT);
 			free(path);
 		}
+		{
+			printf("\tLisbon -> Lisbon (Lord Godalming, Round 1)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
+			                                    LISBON, &pathLength);
+			
+			assert(pathLength == 0);
+			assert(path == NULL);
+		}
 		HvFree(hv);
 		printf("Test passed!\n");
 	}
@@ -562,7 +571,15 @@ int main(void)
 			assert(path[2] == CONSTANTA);
 			free(path);
 		}
+		{
+			printf("\thospital -> hospital (Lord Godalming, Round 4)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
+												HOSPITAL_PLACE, &pathLength);
 
+			assert(pathLength == 0);
+			assert(path == NULL);
+		}
 		{
 			printf("\tGenvea -> Constanta (Dr. Seward, Round 4)\n");
 			int pathLength = -1;
