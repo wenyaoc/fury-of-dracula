@@ -47,7 +47,6 @@ typedef struct ShortestPath {
 
 struct hunterView {
 	GameView gv;
-	Message * messages; // the messages for each player 
 	ShortestPath path[4];
 };
 
@@ -73,14 +72,6 @@ HunterView HvNew(char *pastPlays, Message messages[]) {
 		new->path[i].dist = NULL;
 		new->path[i].pred = NULL;
 	}
-	// calculate the total turns for all the player
-	int totalLength = strlen(pastPlays);
-	int totalTurn = (totalLength + 1) / MAXPLAY;
-	new->messages = malloc(totalTurn * sizeof(* new->messages));
-	// store messages into HunterView
-	for (int i = 0; i < totalTurn; i++) {
-		strcpy(new->messages[i], messages[i]);
-	}
 	return new;
 }
 
@@ -92,7 +83,6 @@ void HvFree(HunterView hv) {
 			free(hv->path[i].dist);
 		}
 	}
-	free(hv->messages);
 	free(hv);
 }
 
@@ -153,11 +143,9 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 
 	PlaceId * path = NULL;
 	*pathLength = 0;
-	if (src == dest) { // if the hunter is at that location
-		path = malloc((*pathLength + 1) * sizeof(PlaceId));
-		path[0] = src;
+	if (src == dest) // if the hunter is at that location
 		return path;
-	}
+		
 	int w;
     // if HvGetShortestPathTo haven't been called brfore
 	if (src != hv->path[hunter].src) { 

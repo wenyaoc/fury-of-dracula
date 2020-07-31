@@ -161,13 +161,15 @@ PlaceId getMove(HunterView hv, Player player) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_DR_SEWARD);
 	Round round = HvGetRound(hv);
 	Round knownDraculaRound = -1;
-	Place knownDraculaLocation = HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
-
-	if (round - knownDraculaRound > 7) { 
-		return NOWHERE;
-	} else if (round == knownDraculaRound + 1) {
+	/*PlaceId knownDraculaLocation =*/ HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
+	//if (round - knownDraculaRound > 7) { 
+	//	return NOWHERE;
+	//} else if (round == knownDraculaRound + 1) {
 		int pathLength;
-		PlaceId *shortestPath = HvGetShortestPathTo(hv, player, knownDraculaLocation, &pathLength);
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, player, CASTLE_DRACULA, &pathLength);
+		for (int i = 0; i < pathLength; i++) {
+			printf("%d %s\n", round + i + player, placeIdToName(shortestPath[i]));
+		}
 		if (pathLength == 0) 
 			return currPlace;
 		else {
@@ -175,8 +177,8 @@ PlaceId getMove(HunterView hv, Player player) {
 			free(shortestPath);
 			return newPlace;
 		}
-	}
-
+	//}
+	return NOWHERE;
 }
 
 PlaceId randomLocation(HunterView hv, PlaceId * places, Player player, int numReturnedLocs) {
