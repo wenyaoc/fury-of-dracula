@@ -562,8 +562,7 @@ int main(void)
 		{
 			printf("\thospital -> Constanta (Lord Godalming, Round 4)\n");
 			int pathLength = -1;
-			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
-													CONSTANTA, &pathLength);
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, CONSTANTA, &pathLength);
 
 			assert(pathLength == 3);
 			assert(path[0] == SZEGED);
@@ -574,8 +573,7 @@ int main(void)
 		{
 			printf("\thospital -> hospital (Lord Godalming, Round 4)\n");
 			int pathLength = -1;
-			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
-												HOSPITAL_PLACE, &pathLength);
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, HOSPITAL_PLACE, &pathLength);
 
 			assert(pathLength == 0);
 			assert(path == NULL);
@@ -583,8 +581,7 @@ int main(void)
 		{
 			printf("\tGenvea -> Constanta (Dr. Seward, Round 4)\n");
 			int pathLength = -1;
-			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD,
-													CONSTANTA, &pathLength);
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, CONSTANTA, &pathLength);
 			assert(pathLength == 6);
 			assert(path[0] == MILAN);
 			assert(path[1] == VENICE || path[1] == GENOA);
