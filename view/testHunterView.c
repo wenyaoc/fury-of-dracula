@@ -787,11 +787,7 @@ int main(void)
 			int numLocs = -1;
 			PlaceId *locs = HvWhereCanTheyGo(hv, PLAYER_DR_SEWARD, &numLocs);
 			
-			printf("num = %d\n", numLocs);
 			sortPlaces(locs, numLocs);
-			//for (int i = 0; i < numLocs; i++) {
-			//	printf("Locations = %s\n", placeIdToName(locs[i]));
-			//}
 			assert(numLocs == 7);
 			sortPlaces(locs, numLocs);
 			assert(locs[0] == ALICANTE);
