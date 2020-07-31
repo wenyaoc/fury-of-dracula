@@ -736,7 +736,7 @@ int main(void)
 		HvFree(hv);
 		printf("Test passed!\n");
 	}
-	
+
 	// extra test 6
 	// test HvWhereCanTheyGo for hunter
 	{///////////////////////////////////////////////////////////////////
@@ -764,6 +764,10 @@ int main(void)
 			assert(locs[2] == PLYMOUTH);
 			assert(locs[3] == SWANSEA);
 			free(locs);
+
+			Round round = -1;
+			assert(HvGetLastKnownDraculaLocation(hv, &round) == NAPLES);
+			assert(round == 2);
 		}
 		{
 			printf("\tLord Godaming: rail only\n");
@@ -782,9 +786,9 @@ int main(void)
 			
 			printf("num = %d\n", numLocs);
 			sortPlaces(locs, numLocs);
-			for (int i = 0; i < numLocs; i++) {
-				printf("Locations = %s\n", placeIdToName(locs[i]));
-			}
+			//for (int i = 0; i < numLocs; i++) {
+			//	printf("Locations = %s\n", placeIdToName(locs[i]));
+			//}
 			assert(numLocs == 7);
 			sortPlaces(locs, numLocs);
 			assert(locs[0] == ALICANTE);
