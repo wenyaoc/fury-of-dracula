@@ -105,12 +105,17 @@ const char * decideLordGodalmingMove(HunterView hv) {
 
 const char * decideDrSewardMove(HunterView hv) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_DR_SEWARD);
+	Round currRound = HvGetRound(hv);
 	if (currPlace == NOWHERE) return "BD";
 
 	PlaceId newPlace = getMove(hv, PLAYER_DR_SEWARD);
 	if (newPlace == NOWHERE) {
 		int pathLength;
-		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, BELGRADE, &pathLength);
+		PlaceId *shortestPath = NULL;
+		if (currRound <= 6)
+			shortestPath =  HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, MUNICH, &pathLength);
+		else
+			shortestPath =  HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, SOFIA, &pathLength);
 		if (pathLength > 3) {
 			newPlace = shortestPath[0];
 			free(shortestPath);
@@ -133,6 +138,8 @@ const char * decideVanHelsingMove(HunterView hv) {
 		if (HvGetRound(hv) == 2) return "MA";
 		int pathLength;
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_VAN_HELSING, MADRID, &pathLength);
+		
+		
 		if (pathLength > 3) {
 			newPlace = shortestPath[0];
 			free(shortestPath);
@@ -156,7 +163,7 @@ PlaceId getMove(HunterView hv, Player player) {
 	Round knownDraculaRound = -1;
 	Place knownDraculaLocation = HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
 
-	if (knownDraculaRound == -1) { 
+	if (round - knownDraculaRound > 7) { 
 		return NOWHERE;
 	} else if (round == knownDraculaRound + 1) {
 		int pathLength;
@@ -179,7 +186,7 @@ PlaceId randomLocation(HunterView hv, PlaceId * places, Player player, int numRe
 
 	srand(time(0));
 	newPlace = places[rand() % numReturnedLocs];
-	// if hunter can travel long distance via rail next ture
+	// if hunter can travel long distance via rail next turn
 	// prefer a city with rail 
 	if ((num % 4 == 1 || num % 4 == 2) && !hasRailConnection(newPlace)) {
 		for (int i = 0; i < numReturnedLocs; i++) {
