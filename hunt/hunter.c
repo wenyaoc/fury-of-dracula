@@ -59,11 +59,11 @@ void decideHunterMove(HunterView hv) {
 
 const char * decideLordGodalmingMove(HunterView hv) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_LORD_GODALMING);
-	Round round = HvGetRound(hv);
+	Round currRound = HvGetRound(hv);
 	if (currPlace == NOWHERE) return "ED";
 
 	PlaceId newPlace = getMove(hv, PLAYER_LORD_GODALMING);
-	if (newPlace == NOWHERE && round <= 6) {
+	if (newPlace == NOWHERE && currRound<= 6) {
 		switch (currPlace) {
 			case EDINBURGH:
 				newPlace = MANCHESTER;
@@ -86,18 +86,28 @@ const char * decideLordGodalmingMove(HunterView hv) {
 	} 
 	if (newPlace == NOWHERE) {
 		int pathLength;
-		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, FRANKFURT, &pathLength);
-		//for(int i = 0; i < pathLength; i ++) {
-		//	printf("%s\n", placeIdToName(shortestPath[i]));
-		//}
+		PlaceId *shortestPath = NULL;
+		if (currRound % 26 >= 1 && currRound % 26 <= 6)
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, LIVERPOOL, &pathLength);
+		else
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, FRANKFURT, &pathLength);
+
 		if (pathLength > 3) {
 			newPlace = shortestPath[0];
-			free(shortestPath);
 		} else {
 			int numReturnedLocs;
 			PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
 			newPlace = randomLocation(hv, places, PLAYER_LORD_GODALMING, numReturnedLocs);
 			free(places);
+		}
+
+		free(shortestPath);
+		PlaceId vampirePlace = HvGetVampireLocation(hv);
+		if (placeIsReal(vampirePlace)) {
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, vampirePlace, &pathLength);
+			if(pathLength <= 3 && pathLength > 0) 
+				newPlace = shortestPath[0];
+			free(shortestPath);
 		}
 	}
 	return placeIdToAbbrev(newPlace);
@@ -112,18 +122,27 @@ const char * decideDrSewardMove(HunterView hv) {
 	if (newPlace == NOWHERE) {
 		int pathLength;
 		PlaceId *shortestPath = NULL;
-		if (currRound <= 6)
+		if (currRound % 26 >= 1 && currRound % 26 <= 6)
 			shortestPath =  HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, MUNICH, &pathLength);
 		else
 			shortestPath =  HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, SOFIA, &pathLength);
+		
 		if (pathLength > 3) {
 			newPlace = shortestPath[0];
-			free(shortestPath);
 		} else {
 			int numReturnedLocs;
 			PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
 			newPlace = randomLocation(hv, places, PLAYER_DR_SEWARD, numReturnedLocs);
 			free(places);
+		}
+
+		free(shortestPath);
+		PlaceId vampirePlace = HvGetVampireLocation(hv);
+		if (placeIsReal(vampirePlace)) {
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, vampirePlace, &pathLength);
+			if(pathLength <= 3 && pathLength > 0) 
+				newPlace = shortestPath[0];
+			free(shortestPath);
 		}
 	}
 	return placeIdToAbbrev(newPlace);
@@ -131,23 +150,33 @@ const char * decideDrSewardMove(HunterView hv) {
 
 const char * decideVanHelsingMove(HunterView hv) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_VAN_HELSING);
+	//Round currRound = HvGetRound(hv);
+
 	if (currPlace == NOWHERE) return "PA";
 
 	PlaceId newPlace = getMove(hv, PLAYER_VAN_HELSING);
 	if (newPlace == NOWHERE) {
 		if (HvGetRound(hv) == 2) return "MA";
 		int pathLength;
+
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_VAN_HELSING, MADRID, &pathLength);
-		
-		
+				
 		if (pathLength > 3) {
 			newPlace = shortestPath[0];
-			free(shortestPath);
 		} else {
 			int numReturnedLocs;
 			PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
 			newPlace = randomLocation(hv, places, PLAYER_VAN_HELSING, numReturnedLocs);
 			free(places);
+		}
+
+		free(shortestPath);
+		PlaceId vampirePlace = HvGetVampireLocation(hv);
+		if (placeIsReal(vampirePlace)) {
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, vampirePlace, &pathLength);
+			if(pathLength <= 3 && pathLength > 0) 
+				newPlace = shortestPath[0];
+			free(shortestPath);
 		}
 	}
 	return placeIdToAbbrev(newPlace);
@@ -161,15 +190,12 @@ PlaceId getMove(HunterView hv, Player player) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_DR_SEWARD);
 	Round round = HvGetRound(hv);
 	Round knownDraculaRound = -1;
-	/*PlaceId knownDraculaLocation =*/ HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
-	//if (round - knownDraculaRound > 7) { 
-	//	return NOWHERE;
-	//} else if (round == knownDraculaRound + 1) {
+	PlaceId knownDraculaLocation = HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
+	if (round - knownDraculaRound > 7 || knownDraculaLocation == NOWHERE) { 
+		return NOWHERE;
+	} else if (round == knownDraculaRound + 1) {
 		int pathLength;
-		PlaceId *shortestPath = HvGetShortestPathTo(hv, player, CASTLE_DRACULA, &pathLength);
-		for (int i = 0; i < pathLength; i++) {
-			printf("%d %s\n", round + i + player, placeIdToName(shortestPath[i]));
-		}
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, player, knownDraculaLocation, &pathLength);
 		if (pathLength == 0) 
 			return currPlace;
 		else {
@@ -177,7 +203,42 @@ PlaceId getMove(HunterView hv, Player player) {
 			free(shortestPath);
 			return newPlace;
 		}
-	//}
+	} else if (round == knownDraculaRound + 2) {
+		PlaceId DraculaCurrPlace = HvGetPlayerLocation(hv, PLAYER_DRACULA);
+		if(DraculaCurrPlace == CITY_UNKNOWN) {
+			int numLocs;
+			PlaceId * places = HvWhereCanIGoByType(hv, true, false, false, &numLocs);
+			PlaceId newPlace = randomLocation(hv, places, player, numLocs);
+			free(places);
+			if (currPlace == knownDraculaLocation) 
+				return newPlace;
+			else {
+				int pathLength;
+				PlaceId *shortestPath = HvGetShortestPathTo(hv, player, newPlace, &pathLength);
+				if (pathLength > 0) {
+					newPlace = shortestPath[0];
+					free(shortestPath);
+					return newPlace;
+				}
+			}
+		} else if(DraculaCurrPlace == SEA_UNKNOWN) {
+			int numLocs;
+			PlaceId * places = HvWhereCanIGoByType(hv, false, false, true, &numLocs);
+			PlaceId newPlace = randomLocation(hv, places, player, numLocs);
+			free(places);
+			if (currPlace == knownDraculaLocation) 
+				return newPlace;
+			else {
+				int pathLength;
+				PlaceId *shortestPath = HvGetShortestPathTo(hv, player, newPlace, &pathLength);
+				if (pathLength > 0) {
+					newPlace = shortestPath[0];
+					free(shortestPath);
+					return newPlace;
+				}
+			}
+		}
+	}
 	return NOWHERE;
 }
 
