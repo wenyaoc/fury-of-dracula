@@ -183,7 +183,16 @@ const char * decideVanHelsingMove(HunterView hv) {
 }
 
 const char * decideMinaHarkerMove(HunterView hv) {
-	return "CD";
+	assert(hv != NULL);
+	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_Mina_Harker);
+	
+	if (currPlace != CD) {
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_Mina_Harker, CD, &pathLength);
+		return shortestPath[0];
+	}
+
+	reuturn "CD";
+
 }
 
 PlaceId getMove(HunterView hv, Player player) {
