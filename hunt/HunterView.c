@@ -56,6 +56,7 @@ void QueueJoin (Queue Q, int it); // add int on queue, from lab07
 int QueueLeave (Queue Q); // remove item from queue, from lab07
 int QueueIsEmpty (Queue Q); // check for no items, from lab07
 
+
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -251,6 +252,42 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 
 ////////////////////////////////////////////////////////////////////////
 // Our own interface functions
+
+//PlaceId *HvGetMoveHistory(HunterView hv, Player player,
+//                         int *numReturnedMoves, bool *canFree) {
+//	return GvGetMoveHistory(hv->gv, player, numReturnedMoves, canFree);	
+//}
+
+PlaceId* HvGetLastMoves(HunterView hv, Player player, int numMoves,
+                        int* numReturnedMoves, bool* canFree) {
+	return GvGetLastMoves(hv->gv, player, numMoves, numReturnedMoves, canFree);	
+}
+
+
+PlaceId *HvGetReachableByType(HunterView hv, Player player, Round round,
+                              PlaceId from, bool road, bool rail,
+                              bool boat, int *numReturnedLocs) {
+	return GvGetReachableByType(hv->gv, player, round, from, road, rail, boat, numReturnedLocs);
+}
+
+
+PlaceId* HvGetLastLocations(HunterView hv, Player player, int numLocs,
+                            int* numReturnedLocs, bool* canFree) {
+	return GvGetLastLocations(hv->gv, player, numLocs, numReturnedLocs, canFree);
+}
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+// helper functions
+
+
+
 
 // Queue operations
 // create new empty Queue
