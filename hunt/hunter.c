@@ -15,6 +15,7 @@
 
 #include "Map.h"
 #include "Places.h"
+
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
@@ -27,10 +28,19 @@ const char * decideDrSewardMove(HunterView hv);
 const char * decideVanHelsingMove(HunterView hv);
 const char * decideMinaHarkerMove(HunterView hv);
 PlaceId getMove(HunterView hv, Player player);
-PlaceId randomLocation(HunterView hv, PlaceId * places, Player player, int numReturnedLocs);
+PlaceId getVampire(HunterView hv, Player player, PlaceId place);
+PlaceId getRandomLocation(HunterView hv, PlaceId * places, Player player, int numReturnedLocs);
+PlaceId * removeImpossibleLocations(HunterView hv, Player player, PlaceId * places, PlaceId currPlace, int * numReturnedLocs);
+PlaceId * removeBoat(PlaceId * places, int * numReturnedLocs);
+PlaceId * removeRoad(PlaceId * places, int * numReturnedLocs);
+
 
 bool hasRailConnection(PlaceId place);
-
+bool hasSeaMove(HunterView hv, int numMoves);
+bool placeHasOtherHunter(HunterView hv, Player player, PlaceId place);
+bool canGo(HunterView hv, PlaceId place);
+bool planToTeleport(PlaceId * moves, int numMoves, PlaceId place);
+bool placeCanTeleport(PlaceId place);
 
 void decideHunterMove(HunterView hv) {
 	Player player = HvGetPlayer(hv);
@@ -51,11 +61,14 @@ void decideHunterMove(HunterView hv) {
 		default:
 		break;
     }
+	// change from comst char * to char *
 	char * newPlace = malloc(2 * sizeof(char));
 	strcpy(newPlace, place);
 	registerBestPlay(newPlace, "I like Dracula");
 }
 
+////////////////////////////////////////////////////////////////////////
+// helper functions
 
 const char * decideLordGodalmingMove(HunterView hv) {
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_LORD_GODALMING);
@@ -63,7 +76,8 @@ const char * decideLordGodalmingMove(HunterView hv) {
 	if (currPlace == NOWHERE) return "ED";
 
 	PlaceId newPlace = getMove(hv, PLAYER_LORD_GODALMING);
-	if (newPlace == NOWHERE && currRound<= 6) {
+	// in the first 6 turns, make sure there is no vampires in England
+	if (newPlace == NOWHERE && currRound < 6) {
 		switch (currPlace) {
 			case EDINBURGH:
 				newPlace = MANCHESTER;
@@ -84,31 +98,32 @@ const char * decideLordGodalmingMove(HunterView hv) {
 			break;
     	}
 	} 
+	// deacula's location is unknown
+	// Lord Godalming will move around liverpool if 1 <= round%26 < 6 
+	// otherwise move around Frankfurt
 	if (newPlace == NOWHERE) {
 		int pathLength;
 		PlaceId *shortestPath = NULL;
-		if (currRound % 26 >= 1 && currRound % 26 <= 6)
+		if (currRound % 26 >= 1 && currRound % 26 < 6)
 			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, LIVERPOOL, &pathLength);
 		else
 			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, FRANKFURT, &pathLength);
 
-		if (pathLength > 3) {
+		if (pathLength > 3) { // if Hunter is far away from the center
 			newPlace = shortestPath[0];
 		} else {
 			int numReturnedLocs;
-			PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
-			newPlace = randomLocation(hv, places, PLAYER_LORD_GODALMING, numReturnedLocs);
+			bool sea = (hasSeaMove(hv, 6) || placeIsSea(currPlace));
+			PlaceId * places = HvWhereCanIGoByType(hv, true, true, sea, &numReturnedLocs);
+			if (placeIsSea(currPlace))
+				numReturnedLocs--;
+			newPlace = getRandomLocation(hv, places, PLAYER_LORD_GODALMING, numReturnedLocs);
 			free(places);
 		}
-
-		free(shortestPath);
-		PlaceId vampirePlace = HvGetVampireLocation(hv);
-		if (placeIsReal(vampirePlace)) {
-			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, vampirePlace, &pathLength);
-			if(pathLength <= 3 && pathLength > 0) 
-				newPlace = shortestPath[0];
+		if (pathLength != 0)
 			free(shortestPath);
-		}
+		
+		newPlace = getVampire(hv, PLAYER_LORD_GODALMING, newPlace);
 	}
 	return placeIdToAbbrev(newPlace);
 }
@@ -122,28 +137,27 @@ const char * decideDrSewardMove(HunterView hv) {
 	if (newPlace == NOWHERE) {
 		int pathLength;
 		PlaceId *shortestPath = NULL;
-		if (currRound % 26 >= 1 && currRound % 26 <= 6)
+		if ((currRound % 26 >= 1 && currRound % 26 <= 6) && hasSeaMove(hv, 6))
 			shortestPath =  HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, MUNICH, &pathLength);
 		else
-			shortestPath =  HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, SOFIA, &pathLength);
+			shortestPath =  HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, SZEGED, &pathLength);
 		
 		if (pathLength > 3) {
 			newPlace = shortestPath[0];
 		} else {
 			int numReturnedLocs;
-			PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
-			newPlace = randomLocation(hv, places, PLAYER_DR_SEWARD, numReturnedLocs);
+			bool sea = (hasSeaMove(hv, 6) || placeIsSea(currPlace));
+			PlaceId * places = HvWhereCanIGoByType(hv, true, true, sea, &numReturnedLocs);
+			if (placeIsSea(currPlace))
+				numReturnedLocs--;
+			newPlace = getRandomLocation(hv, places, PLAYER_DR_SEWARD, numReturnedLocs);
 			free(places);
 		}
-
-		free(shortestPath);
-		PlaceId vampirePlace = HvGetVampireLocation(hv);
-		if (placeIsReal(vampirePlace)) {
-			shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, vampirePlace, &pathLength);
-			if(pathLength <= 3 && pathLength > 0) 
-				newPlace = shortestPath[0];
+		if (pathLength > 0)
 			free(shortestPath);
-		}
+		
+		newPlace = getVampire(hv, PLAYER_DR_SEWARD, newPlace);
+
 	}
 	return placeIdToAbbrev(newPlace);
 }
@@ -156,113 +170,197 @@ const char * decideVanHelsingMove(HunterView hv) {
 
 	PlaceId newPlace = getMove(hv, PLAYER_VAN_HELSING);
 	if (newPlace == NOWHERE) {
-		if (HvGetRound(hv) == 2) return "MA";
-		int pathLength;
+		if (HvGetRound(hv) == 1) return "MA";
 
+		int pathLength;
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_VAN_HELSING, MADRID, &pathLength);
-				
-		if (pathLength > 3) {
+		if (pathLength > 2) {
 			newPlace = shortestPath[0];
 		} else {
 			int numReturnedLocs;
-			PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
-			newPlace = randomLocation(hv, places, PLAYER_VAN_HELSING, numReturnedLocs);
+			bool sea = (hasSeaMove(hv, 6) || placeIsSea(currPlace));
+			PlaceId * places = HvWhereCanIGoByType(hv, true, true, sea, &numReturnedLocs);
+			if (placeIsSea(currPlace))
+				numReturnedLocs--;
+			newPlace = getRandomLocation(hv, places, PLAYER_VAN_HELSING, numReturnedLocs);
 			free(places);
 		}
-
-		free(shortestPath);
-		PlaceId vampirePlace = HvGetVampireLocation(hv);
-		if (placeIsReal(vampirePlace)) {
-			shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, vampirePlace, &pathLength);
-			if(pathLength <= 3 && pathLength > 0) 
-				newPlace = shortestPath[0];
+		if (pathLength > 0)
 			free(shortestPath);
-		}
+		
+		newPlace = getVampire(hv, PLAYER_VAN_HELSING, newPlace);
 	}
 	return placeIdToAbbrev(newPlace);
 }
 
 
 const char * decideMinaHarkerMove(HunterView hv) {
-	assert(hv != NULL);
-	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_Mina_Harker);
+
+	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_MINA_HARKER);
+	if (currPlace == NOWHERE) 
+		return "CD";
 	
-	if (currPlace != CD) {
-		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_Mina_Harker, CD, &pathLength);
-		PlaceId place = shortestPath[0];
-
-		/*free(shortestPath);
-		PlaceId vampirePlace = HvGetVampireLocation(hv);
-		if (placeIsReal(vampirePlace)) {
-			shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, vampirePlace, &pathLength);
-			if(pathLength <= 3 && pathLength > 0) 
-				newPlace = shortestPath[0];
+	Round round = HvGetRound(hv);
+	Round knownDraculaRound = -1;
+	HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
+	PlaceId newPlace = CASTLE_DRACULA;
+	if (knownDraculaRound != -1 && round - knownDraculaRound < 6) {
+		newPlace = getMove(hv, PLAYER_MINA_HARKER);
+			printf("%s %s\n", placeIdToName(currPlace),placeIdToName(newPlace));
+		int pathLength;
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_MINA_HARKER, newPlace, &pathLength);
+		// if dracula is too far away, keep staying at castle
+		if (pathLength > 3) {
 			free(shortestPath);
-		}*/
-		return placeIdToAbbrev(place);
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_MINA_HARKER,CASTLE_DRACULA, &pathLength);
+		}
+		if (pathLength > 0) {
+			newPlace = shortestPath[0];
+			free (shortestPath);
+		}	
+	} else {
+		int pathLength;
+		PlaceId * shortestPath = HvGetShortestPathTo(hv, PLAYER_MINA_HARKER, CASTLE_DRACULA, &pathLength);
+		if (pathLength > 2){
+			newPlace = shortestPath[0];
+			free(shortestPath);
+		} else {
+			if (pathLength != 0)
+				free(shortestPath);
+			int numReturnedLocs;
+			PlaceId * places = HvWhereCanIGoByType(hv, true, false, false, &numReturnedLocs);
+			newPlace = getRandomLocation(hv, places, PLAYER_VAN_HELSING, numReturnedLocs);
+			free(places);
+		}
+		
 	}
-
-	reuturn "CD";
+	newPlace = getVampire(hv, PLAYER_MINA_HARKER, newPlace);
+	return placeIdToAbbrev(newPlace);
 
 }
 
+
+
 PlaceId getMove(HunterView hv, Player player) {
-	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_DR_SEWARD);
+	PlaceId currPlace = HvGetPlayerLocation(hv, player);
 	Round round = HvGetRound(hv);
 	Round knownDraculaRound = -1;
 	PlaceId knownDraculaLocation = HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
-	if (round - knownDraculaRound > 7 || knownDraculaLocation == NOWHERE) { 
-		return NOWHERE;
-	} else if (round == knownDraculaRound + 1) {
+	//printf("%s %s\n", placeIdToName(currPlace), placeIdToName(knownDraculaLocation));
+	//printf("%d %d\n", round, knownDraculaRound);
+	if (knownDraculaRound == -1 || round - knownDraculaRound > 6) {
+		if(round - knownDraculaRound > 10) {
+			// losing dracula for a long time -> research
+			return currPlace;
+		}
+		PlaceId newPlace = NOWHERE;
+		int numDracMoves = 0;
+		bool canFreeMoves;
+		PlaceId* DraculaMoves = HvGetLastMoves(hv, PLAYER_DRACULA, 4, &numDracMoves, &canFreeMoves);
+		if (planToTeleport(DraculaMoves, numDracMoves, NOWHERE)) {
+			int pathLength;
+			PlaceId *shortestPath = HvGetShortestPathTo(hv, player, CASTLE_DRACULA, &pathLength);
+			if (pathLength > 0) {
+				newPlace = shortestPath[0];
+				free(shortestPath);
+			} else
+				newPlace = currPlace;
+		}
+		if (canFreeMoves && DraculaMoves != NULL)
+			free(DraculaMoves);
+		// let hunters randomly pick a place
+		return newPlace;
+	} else if (round == knownDraculaRound + 1) { 
+		// dracula's current place is known
 		int pathLength;
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, player, knownDraculaLocation, &pathLength);
-		if (pathLength == 0) 
+		if (pathLength == 0)  // hunter is in the same city with dracula
 			return currPlace;
-		else {
+		else { // move to the city with dracula
 			PlaceId newPlace = shortestPath[0];
 			free(shortestPath);
 			return newPlace;
 		}
-	} else if (round == knownDraculaRound + 2) {
-		PlaceId DraculaCurrPlace = HvGetPlayerLocation(hv, PLAYER_DRACULA);
-		if(DraculaCurrPlace == CITY_UNKNOWN) {
+	} else if (round - knownDraculaRound >= 2 && round - knownDraculaRound <= 6) {
+		//PlaceId DraculaCurrPlace = HvGetPlayerLocation(hv, PLAYER_DRACULA);
+		int numMoves = round - knownDraculaRound;
+		int numDracLocs = 0;
+		bool canFreeLocs;
+		PlaceId* DraculaLocs = HvGetLastLocations(hv, PLAYER_DRACULA, numMoves, &numDracLocs, &canFreeLocs);
+		bool boat = false;
+		bool road = true;
+		PlaceId newPlace = knownDraculaLocation;
+		for (int i = 0; i < numDracLocs - 1 && i < 3 ; i++) {
+			//printf("move = %s\n", placeIdToName(DraculaMoves[i + 1]));
+			boat = (DraculaLocs[i + 1] == SEA_UNKNOWN || DraculaLocs[i] == SEA_UNKNOWN);
+			road = (DraculaLocs[i + 1] != SEA_UNKNOWN);
+			//printf("%d %d\n", road, boat);
 			int numLocs;
-			PlaceId * places = HvWhereCanIGoByType(hv, true, false, false, &numLocs);
-			PlaceId newPlace = randomLocation(hv, places, player, numLocs);
-			free(places);
-			if (currPlace == knownDraculaLocation) 
-				return newPlace;
-			else {
-				int pathLength;
-				PlaceId *shortestPath = HvGetShortestPathTo(hv, player, newPlace, &pathLength);
-				if (pathLength > 0) {
-					newPlace = shortestPath[0];
-					free(shortestPath);
-					return newPlace;
-				}
+			PlaceId * places = HvGetReachableByType(hv, PLAYER_DRACULA, knownDraculaRound + i, newPlace, road, false, boat, &numLocs);
+			int possibleNumLocs = numLocs;	
+			PlaceId * possiblePlaces  = removeImpossibleLocations(hv, PLAYER_DRACULA, places, newPlace, &possibleNumLocs);
+			if (DraculaLocs[i] == SEA_UNKNOWN && road) {
+				possiblePlaces = removeBoat(possiblePlaces, &possibleNumLocs);
+			} else if (DraculaLocs[i + 1] == SEA_UNKNOWN) {
+				possiblePlaces = removeRoad(possiblePlaces, &possibleNumLocs);
 			}
-		} else if(DraculaCurrPlace == SEA_UNKNOWN) {
-			int numLocs;
-			PlaceId * places = HvWhereCanIGoByType(hv, false, false, true, &numLocs);
-			PlaceId newPlace = randomLocation(hv, places, player, numLocs);
-			free(places);
-			if (currPlace == knownDraculaLocation) 
+			if (possibleNumLocs > 0) {
+				free(places);
+				places = possiblePlaces;
+				numLocs = possibleNumLocs;
+			} 
+			for(int i = 0; i < numLocs; i++) {
+				printf("%s\n", placeIdToName(places[i]));
+			}	
+			printf("\n");
+			newPlace = getRandomLocation(hv, places, player, numLocs);
+			free (places);
+		}
+		if (canFreeLocs && DraculaLocs != NULL)	
+			free (DraculaLocs);
+		// if there is evidence that dracula want to teleport, set the destination to castle
+		int numDracMoves = 0;
+		bool canFreeMoves;
+		PlaceId* DraculaMoves = HvGetLastMoves(hv, PLAYER_DRACULA, 4, &numDracMoves, &canFreeMoves);
+		if (planToTeleport(DraculaMoves, numDracMoves, newPlace)) {
+			int pathLength;
+			PlaceId *shortestPath = HvGetShortestPathTo(hv, player, newPlace, &pathLength);
+			if (pathLength == 1) {
+				free(shortestPath);
 				return newPlace;
-			else {
-				int pathLength;
-				PlaceId *shortestPath = HvGetShortestPathTo(hv, player, newPlace, &pathLength);
-				if (pathLength > 0) {
-					newPlace = shortestPath[0];
+			} else {
+				newPlace = CASTLE_DRACULA;
+				if (pathLength > 0)
 					free(shortestPath);
-					return newPlace;
-				}
 			}
 		}
+			
+		if (canFreeMoves && DraculaMoves != NULL)
+			free(DraculaMoves);
+		// if the player is Mina Harker, we need to consideration related the path length
+		// return the predict dracula place directly for further decision
+		if (player == PLAYER_MINA_HARKER)
+			return newPlace;
+		int pathLength;
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, player, newPlace, &pathLength);
+		//for(int i = 0; i < pathLength; i++) {
+		//	printf("%s\n", placeIdToName(shortestPath[i]));
+		//}	
+		//printf("\n");
+		if (pathLength > 0) {
+			newPlace = shortestPath[0];
+			free(shortestPath);
+			return newPlace;
+		} else 
+			return currPlace;	
+		
 	}
 	return NOWHERE;
 }
 
-PlaceId randomLocation(HunterView hv, PlaceId * places, Player player, int numReturnedLocs) {
+PlaceId getRandomLocation(HunterView hv, PlaceId * places, Player player, int numReturnedLocs) { 
+	if (numReturnedLocs == 0)
+		return places[0];
 	Round round = HvGetRound(hv);
 	int num = round + player;
 	PlaceId newPlace;
@@ -271,7 +369,7 @@ PlaceId randomLocation(HunterView hv, PlaceId * places, Player player, int numRe
 	newPlace = places[rand() % numReturnedLocs];
 	// if hunter can travel long distance via rail next turn
 	// prefer a city with rail 
-	if ((num % 4 == 1 || num % 4 == 2) && !hasRailConnection(newPlace)) {
+	if ((num % 4 == 2) && !hasRailConnection(newPlace)) {
 		for (int i = 0; i < numReturnedLocs; i++) {
 			if (hasRailConnection(places[i])) {
 				newPlace = places[i];
@@ -279,12 +377,83 @@ PlaceId randomLocation(HunterView hv, PlaceId * places, Player player, int numRe
 			}		
 		}
 	}
+	if (placeHasOtherHunter(hv, player, newPlace)) {
+		srand(time(0));
+		newPlace = places[rand() % numReturnedLocs];
+	}
 	return newPlace;
 }
 
+PlaceId * removeImpossibleLocations(HunterView hv, Player player, PlaceId * places, PlaceId currPlace, int * numReturnedLocs) {
+
+	PlaceId * availablePlace = malloc(*numReturnedLocs * sizeof(PlaceId));
+	int num = 0;
+	for(int i = 0; i < *numReturnedLocs; i++) {
+		if (placeIsSea(currPlace) && places[i] == currPlace)
+			continue;
+		if(canGo(hv, places[i])) {
+			int hasOtherHunter = 0;
+			for(int j = 0; j < player; j++) {
+				if(HvGetPlayerLocation(hv, j) == places[i] && placeIsLand(places[i]))
+					hasOtherHunter = 1;
+			}
+			if(!hasOtherHunter){
+				availablePlace[num] = places[i];
+				num++;
+			}
+		}
+	}
+	*numReturnedLocs = num;
+	//free(places);
+	//for(int i = 0; i < num; i++) {
+	//	printf("%s\n", placeIdToName(availablePlace[i]));
+	//}
+	return availablePlace;
+}
+
+PlaceId * removeBoat(PlaceId * places, int * numReturnedLocs) {
+	
+	PlaceId * newPlaces = malloc(*numReturnedLocs * sizeof(PlaceId));
+	int num = 0;
+	for(int i = 0; i < *numReturnedLocs; i++) {
+		if(placeIsLand(places[i])) {
+			newPlaces[num] = places[i];
+			num++;
+		}
+	}
+	*numReturnedLocs = num;
+	free(places);
+	//for(int i = 0; i < num; i++) {
+	//	printf("%s\n", placeIdToName(availablePlace[i]));
+	//}
+	return newPlaces;
+}
+
+PlaceId * removeRoad(PlaceId * places, int * numReturnedLocs) {
+	PlaceId * newPlaces = malloc(*numReturnedLocs * sizeof(PlaceId));
+	int num = 0;
+	for(int i = 0; i < *numReturnedLocs; i++) {
+		if(placeIsSea(places[i])) {
+			newPlaces[num] = places[i];
+			num++;
+		}
+	}
+	*numReturnedLocs = num;
+	free(places);
+	return newPlaces;
+}
+
+
+
+bool placeHasOtherHunter(HunterView hv, Player player, PlaceId place) {
+	for(int i = 0; i < player; i++) {
+		if(HvGetPlayerLocation(hv, i) == place)
+			return true;
+	}
+	return false;
+}
 
 bool hasRailConnection(PlaceId place) {
-	printf("%s\n", placeIdToName(place));
 	Map m = MapNew();
 	ConnList list = MapGetConnections(m, place);
 	while (list != NULL) {
@@ -293,4 +462,101 @@ bool hasRailConnection(PlaceId place) {
 		list = list->next;
 	}
 	return false;
+}
+
+bool hasSeaMove(HunterView hv, int numMoves) {
+	int numReturnedMoves;
+	bool canFree;
+	PlaceId * places = HvGetLastMoves(hv, PLAYER_DRACULA, numMoves, &numReturnedMoves, &canFree);
+	if (numReturnedMoves == 0)
+		return false;	
+	for(int i = 0; i < numReturnedMoves; i++) {
+		if (placeIsSea(places[i]) || places[i] == SEA_UNKNOWN) {
+			if (canFree)
+				free(places);
+			return true;
+		}
+			
+	}
+	if (canFree)
+		free(places);
+	return false;
+}
+
+
+bool canGo(HunterView hv, PlaceId place) {
+
+	if (place == NOWHERE) // Dracula has no movement yet
+		return true;
+	if (place == HOSPITAL_PLACE) // Dracula cannot goto hospital
+		return false;
+
+	int num = -1;
+	bool canFree = false;
+	bool go = true;
+	PlaceId* list = HvGetLastLocations(hv, PLAYER_DRACULA, 5, &num, &canFree);
+
+	for (int i = 0; i < num; i++) {	
+		if (list[i] == place) // the place is already in the trail
+			go = false;
+	}
+	if (canFree)
+		free(list); // free the location list
+	return go;
+}
+
+bool planToTeleport(PlaceId * moves, int numMoves, PlaceId place) {
+	int number = numMoves < 4 ? numMoves : 4;
+	bool hide = false;
+	bool doubleBack = false;
+	for (int i = 0; i < number; i++) {
+		if (moves[i] == HIDE)
+			hide = true;
+		else if (moves[i] >= DOUBLE_BACK_1 && moves[i] <= DOUBLE_BACK_3)
+			doubleBack = true;
+	}
+	if (place == NOWHERE) {
+		if ((moves[0]  == HIDE  || moves[0] == DOUBLE_BACK_1 
+			|| moves[0] == DOUBLE_BACK_2) || (hide && doubleBack)) {
+			
+			return true;
+		} else
+			return false;
+	} else {
+		if (hide || doubleBack) {
+			if (placeCanTeleport(place)) 
+				return true;
+			else
+				return false;
+		} else 
+			return false;
+	}
+}
+
+bool placeCanTeleport(PlaceId place) {
+	if (place == EDINBURGH || place == MANCHESTER || place == NORTH_SEA ||
+		place == LONDON || place == PLYMOUTH || place == SWANSEA ||
+		place == IRISH_SEA || place == DUBLIN || place == GALWAY || 
+		place == ATLANTIC_OCEAN || place == TYRRHENIAN_SEA ||
+		place == MEDITERRANEAN_SEA || place == CAGLIARI || 
+		place == ATHENS || place == VALONA || place == IONIAN_SEA) {
+
+		return true;
+	}
+	return false;
+}
+
+
+PlaceId getVampire(HunterView hv, Player player, PlaceId place) {
+	PlaceId newPlace = place;
+	PlaceId vampirePlace = HvGetVampireLocation(hv);
+	if (placeIsReal(vampirePlace)) {
+		int pathLength;
+		PlaceId * shortestPath = HvGetShortestPathTo(hv, player, vampirePlace, &pathLength);
+		if (pathLength <= 3 && pathLength > 0) 
+			newPlace = shortestPath[0];
+		if (pathLength > 0)
+			free(shortestPath);
+	}
+	return newPlace;
 }
