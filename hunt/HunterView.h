@@ -217,4 +217,18 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 
 // TODO
 
+
+//PlaceId *HvGetMoveHistory(HunterView hv, Player player,
+  //                        int *numReturnedMoves, bool *canFree);
+
+PlaceId *HvGetReachableByType(HunterView hv, Player player, Round round,
+                              PlaceId from, bool road, bool rail,
+                              bool boat, int *numReturnedLocs);
+
+PlaceId* HvGetLastMoves(HunterView hv, Player player, int numMoves,
+                        int* numReturnedMoves, bool* canFree);
+
+PlaceId* HvGetLastLocations(HunterView hv, Player player, int numLocs,
+                            int* numReturnedLocs, bool* canFree);
+
 #endif // !defined (FOD__HUNTER_VIEW_H_)

@@ -143,11 +143,9 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 
 	PlaceId * path = NULL;
 	*pathLength = 0;
-	if (src == dest) { // if the hunter is at that location
-		path = malloc((*pathLength + 1) * sizeof(PlaceId));
-		path[0] = src;
+	if (src == dest) // if the hunter is at that location
 		return path;
-	}
+		
 	int w;
     // if HvGetShortestPathTo haven't been called brfore
 	if (src != hv->path[hunter].src) { 

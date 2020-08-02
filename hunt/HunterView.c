@@ -56,6 +56,7 @@ void QueueJoin (Queue Q, int it); // add int on queue, from lab07
 int QueueLeave (Queue Q); // remove item from queue, from lab07
 int QueueIsEmpty (Queue Q); // check for no items, from lab07
 
+
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
 
@@ -143,11 +144,9 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 
 	PlaceId * path = NULL;
 	*pathLength = 0;
-	if (src == dest) { // if the hunter is at that location
-		path = malloc((*pathLength + 1) * sizeof(PlaceId));
-		path[0] = src;
+	if (src == dest) // if the hunter is at that location
 		return path;
-	}
+		
 	int w;
     // if HvGetShortestPathTo haven't been called brfore
 	if (src != hv->path[hunter].src) { 
@@ -254,6 +253,42 @@ PlaceId *HvWhereCanTheyGoByType(HunterView hv, Player player,
 ////////////////////////////////////////////////////////////////////////
 // Our own interface functions
 
+//PlaceId *HvGetMoveHistory(HunterView hv, Player player,
+//                         int *numReturnedMoves, bool *canFree) {
+//	return GvGetMoveHistory(hv->gv, player, numReturnedMoves, canFree);	
+//}
+
+PlaceId* HvGetLastMoves(HunterView hv, Player player, int numMoves,
+                        int* numReturnedMoves, bool* canFree) {
+	return GvGetLastMoves(hv->gv, player, numMoves, numReturnedMoves, canFree);	
+}
+
+
+PlaceId *HvGetReachableByType(HunterView hv, Player player, Round round,
+                              PlaceId from, bool road, bool rail,
+                              bool boat, int *numReturnedLocs) {
+	return GvGetReachableByType(hv->gv, player, round, from, road, rail, boat, numReturnedLocs);
+}
+
+
+PlaceId* HvGetLastLocations(HunterView hv, Player player, int numLocs,
+                            int* numReturnedLocs, bool* canFree) {
+	return GvGetLastLocations(hv->gv, player, numLocs, numReturnedLocs, canFree);
+}
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+// helper functions
+
+
+
+
 // Queue operations
 // create new empty Queue
 Queue newQueue (void) {
@@ -306,3 +341,4 @@ int QueueLeave (Queue Q) {
 int QueueIsEmpty (Queue Q) {
 	return (Q->head == NULL);
 }
+
