@@ -111,9 +111,20 @@ const char * decideMinaHarkerMove(HunterView hv){
 	
 	if (currPlace != CD) {
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_Mina_Harker, CD, &pathLength);
-		return shortestPath;
+		PlaceId place = shortestPath[0];
+
+		/*free(shortestPath);
+		PlaceId vampirePlace = HvGetVampireLocation(hv);
+		if (placeIsReal(vampirePlace)) {
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, vampirePlace, &pathLength);
+			if(pathLength <= 3 && pathLength > 0) 
+				newPlace = shortestPath[0];
+			free(shortestPath);
+		}*/
+		return placeIdToAbbrev(place);
 	}
 
+	
 	reuturn "CD";
 
 }
