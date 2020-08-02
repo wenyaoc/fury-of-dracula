@@ -13,8 +13,26 @@
 #include "DraculaView.h"
 #include "Game.h"
 
+#include "Places.h"
+
+
 void decideDraculaMove(DraculaView dv)
 {
-	// TODO: Replace this with something better!
+	// TODO: Replace this with something better!  
+	PlaceId currPlace = DvGetPlayerLocation (dv,PlayerPlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_LORD_GODALMING);
+	if (currPlace == NOWHERE) return "ED";
+
+	PlaceId newPlace = currPlace;
+	PlaceId predictPlace = predictLocation(hv);
+	if (predictPlace == NOWHERE) {
+		int numReturnedLocs;
+		PlaceId * places = HvWhereCanIGo(hv, &numReturnedLocs);
+		srand(time(0));
+		newPlace = places[rand() % numReturnedLocs];
+		free(places);
+	}
+	return placeIdToAbbrev(newPlace);
+	
 	registerBestPlay("CD", "Mwahahahaha");
 }
+

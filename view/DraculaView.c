@@ -44,7 +44,6 @@ DraculaView DvNew(char* pastPlays, Message messages[]) {
 	}
 
 	new_dv->gv = GvNew(pastPlays, messages);
-
 	return new_dv;
 }
 

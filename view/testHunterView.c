@@ -531,6 +531,15 @@ int main(void)
 			assert(path[3] == FRANKFURT);
 			free(path);
 		}
+		{
+			printf("\tLisbon -> Lisbon (Lord Godalming, Round 1)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
+			                                    LISBON, &pathLength);
+			
+			assert(pathLength == 0);
+			assert(path == NULL);
+		}
 		HvFree(hv);
 		printf("Test passed!\n");
 	}
@@ -553,8 +562,8 @@ int main(void)
 		{
 			printf("\thospital -> Constanta (Lord Godalming, Round 4)\n");
 			int pathLength = -1;
-			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING,
-													CONSTANTA, &pathLength);
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, 
+			                                    CONSTANTA, &pathLength);
 
 			assert(pathLength == 3);
 			assert(path[0] == SZEGED);
@@ -562,12 +571,20 @@ int main(void)
 			assert(path[2] == CONSTANTA);
 			free(path);
 		}
+		{
+			printf("\thospital -> hospital (Lord Godalming, Round 4)\n");
+			int pathLength = -1;
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, 
+			                                    HOSPITAL_PLACE, &pathLength);
 
+			assert(pathLength == 0);
+			assert(path == NULL);
+		}
 		{
 			printf("\tGenvea -> Constanta (Dr. Seward, Round 4)\n");
 			int pathLength = -1;
-			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD,
-													CONSTANTA, &pathLength);
+			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, 
+			                                    CONSTANTA, &pathLength);
 			assert(pathLength == 6);
 			assert(path[0] == MILAN);
 			assert(path[1] == VENICE || path[1] == GENOA);
@@ -582,7 +599,7 @@ int main(void)
 			printf("\tGenvea -> Constanta (Van Gelsing, Round 4)\n");
 			int pathLength = -1;
 			PlaceId *path = HvGetShortestPathTo(hv, PLAYER_VAN_HELSING,
-													CONSTANTA, &pathLength);
+			                                    CONSTANTA, &pathLength);
 			//printf("pathLength = %d\n", pathLength);
 			//for (int i = 0; i < pathLength; i++) {
 			//	printf("Locations = %s\n", placeIdToName(path[i]));
@@ -722,7 +739,7 @@ int main(void)
 		HvFree(hv);
 		printf("Test passed!\n");
 	}
-	
+
 	// extra test 6
 	// test HvWhereCanTheyGo for hunter
 	{///////////////////////////////////////////////////////////////////
@@ -750,6 +767,10 @@ int main(void)
 			assert(locs[2] == PLYMOUTH);
 			assert(locs[3] == SWANSEA);
 			free(locs);
+
+			Round round = -1;
+			assert(HvGetLastKnownDraculaLocation(hv, &round) == NAPLES);
+			assert(round == 2);
 		}
 		{
 			printf("\tLord Godaming: rail only\n");
@@ -766,11 +787,7 @@ int main(void)
 			int numLocs = -1;
 			PlaceId *locs = HvWhereCanTheyGo(hv, PLAYER_DR_SEWARD, &numLocs);
 			
-			printf("num = %d\n", numLocs);
 			sortPlaces(locs, numLocs);
-			for (int i = 0; i < numLocs; i++) {
-				printf("Locations = %s\n", placeIdToName(locs[i]));
-			}
 			assert(numLocs == 7);
 			sortPlaces(locs, numLocs);
 			assert(locs[0] == ALICANTE);
@@ -820,7 +837,7 @@ int main(void)
 
 		int numLocs = -1;
 		PlaceId *locs = HvWhereCanTheyGoByType(hv, PLAYER_DRACULA,
-												true, false, false, &numLocs);
+		                                       true, false, false, &numLocs);
 			
 		assert(numLocs == 0);
 		assert(locs == NULL);

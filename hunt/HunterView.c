@@ -341,3 +341,4 @@ int QueueLeave (Queue Q) {
 int QueueIsEmpty (Queue Q) {
 	return (Q->head == NULL);
 }
+
