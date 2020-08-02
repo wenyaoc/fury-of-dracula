@@ -71,7 +71,7 @@ typedef HunterView View;
 # define decideMove decideHunterMove
 # define ViewFree HvFree
 
-# define xPastPlays "GED.... SBD.... HPA.... MAO.... DGE.V.. GNS.... "
+# define xPastPlays "GSZ.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SPR.... HMA.... MGA.... DC?T... GLV.... SBR.... HBO.... MGA.... DC?T... GSW.... SPR.... HNA.... MKL.... DS?.... GLO.... SVE.... HPA.... MSZ.... DCGT... GPL.... SPD.... HMR.... MJM.... DHIT... GEC.... SBD.... HMS.... MSZ.... DS?..V. GNS.... SVI.... HCGTT.. MGA.... DC?T... GAO.... SVE.... HTS.... MCD.... DS?.... GNS.... SBD.... HMS.... MCD.... DC?T.T. GAO.... SVE.... HMS.... MGA.... DC?T... GMS.... SMI.... HTS.... MGA.... DSJT... GMR.... SZU.... HMS.... MCN.... DJMT... GTO.... SLI.... HAL.... MGA.... DC?.V.. GSR.... SNU.... HGR.... MBC.... CD2T... GMR.... SPR.... HMA.... MGA.... DC?T.T. GMR.... SPR.... HMA.... MGA.... DC?T.T. GZU.... SBD.... HPA.... MKL.... DC?T.T. GMR.... SSZ.... HNA.... MBD.... DC?T.T. GPA.... SJMTT.. HPA.... MSZ.... DS?..V. GST.... SSZ.... HST.... MVI.... DD1T... GFR.... SGA.... HMU.... MBD.... DHIT... GBR.... SCD.... HZA.... MKL.... DTPT.T. GBD.... SCDTD.. HSZ.... MCDD... DGAT... GKL.... SGAT... HGAD... MGAD..." 
 # define xMsgs { "", "", "" }
 
 #endif
@@ -91,7 +91,7 @@ int main(void)
 
 // Saves characters from play (and appends a terminator)
 // and saves characters from message (and appends a terminator)
-void registerBestPlay(char *play, Message message)
+void registerBestPlay(const char *play, Message message)
 {
 	strncpy(latestPlay, play, MOVE_SIZE - 1);
 	latestPlay[MOVE_SIZE - 1] = '\0';
