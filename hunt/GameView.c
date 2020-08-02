@@ -468,17 +468,17 @@ void hunterEvent(GameView gv, char* play, PlaceId place, int player) {
 			gv->data[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
 		}
 	}
-	if (gv->data[player].turn > 1 
+	if (gv->data[player].health <= 0) { // the hunter die, teleport to hospital
+		gv->data[player].health = 0;
+		gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
+		gv->data[player].first->place = HOSPITAL_PLACE;
+	} else if (gv->data[player].turn > 1 
 	    && gv->data[player].first->place == gv->data[player].first->next->place) {
 		gv->data[player].health += LIFE_GAIN_REST;
 		// if health > 9, set back to 9
 		if (gv->data[player].health > GAME_START_HUNTER_LIFE_POINTS) 
 			gv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
-	}
-	if (gv->data[player].health <= 0) { // the hunter die, teleport to hospital
-		gv->data[player].health = 0;
-		gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
-		gv->data[player].first->place = HOSPITAL_PLACE;
+		
 	}
 }
 
