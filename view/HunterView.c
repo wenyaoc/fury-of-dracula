@@ -23,7 +23,7 @@
 #include <limits.h>
 #include <string.h>
 
-#define MAXCHAR 8
+#define MAXPLAY 8
 #define MAXLINE 40
 // OUR OWN STRUCTS
 typedef struct QueueRep *Queue;
@@ -45,12 +45,10 @@ typedef struct ShortestPath {
 	int * pred;
 } ShortestPath;
 
-
 struct hunterView {
 	GameView gv;
 	ShortestPath path[4];
 };
-
 
 Queue newQueue (void); // create new empty queue, from lab07
 void dropQueue (Queue Q); // free memory used by queue, from lab07
@@ -77,8 +75,7 @@ HunterView HvNew(char *pastPlays, Message messages[]) {
 	return new;
 }
 
-void HvFree(HunterView hv) {
-	
+void HvFree(HunterView hv) {	
 	GvFree(hv->gv);
 	for (int i = 0; i < 4; i++) {
 		if (hv->path[i].src != NOWHERE) {
@@ -146,11 +143,9 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 
 	PlaceId * path = NULL;
 	*pathLength = 0;
-	if (src == dest) { // if the hunter is at that location
-		path = malloc((*pathLength + 1) * sizeof(PlaceId));
-		path[0] = src;
+	if (src == dest) // if the hunter is at that location
 		return path;
-	}
+		
 	int w;
     // if HvGetShortestPathTo haven't been called brfore
 	if (src != hv->path[hunter].src) { 
@@ -296,13 +291,13 @@ void QueueJoin (Queue Q, int it) {
 int QueueLeave (Queue Q) {
 	assert (Q != NULL);
 	assert (Q->head != NULL);
-	int it = Q->head->value;
+	int item = Q->head->value;
 	QueueNode *old = Q->head;
 	Q->head = old->next;
 	if (Q->head == NULL)
 		Q->tail = NULL;
 	free (old);
-	return it;
+	return item;
 }
 
 // check for no items

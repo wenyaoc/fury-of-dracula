@@ -193,7 +193,9 @@ const char * decideVanHelsingMove(HunterView hv) {
 	return placeIdToAbbrev(newPlace);
 }
 
+
 const char * decideMinaHarkerMove(HunterView hv) {
+
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_MINA_HARKER);
 	if (currPlace == NOWHERE) 
 		return "CD";
@@ -234,6 +236,7 @@ const char * decideMinaHarkerMove(HunterView hv) {
 	}
 	newPlace = getVampire(hv, PLAYER_MINA_HARKER, newPlace);
 	return placeIdToAbbrev(newPlace);
+
 }
 
 
