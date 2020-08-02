@@ -182,13 +182,24 @@ const char * decideVanHelsingMove(HunterView hv) {
 	return placeIdToAbbrev(newPlace);
 }
 
+
 const char * decideMinaHarkerMove(HunterView hv) {
 	assert(hv != NULL);
 	PlaceId currPlace = HvGetPlayerLocation(hv, PLAYER_Mina_Harker);
 	
 	if (currPlace != CD) {
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_Mina_Harker, CD, &pathLength);
-		return shortestPath[0];
+		PlaceId place = shortestPath[0];
+
+		/*free(shortestPath);
+		PlaceId vampirePlace = HvGetVampireLocation(hv);
+		if (placeIsReal(vampirePlace)) {
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, vampirePlace, &pathLength);
+			if(pathLength <= 3 && pathLength > 0) 
+				newPlace = shortestPath[0];
+			free(shortestPath);
+		}*/
+		return placeIdToAbbrev(place);
 	}
 
 	reuturn "CD";
