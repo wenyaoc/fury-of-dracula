@@ -215,7 +215,7 @@ PlaceId *HvWhereCanIGoByType(HunterView hv, bool road, bool rail,
 	PlaceId from = GvGetPlayerLocation(hv->gv, player);
 	if (from == NOWHERE) return NULL; // hunter has no movement yet
 	return GvGetReachableByType(hv->gv, player, 
-	                            GvGetRound(hv->gv) + player, from, 
+	                            GvGetRound(hv->gv), from, 
 	                            road, rail, boat, numReturnedLocs);
 }
 
