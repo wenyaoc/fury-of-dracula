@@ -96,6 +96,10 @@ GameView GvNew(char* pastPlays, Message messages[]) {
 			trailLoad(new, play);
 		}
 	}
+
+	if(GvGetPlayer(new) == PLAYER_LORD_GODALMING || GvGetHealth(new, PLAYER_DRACULA) <= 0) {
+		printf("round = %d\nscore = %d\nhunter = %d %d %d %d, Dracula = %d\n", GvGetRound(new), GvGetScore(new), GvGetHealth(new, 0), GvGetHealth(new, 1),GvGetHealth(new, 2),GvGetHealth(new, 3),GvGetHealth(new, PLAYER_DRACULA));
+	}
 	free(play);
 	return new;
 }

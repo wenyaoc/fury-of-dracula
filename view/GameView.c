@@ -468,17 +468,17 @@ void hunterEvent(GameView gv, char* play, PlaceId place, int player) {
 			gv->data[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
 		}
 	}
-	if (gv->data[player].turn > 1 
+	if (gv->data[player].health <= 0) { // the hunter die, teleport to hospital
+		gv->data[player].health = 0;
+		gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
+		gv->data[player].first->place = HOSPITAL_PLACE;
+	} else if (gv->data[player].turn > 1 
 	    && gv->data[player].first->place == gv->data[player].first->next->place) {
 		gv->data[player].health += LIFE_GAIN_REST;
 		// if health > 9, set back to 9
 		if (gv->data[player].health > GAME_START_HUNTER_LIFE_POINTS) 
 			gv->data[player].health = GAME_START_HUNTER_LIFE_POINTS;
-	}
-	if (gv->data[player].health <= 0) { // the hunter die, teleport to hospital
-		gv->data[player].health = 0;
-		gv->score -= SCORE_LOSS_HUNTER_HOSPITAL;
-		gv->data[player].first->place = HOSPITAL_PLACE;
+		
 	}
 }
 
@@ -573,14 +573,14 @@ bool deleteLastTraps(HistoryNode node, PlaceId place, int num) {
 }
 
 
-// if a hunter encountered the vampire, delete the vampire
+// delete the vampire
 // input: GameView
 void deleteVampire(GameView gv) {
 	HistoryNode curr = gv->data[PLAYER_DRACULA].first;
 	for (int counter = 0; curr != NULL && counter < 6 
 	     && counter < gv->round; counter++) {
-		if (curr->vampire){ // the current place has vampire
-			curr->vampire = false; // delete the vampire
+		if (curr->vampire){ 
+			curr->vampire = false;
 			return;
 		}
 		curr = curr->next;
@@ -608,10 +608,8 @@ HistoryNode findDBCity(HistoryNode DBnode) {
 // output: the new PlaceId array
 PlaceId * addPlace(PlaceId * place, int * num, PlaceId newPlace) {
 	for(int i = 0; i < *num; i++) {
-	    // the given PlaceId is already in the array
 		if(place[i] == newPlace) return place;
 	}
-	// allocate more memorys for the array
 	place = realloc(place, (*num + 1) * sizeof(PlaceId));
 	place[*num] = newPlace;
 	*num = *num + 1;
@@ -644,7 +642,7 @@ HistoryNode creatNode(PlaceId place, bool vampire, bool trap) {
 }
 
 
-// add the node to history (add to the front)
+// add the node to history 
 playerData addToHistory(playerData data, HistoryNode newNode) {
     if(data.first == NULL){
         data.first = newNode;
