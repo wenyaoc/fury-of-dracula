@@ -152,6 +152,8 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 		// initialise values
 		hv->path[hunter].src = src;
 		Round round = HvGetRound(hv);
+		if (HvGetPlayer(hv) > hunter) 
+			round++;
 		int * dist = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
 		int * pred = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
 		*pathLength = 0;
