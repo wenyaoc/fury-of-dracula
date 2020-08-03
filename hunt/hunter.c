@@ -65,7 +65,9 @@ void decideHunterMove(HunterView hv) {
 		break;
     }
 
-	registerBestPlay(place, "I like Dracula");
+	char * newPlace = malloc(2 * sizeof(char));
+	strcpy(newPlace, place);
+	registerBestPlay(newPlace, "I like Dracula");
 }
 
 ////////////////////////////////////////////////////////////////////////
