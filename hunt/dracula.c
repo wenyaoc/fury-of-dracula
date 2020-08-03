@@ -15,75 +15,18 @@
 #include "Game.h"
 #include "GameView.h"
 
+#include "Map.h"
+#include "Places.h"
+
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 #define LANDPLACELENGTH 16
 #define RAILPLACELENGTH 30
 #define SEAPLACELENGTH 10
 #define HUNTERCOUNT 4
 
-PlaceId LandPlace[] = {
-	GALWAY,
-	DUBLIN,
-	AMSTERDAM,
-	NANTES,
-	CLERMONT_FERRAND,
-	TOULOUSE,
-	GRANADA,
-	CADIZ,
-	CAGLIARI,
-	ZAGREB,
-	ST_JOSEPH_AND_ST_MARY,
-	SARAJEVO,
-	VALONA,
-	KLAUSENBURG,
-	CASTLE_DRACULA,
-	ATHENS
-};
-
-PlaceId RailPlace[] = {
-	ALICANTE,
-	BARCELONA,
-	BARI,
-	BELGRADE,
-	BERLIN,
-	BORDEAUX,
-	BRUSSELS,
-	BUCHAREST,
-	BUDAPEST,
-	COLOGNE,
-	EDINBURGH,
-	FLORENCE,
-	FRANKFURT,
-	GENEVA,
-	GENOA,
-	LEIPZIG,
-	LE_HAVRE,
-	LISBON,
-	LIVERPOOL,
-	LONDON,
-	MADRID,
-	MARSEILLES,
-	MILAN,
-	MUNICH,
-	NAPLES,
-	PRAGUE,
-	SALONICA,
-	SOFIA,
-	STRASBOURG,
-	VENICE,
-};
-
-PlaceId SeaPlace[] = {
-	ADRIATIC_SEA,
-	ATLANTIC_OCEAN,
-	BAY_OF_BISCAY,
-	BLACK_SEA,
-	ENGLISH_CHANNEL,
-	IONIAN_SEA,
-	IRISH_SEA,
-	MEDITERRANEAN_SEA,
-	NORTH_SEA,
-	TYRRHENIAN_SEA,
-};
 
 typedef struct hunterPlace HunterPlace;
 
@@ -98,9 +41,9 @@ PlaceId bestPlace(PlaceId* hunterPlace);
 void decideDraculaMove(DraculaView dv)
 {
 	// TODO: Replace this with something better!
-	PlaceId currPlace = NOWHERE;
+	PlaceId currPlace = predictLocation(dv);
 
-	if (predictLocation(dv) == NOWHERE) {
+	if (currPlace == NOWHERE) {
 		int numReturnedLocs;
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
 		srand(time(0));
@@ -113,28 +56,24 @@ void decideDraculaMove(DraculaView dv)
 PlaceId predictLocation(DraculaView dv) {
 
 	PlaceId currPlace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
-
-	int numReturnLocs = 0;
 	int maxLength = 0;
 	if (currPlace == NOWHERE) {
-
 		PlaceId hunterPlace[HUNTERCOUNT];
-		for (int i = 0; i < HUNTERCOUNT; i++)
-			for (int j = 0; j < LANDPLACELENGTH; j++) {
-				DvGetShortestPathTo(dv, i, LandPlace[j], &numReturnLocs);
-				if (numReturnLocs > maxLength) { hunterPlace[i] = LandPlace[j]; maxLength = numReturnLocs; }
+		for (int i = 0; i < HUNTERCOUNT; i++) {
+			printf("%d\n", i);
+			int * dest = DvGetShortestPath(dv, i);
+			maxLength = dest[0];
+			for (int j = 0; j <= MAX_REAL_PLACE; j++) {
+				if (dest[j] > maxLength && placeIsLand(i)) { 
+					hunterPlace[i] = j; 
+					maxLength = dest[j]; 
+				}
 			}
-
+			printf("%d %s\n", i, placeIdToName(hunterPlace[i]));
+		}
 		return bestPlace(hunterPlace);
 	}
-
-
-	// How to move
-	// need to know hunter thinking
-	// 
-	
-
-	return currPlace;
+	return NOWHERE;
 }
 
 PlaceId bestPlace(PlaceId* hunterPlace) {
