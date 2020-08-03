@@ -153,6 +153,9 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 		// initialise values
 		hv->path[hunter].src = src;
 		Round round = HvGetRound(hv);
+		//printf("%s %d\n", placeIdToName(src), round);
+		if (HvGetPlayer(hv) > hunter) 
+			round++;
 		int * dist = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
 		int * pred = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
 		*pathLength = 0;
@@ -213,7 +216,7 @@ PlaceId *HvWhereCanIGoByType(HunterView hv, bool road, bool rail,
 	PlaceId from = GvGetPlayerLocation(hv->gv, player);
 	if (from == NOWHERE) return NULL; // hunter has no movement yet
 	return GvGetReachableByType(hv->gv, player, 
-	                            GvGetRound(hv->gv) + player, from, 
+	                            GvGetRound(hv->gv), from, 
 	                            road, rail, boat, numReturnedLocs);
 }
 
