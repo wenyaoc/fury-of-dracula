@@ -43,9 +43,11 @@ bool placeHasOtherHunter(HunterView hv, Player player, PlaceId place);
 bool canGo(HunterView hv, PlaceId place);
 bool planToTeleport(PlaceId * moves, int numMoves, PlaceId place);
 bool placeCanTeleport(PlaceId place);
+bool hasSpecialMove(HunterView hv, int numMoves);
 
 void decideHunterMove(HunterView hv) {
 	Player player = HvGetPlayer(hv);
+	//printf("%d\n", player);
 	const char * place;
     switch (player) {
         case PLAYER_LORD_GODALMING:
@@ -79,9 +81,10 @@ const char * decideLordGodalmingMove(HunterView hv) {
 	if (currPlace == NOWHERE) return "ED";
 
 	PlaceId newPlace = getMove(hv, PLAYER_LORD_GODALMING);
+	//printf("currPlace = %s newPlace = %s\n", placeIdToName(currPlace), placeIdToName(newPlace));
 	//printf("newplace = %s\n", placeIdToName(newPlace));
 	// in the first 6 turns, make sure there is no vampires in England
-	if (newPlace == NOWHERE && currRound < 6) {
+	if (newPlace == NOWHERE && currRound < 6 && (currRound < 4 || hasSeaMove(hv, currRound))) {
 		switch (currPlace) {
 			case EDINBURGH:
 				newPlace = MANCHESTER;
@@ -108,7 +111,7 @@ const char * decideLordGodalmingMove(HunterView hv) {
 	if (newPlace == NOWHERE) {
 		int pathLength;
 		PlaceId *shortestPath = NULL;
-		if (currRound % 26 >= 1 && currRound % 26 < 6)
+		if (currRound % 26 >= 21 && currRound % 26 < 25)
 			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, LIVERPOOL, &pathLength);
 		else
 			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, FRANKFURT, &pathLength);
@@ -156,6 +159,7 @@ const char * decideDrSewardMove(HunterView hv) {
 	if (currPlace == NOWHERE) return "BD";
 
 	PlaceId newPlace = getMove(hv, PLAYER_DR_SEWARD);
+	//printf("currPlace = %s newPlace = %s\n", placeIdToName(currPlace), placeIdToName(newPlace));
 	if (newPlace == NOWHERE) {
 		int pathLength;
 		PlaceId *shortestPath = NULL;
@@ -171,7 +175,7 @@ const char * decideDrSewardMove(HunterView hv) {
 			bool sea = (hasSeaMove(hv, 6) || placeIsSea(currPlace));
 			PlaceId * places = HvWhereCanIGoByType(hv, true, true, sea, &numReturnedLocs);
 			int numLocs = numReturnedLocs;
-			PlaceId * removedPlaces = removeSameLocations(hv, PLAYER_LORD_GODALMING, places, &numLocs);
+			PlaceId * removedPlaces = removeSameLocations(hv, PLAYER_DR_SEWARD, places, &numLocs);
 			if (numLocs > 0) {
 				free(places);
 				places = removedPlaces;
@@ -345,7 +349,7 @@ PlaceId getMove(HunterView hv, Player player) {
 			free(shortestPath);
 			return newPlace;
 		}
-	} else if (round - knownDraculaRound >= 2 && round - knownDraculaRound <= 6) {
+	} else if ((round - knownDraculaRound >= 2 && round - knownDraculaRound <= 4) || hasSpecialMove(hv, 4) || hasSeaMove(hv, 4)) {
 		//PlaceId DraculaCurrPlace = HvGetPlayerLocation(hv, PLAYER_DRACULA);
 		int numMoves = round - knownDraculaRound;
 		int numDracLocs = 0;
@@ -362,7 +366,11 @@ PlaceId getMove(HunterView hv, Player player) {
 			int numLocs;
 			PlaceId * places = HvGetReachableByType(hv, PLAYER_DRACULA, knownDraculaRound + i, newPlace, road, false, boat, &numLocs);
 			int possibleNumLocs = numLocs;	
-			PlaceId * possiblePlaces  = removeImpossibleLocations(hv, PLAYER_DRACULA, places, newPlace, &possibleNumLocs);	
+			PlaceId * possiblePlaces  = removeImpossibleLocations(hv, PLAYER_DRACULA, places, newPlace, &possibleNumLocs);
+			if (possibleNumLocs == 1) {
+				newPlace = possiblePlaces[i];
+				break;
+			}	
 			if (DraculaLocs[i] == SEA_UNKNOWN && road) {
 				possiblePlaces = removeBoat(possiblePlaces, &possibleNumLocs);
 			} else if (DraculaLocs[i + 1] == SEA_UNKNOWN) {
@@ -419,6 +427,26 @@ PlaceId getMove(HunterView hv, Player player) {
 		} else 
 			return currPlace;	
 		
+	} else {
+		// seamove? shortest path to the colest sea;
+		int numReturnedLocs = 0;
+		PlaceId * places = HvWhereCanIGoByType(hv, true, false, false, &numReturnedLocs);
+		//for(int i = 0; i < numReturnedLocs; i++) {
+		//	printf("%s\n", placeIdToName(places[i]));
+		//}
+		int numLocs = numReturnedLocs;
+		PlaceId * removedPlaces = removeSameLocations(hv, player, places, &numLocs);
+		//for(int i = 0; i < numLocs; i++) {
+		//	printf("locs = %s\n", placeIdToName(removedPlaces[i]));
+		//}
+		if (numLocs > 0) {
+			free(places);
+			places = removedPlaces;
+			numReturnedLocs = numLocs;
+		}
+		PlaceId newPlace = getRandomLocation(hv, places, player, numReturnedLocs);
+		free(places);
+		return newPlace;
 	}
 	return NOWHERE;
 }
@@ -461,20 +489,28 @@ PlaceId * removeSameLocations(HunterView hv, Player player, PlaceId * places, in
 		for (int j = 0; j < 4; j++) {
 			numLocs = 0;
 			canFree = true;
-			lastLocs = HvGetLastLocations(hv, j, 2, &numLocs, &canFree);
-			if (numLocs == 2) {
-				//printf("place = %s loc1 = %s loc2 = %s\n",placeIdToName(places[i]), placeIdToName(lastLocs[0]), placeIdToName(lastLocs[1]));
-				if (player == j) {
-					if (lastLocs[0] == places[i]) {
+			lastLocs = HvGetLastLocations(hv, j, 4, &numLocs, &canFree);
+			//for(int i = 0; i < numLocs; i++) {
+			//	printf(" place = %s\n", placeIdToName(lastLocs[i]));
+		//	}	
+		//	printf("\n");
+			if (numLocs >= 2) {
+				if (player != j) {
+					if (lastLocs[numLocs - 1] == places[i] || lastLocs[numLocs - 2] == places[i]) {
 						areSame = true;
 						break;
 					}
 				} else {
-					if (lastLocs[0] == places[i] || lastLocs[1] == places[i]) {
-						areSame = true;
-						break;
+					for (int k = 0; k < numLocs; k++) {
+						//printf("known = %s\n", placeIdToName(lastLocs[k]));
+						if (lastLocs[k] == places[i]) {
+							
+							areSame = true;
+							break;
+						}
 					}
 				}
+				
 			}
 		}
 		if (!areSame) {
@@ -498,8 +534,15 @@ PlaceId * removeImpossibleLocations(HunterView hv, Player player, PlaceId * plac
 		if(canGo(hv, places[i])) {
 			int hasOtherHunter = 0;
 			for(int j = 0; j < player; j++) {
-				if(HvGetPlayerLocation(hv, j) == places[i] && placeIsLand(places[i]))
-					hasOtherHunter = 1;
+				int numLocs = 0;
+				bool canFree = true;
+				PlaceId * lastLocs = HvGetLastLocations(hv, j, 2, &numLocs, &canFree);
+				if (numLocs == 2) {
+					if (lastLocs[0] == places[i] || lastLocs[1] == places[i]) 
+						hasOtherHunter = true;
+				}
+				if (numLocs > 0 && canFree)
+					free(lastLocs);
 			}
 			if(!hasOtherHunter && places[i] != ST_JOSEPH_AND_ST_MARY){
 				availablePlace[num] = places[i];
@@ -537,8 +580,9 @@ PlaceId * removeRoad(PlaceId * places, int * numReturnedLocs) {
 			num++;
 		}
 	}
+	if (*numReturnedLocs > 0)
+		free(places);
 	*numReturnedLocs = num;
-	free(places);
 	return newPlaces;
 }
 
@@ -660,6 +704,25 @@ bool placeCanTeleport(PlaceId place) {
 
 		return true;
 	}
+	return false;
+}
+
+bool hasSpecialMove(HunterView hv, int numMoves) {
+	int numReturnedMoves;
+	bool canFree;
+	PlaceId * moves = HvGetLastMoves(hv, PLAYER_DRACULA, numMoves, &numReturnedMoves, &canFree);
+	if (numReturnedMoves == 0)
+		return false;	
+	for(int i = 0; i < numReturnedMoves; i++) {
+		if (moves[i] == HIDE || (moves[i] >= DOUBLE_BACK_1 && moves[i] <= DOUBLE_BACK_5)) {
+			if (canFree)
+				free(moves);
+			return true;
+		}
+			
+	}
+	if (canFree)
+		free(moves);
 	return false;
 }
 
