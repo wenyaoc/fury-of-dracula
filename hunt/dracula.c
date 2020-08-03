@@ -109,11 +109,11 @@ void decideDraculaMove(DraculaView dv)
 	else if (currPlace != NOWHERE) {
 		int numReturnedLocs;
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
-		
+		srand(time(0));
 		currPlace = places[rand() % numReturnedLocs];
 		free(places);
 	}
-
+	
 	char* newPlace = malloc(2 * sizeof(char));
 	strcpy(newPlace, placeIdToAbbrev(currPlace));
 	registerBestPlay(newPlace, "hello :)");
