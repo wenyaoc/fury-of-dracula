@@ -86,7 +86,7 @@ PlaceId SeaPlace[] = {
 	NORTH_SEA,
 	TYRRHENIAN_SEA,
 };
-/*
+
 typedef struct hunterPlace HunterPlace;
 
 struct hunterPlace {
@@ -96,29 +96,22 @@ struct hunterPlace {
 
 static PlaceId predictLocation(DraculaView dv);
 PlaceId bestPlace(PlaceId* hunterPlace);
-*/
+
 void decideDraculaMove(DraculaView dv)
 {
 	// TODO: Replace this with something better!
-	PlaceId currPlace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
+	PlaceId currPlace = NOWHERE;
 
-	if (currPlace == NOWHERE) {
-		srand(time(0));
-		currPlace = LandPlace[rand() % LANDPLACELENGTH];
-	}
-	else if (currPlace != NOWHERE) {
+	if (predictLocation(dv) == NOWHERE) {
 		int numReturnedLocs;
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
 		srand(time(0));
 		currPlace = places[rand() % numReturnedLocs];
 		free(places);
 	}
-	
-	char* newPlace = malloc(2 * sizeof(char));
-	strcpy(newPlace, placeIdToAbbrev(currPlace));
-	registerBestPlay(newPlace, "hello :)");
+	registerBestPlay(placeIdToAbbrev(currPlace), "小弟弟来追我啊，我已经放了陷阱了哦 :)");
 }
-/*
+
 PlaceId predictLocation(DraculaView dv) {
 
 	PlaceId currPlace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
@@ -126,7 +119,7 @@ PlaceId predictLocation(DraculaView dv) {
 	int numReturnLocs = 0;
 	int maxLength = 0;
 	if (currPlace == NOWHERE) {
-		
+
 		PlaceId hunterPlace[HUNTERCOUNT];
 		for (int i = 0; i < HUNTERCOUNT; i++)
 			for (int j = 0; j < LANDPLACELENGTH; j++) {
@@ -170,6 +163,10 @@ PlaceId bestPlace(PlaceId* hunterPlace) {
 		}
 
 	return best;
-}*/
+}
 
     
+
+
+
+
