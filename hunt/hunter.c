@@ -149,6 +149,7 @@ const char * decideLordGodalmingMove(HunterView hv) {
 		
 		newPlace = getVampire(hv, PLAYER_LORD_GODALMING, newPlace);
 	}
+
 	newPlace = moveIsValid(hv, PLAYER_LORD_GODALMING, newPlace);
 	return placeIdToAbbrev(newPlace);
 }
@@ -315,9 +316,9 @@ PlaceId getMove(HunterView hv, Player player) {
 	Round knownDraculaRound = -1;
 	PlaceId knownDraculaLocation = HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
 	//printf("%s %s\n", placeIdToName(currPlace), placeIdToName(knownDraculaLocation));
-	//printf("%d %d\n", round, knownDraculaRound);
-	if (knownDraculaRound == -1 || round - knownDraculaRound > 6) {
-		if(round - knownDraculaRound > 10) {
+	printf("%d %d\n", round, knownDraculaRound);
+	if (knownDraculaRound == -1 || round - knownDraculaRound > 6 ) {
+		if(round - knownDraculaRound > 7) {
 			// losing dracula for a long time -> research
 			return currPlace;
 		}
@@ -386,7 +387,9 @@ PlaceId getMove(HunterView hv, Player player) {
 			//}	
 			//printf("\n");
 			newPlace = getRandomLocation(hv, places, player, numLocs);
-			//printf("newplace = %s %d\n\n", placeIdToName(newPlace), i);
+			if ((round - knownDraculaRound >4) && (hasSpecialMove(hv, 4) || hasSeaMove(hv, 4))) {
+				break;
+			}
 			free (places);
 		}
 		if (canFreeLocs && DraculaLocs != NULL)	
@@ -394,6 +397,7 @@ PlaceId getMove(HunterView hv, Player player) {
 		// if there is evidence that dracula want to teleport, set the destination to castle
 		int numDracMoves = 0;
 		bool canFreeMoves;
+		//printf("newplace = %s\n\n", placeIdToName(newPlace));
 		PlaceId* DraculaMoves = HvGetLastMoves(hv, PLAYER_DRACULA, 4, &numDracMoves, &canFreeMoves);
 		if (planToTeleport(DraculaMoves, numDracMoves, newPlace)) {
 			int pathLength;
@@ -544,7 +548,7 @@ PlaceId * removeImpossibleLocations(HunterView hv, Player player, PlaceId * plac
 				if (numLocs > 0 && canFree)
 					free(lastLocs);
 			}
-			if(!hasOtherHunter && places[i] != ST_JOSEPH_AND_ST_MARY){
+			if(!hasOtherHunter && places[i] != ST_JOSEPH_AND_ST_MARY && places[i] != CASTLE_DRACULA){
 				availablePlace[num] = places[i];
 				num++;
 			}
@@ -677,14 +681,12 @@ bool planToTeleport(PlaceId * moves, int numMoves, PlaceId place) {
 			doubleBack = true;
 	}
 	if (place == NOWHERE) {
-		if ((moves[numMoves - 1]  == HIDE  || moves[numMoves - 1] == DOUBLE_BACK_1 
-			|| moves[numMoves - 1] == DOUBLE_BACK_2) || (hide && doubleBack)) {
-			
+		if (hide && doubleBack) {			
 			return true;
 		} else
 			return false;
 	} else {
-		if (hide || doubleBack) {
+		if (hide && doubleBack) {
 			if (placeCanTeleport(place)) 
 				return true;
 			else
