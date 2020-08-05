@@ -289,7 +289,7 @@ PlaceId *HvGetShortestPathWithoutBoatTo(HunterView hv, Player hunter, PlaceId de
 		return path;
 		
 	int w;
-
+	printf("%s %s\n", placeIdToName(src), placeIdToName(dest));
 	// initialise values
 	hv->path[hunter].src = src;
 	Round round = HvGetRound(hv);
@@ -312,18 +312,24 @@ PlaceId *HvGetShortestPathWithoutBoatTo(HunterView hv, Player hunter, PlaceId de
 	while (!QueueIsEmpty(q)) {
 		w = QueueLeave(q);
 		int numReturnedLocs;
-		PlaceId * reachable = GvGetReachable(hv->gv, hunter, 
+		//printf("%d\n", placeIsLand(BAY_OF_BISCAY));
+		PlaceId * reachable = GvGetReachableByType(hv->gv, hunter, 
 		                                     round + dist[w], 
-		                                     w, &numReturnedLocs);
+		                                     w, true, true, false, &numReturnedLocs);
+		
 		for (int i = 0; i < numReturnedLocs; i++) {
 			v = reachable[i];
-			if (w != v && pred[v] == -1 && placeIsLand(v)) {
+			//printf("%s\n", placeIdToName(reachable[i]));
+			if (w != v && pred[v] == -1) {
 				pred[v] = w;
 				dist[v] = dist[w] + 1;
 				QueueJoin(q, v);
 			}
 		}
-		free(reachable);
+		//printf("hello");
+		if (numReturnedLocs > 0)
+			free(reachable);
+		//printf("hello");
 	}
 	dropQueue(q);
 	

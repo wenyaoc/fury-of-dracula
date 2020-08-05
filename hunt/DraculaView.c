@@ -123,6 +123,7 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves) {
     PlaceId * reachable = GvGetReachable(dv->gv, PLAYER_DRACULA, 
                                          GvGetRound(dv->gv), lastLocation, 
                                          &numReachable);
+
 	PlaceId * move = NULL;
 	// search through all the reachable locations
 	for (int i = 0; i < numReachable; i++) {
@@ -322,10 +323,15 @@ bool canHide(DraculaView dv) {
 	bool hide = true;
 	PlaceId* list = GvGetLastMoves(dv->gv, PLAYER_DRACULA, 5, &num, &canFree);
 
-	for (int i = 0; i < num; i++) {
-		if (list[i] == HIDE) // there exist a HIDE move in the trail
-			hide = false;
+	if (DvGetRound(dv) == 0 || placeIdToType(DvGetPlayerLocation(dv, PLAYER_DRACULA)) == SEA)
+		hide = false;
+	else {
+		for (int i = 0; i < num; i++) {
+			if (list[i] == HIDE) // there exist a HIDE move in the trail
+				hide = false;
+		}
 	}
+
 	if (canFree)
 		free(list);
 	return hide;
