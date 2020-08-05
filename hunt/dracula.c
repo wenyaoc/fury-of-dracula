@@ -1,5 +1,3 @@
-        
-        
 ////////////////////////////////////////////////////////////////////////
 // COMP2521 20T2 ... the Fury of Dracula
 // dracula.c: your "Fury of Dracula" Dracula AI
@@ -10,6 +8,7 @@
 // 2020-07-10	v3.0	Team Dracula <cs2521@cse.unsw.edu.au>
 //
 ////////////////////////////////////////////////////////////////////////
+
 #include "dracula.h"
 #include "DraculaView.h"
 #include "Game.h"
@@ -146,13 +145,14 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size);
 State distancefromhunter(DraculaView dv, PlaceId place);
 PlaceId bestPlace(PlaceId* hunterPlace);
 PlaceId* DvaddPlace(PlaceId* place, int* num, PlaceId newPlace);
+PlaceId ConvertToAction(DraculaView dv, PlaceId place);
 
 void decideDraculaMove(DraculaView dv)
 {
 	// TODO: Replace this with something better!
 	PlaceId currPlace = predictLocation(dv);
 
-	if (currPlace == NOWHERE) {
+	if (currPlace == NOWHERE || currPlace == UNKNOWN_PLACE) {
 		int numReturnedLocs;
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
 		srand(time(0));
@@ -161,7 +161,7 @@ void decideDraculaMove(DraculaView dv)
 	}
 
 	char newplace[3];
-	strcpy(newplace, placeIdToAbbrev(currPlace));
+	strcpy(newplace, placeIdToAbbrev(ConvertToAction(dv, currPlace)));
 	registerBestPlay(newplace, "come and catch me :)");
 }
 
@@ -193,13 +193,12 @@ PlaceId predictLocation(DraculaView dv) {
 PlaceId getNearestLocation(DraculaView dv) {
 
 	int numReturnedLocs = 0;
-	PlaceId * places = DvGetValidMoves(dv, &numReturnedLocs);
+	PlaceId * places = DvWhereCanIGo(dv, &numReturnedLocs);
 	for (int i = 0; i < numReturnedLocs; i++)
 		for (int j = 0; j < AVAILIABLEPLACE; j++)
 			if (places[i] == AvailablePlace[j])
 				return places[i];
 
-	srand(time(0));
 	int minLength = -1;
 	//PlaceId curr = DvGetPlayerLocation(dv, PLAYER_DRACULA);
 	PlaceId p = NOWHERE;
@@ -210,11 +209,18 @@ PlaceId getNearestLocation(DraculaView dv) {
 			minLength = numReturnedLocs;
 		}
 	}
-	//PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &numReturnedLocs);
-	//for (int i = 0; i < numReturnedLocs; i++)
-	//	printf("The place[%d] = %s\n", i, placeIdToAbbrev(pp[i]));
 
-	return DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &numReturnedLocs)[0];
+	int numPP = 0;
+	PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &numPP);
+	places = DvWhereCanIGo(dv, &numReturnedLocs);
+
+	for (int i = 0; i < numReturnedLocs; i++) {
+		if (places[i] == pp[0])
+			return pp[0];
+	}
+
+	srand(time(0));
+	return places[rand() % numReturnedLocs];
 }
 
 State getDraculaState(DraculaView dv)
@@ -279,6 +285,8 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 	int maxLength = 0;
 	bool sameplace = false;
 	PlaceId hunterPlace[HUNTERCOUNT];
+	for (int i = 0; i < HUNTERCOUNT; i++)
+		hunterPlace[i] = UNKNOWN_PLACE;
 	for (int i = 0; i < HUNTERCOUNT; i++) {
 		for (int j = 0; j < size; j++) {
 			sameplace = false;
@@ -300,7 +308,7 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 
 	PlaceId p = bestPlace(hunterPlace);
 	int locs = 0;
-
+	srand(time(0));
 	return !placeIsReal(p) ? DvGetValidMoves(dv, &locs)[rand() % locs] : p;
 }
 
@@ -354,5 +362,39 @@ PlaceId* DvaddPlace(PlaceId* place, int* num, PlaceId newPlace) {
 	place = realloc(place, (*num + 1) * sizeof(PlaceId));
 	place[*num] = newPlace;
 	*num = *num + 1;
+	return place;
+}
+
+
+PlaceId ConvertToAction(DraculaView dv, PlaceId place) {
+
+	// dracula can directly move to that location
+	if (DvCanGo(dv, place))
+		return place;
+
+	if (getDoubleBackNum(dv, place) > 0) {
+		// dracula can double back to that location
+		int DBnumber = getDoubleBackNum(dv, place);
+		// if there is no DOUBLE_BACK_# in the trail and the last move was HIDE
+		// Dracula can go either DOUBLE_BACK_1 or DOUBLE_BACK_2
+		if (DBnumber == 2) {
+			bool canFree;
+			int numReturned = 0;
+			// get the last move in the history
+			if (numReturned > 0) {
+				if (GvGetLastMoves(getGameView(dv), PLAYER_DRACULA, 1, &numReturned, &canFree)[0] == HIDE) {
+					// if the last move is HIDE, add DOUBLE_BACK_1 to moves
+					return DOUBLE_BACK_1;
+				}
+			}
+		}
+		// add DOUBLE_BACK_# to the history
+		return DOUBLE_BACK_1 + DBnumber - 1;
+	}
+
+	// dracula can hide in the current location
+	if (canHide(dv))
+		return HIDE;
+
 	return place;
 }

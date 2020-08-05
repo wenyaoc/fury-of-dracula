@@ -47,13 +47,8 @@ typedef struct ShortestPath {
 
 struct draculaView {
 	GameView gv;
-	ShortestPath path[4];
+	ShortestPath path[5];
 };
-
-bool DvCanGo(DraculaView dv, PlaceId place);
-int getDoubleBackNum(DraculaView dv, PlaceId place);
-bool canDoubleBack(DraculaView dv);
-bool canHide(DraculaView dv);
 
 ////////////////////////////////////////////////////////////////////////
 // Constructor/Destructor
@@ -65,7 +60,7 @@ DraculaView DvNew(char* pastPlays, Message messages[]) {
 		exit(EXIT_FAILURE);
 	}
 	new->gv = GvNew(pastPlays, messages);
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 5; i++) {
 		// set src to NOWHERE if shortest haven't been called
 		new->path[i].src = NOWHERE;
 		new->path[i].dist = NULL;
@@ -336,6 +331,10 @@ bool canHide(DraculaView dv) {
 	return hide;
 }
 
+GameView getGameView(DraculaView dv) {
+	return dv->gv;
+}
+
 // Queue operations
 // create new empty Queue
 static Queue newQueue(void) {
@@ -425,6 +424,7 @@ PlaceId* DvGetShortestPathTo(DraculaView dv, Player hunter, PlaceId dest, int* p
 			PlaceId* reachable = GvGetReachable(dv->gv, hunter,
 												round + dist[w],
 												w, &numReturnedLocs);
+
 			for (int i = 0; i < numReturnedLocs; i++) {
 				v = reachable[i];
 				if (w != v && pred[v] == -1) {

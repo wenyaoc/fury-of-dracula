@@ -60,7 +60,7 @@ typedef DraculaView View;
 # define decideMove decideDraculaMove
 # define ViewFree DvFree
 
-# define xPastPlays "GED.... SBD.... HPA.... MCD.... DSJ.V.. GMN.... SVI.... HMA.... MCD.... "
+# define xPastPlays "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SBD.... HMA.... MKL.... DSJT... GLV.... SBC.... HCA.... MGA.... DZAT... GSW.... SSO.... HLS.... MCN.... DVIT... GLO.... SSJT... HAO.... MBS.... DBDT... GEC.... SBE.... HNS.... MVR...."
 # define xMsgs { "", "", "", "" }
 
 #else
@@ -71,7 +71,7 @@ typedef HunterView View;
 # define decideMove decideHunterMove
 # define ViewFree HvFree
 
-# define xPastPlays "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVI.... HMA.... MCD.... DC?T... GLV.... SPR.... HSR.... MGA.... DC?T... GSW.... SNU.... HSN.... MBC.... DC?T... GLO.... SLI.... HMA.... MGA.... DC?T... GEC.... SBR.... HBO.... MCD.... DC?T... GLE.... SPR.... HNA.... MKL.... DMRT.V. GSR.... SNU.... HCF.... MBC.... DC?T.M. GTO.... SST.... HPA.... MGA.... DMUT.M. GSR.... SMUTD.. HST.... MKL.... DC?T.M. GBO.... SVITD.. HMU.... MBD.... DPRT.M. GMRT... SZA.... HVI.... MVE.... DBRT.M. GZUT... SMU.... HVE.... MBD.... DHAT... GST.... SZU.... HVI.... MZA.... DCO.V.. GNU.... SMU.... HPRT... MVI.... DAMT... GFR.... SNU.... HBRT... MLI.... DBUT... GPR.... SLI.... HHAT... MLI.... DLET... GBR.... SCOV... HNU.... MCO.... DNAT... GHA.... SBUT... HST.... MBU.... DC?T... GNU.... SPA.... HPA.... MPA.... DSRT... GST.... SNAT... HSRTD.. MSRD... " 
+# define xPastPlays "" 
 # define xMsgs { "", "", "" }
 
 #endif
@@ -80,6 +80,8 @@ int main(void)
 {
 	char *pastPlays = xPastPlays;
 	Message msgs[] = xMsgs;
+
+	//printf("%s\n",pastPlays);
 
 	View state = ViewNew(pastPlays, msgs);
 	decideMove(state);
