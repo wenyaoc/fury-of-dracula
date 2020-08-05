@@ -17,7 +17,7 @@
 #include <string.h>
 
 #define AVAILIABLEPLACE 14
-#define SAVELANDPLACELENGTH 17
+#define SAVELANDPLACELENGTH 20
 #define LANDPLACELENGTH 15
 #define RAILPLACELENGTH 30
 #define SEAPLACELENGTH 10
@@ -42,6 +42,8 @@ PlaceId AvailablePlace[] = {
 };
 
 PlaceId SaveLandPlace[] = {
+	GALWAY,
+	DUBLIN,
 	AMSTERDAM,
 	NANTES,
 	CLERMONT_FERRAND,
@@ -58,7 +60,8 @@ PlaceId SaveLandPlace[] = {
 	BARI,
 	NAPLES,
 	GENOA,
-	ROME
+	ROME,
+	MANCHESTER
 };
 
 PlaceId LandPlace[] = {
@@ -149,11 +152,26 @@ PlaceId ConvertToAction(DraculaView dv, PlaceId place);
 
 void decideDraculaMove(DraculaView dv)
 {
+	//printf("Do decideDraculaMove\n");
 	// TODO: Replace this with something better!
 	PlaceId currPlace = predictLocation(dv);
 
-	if (currPlace == NOWHERE || currPlace == UNKNOWN_PLACE) {
-		int numReturnedLocs;
+	bool checkplace = false;
+	if (DvGetRound(dv) != 0) {
+		int numReturnedLocs = 0;
+		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
+
+		for (int i = 0; i < numReturnedLocs; i++) {
+			if (ConvertToAction(dv, currPlace) == places[i])
+				checkplace = true;
+		}
+
+		free(places);
+	}
+	else checkplace = true;
+
+	if (currPlace == NOWHERE || currPlace == UNKNOWN_PLACE || checkplace == false) {
+		int numReturnedLocs = 0;
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
 		srand(time(0));
 		currPlace = places[rand() % numReturnedLocs];
@@ -166,7 +184,7 @@ void decideDraculaMove(DraculaView dv)
 }
 
 PlaceId predictLocation(DraculaView dv) {
-
+	//printf("Do predictLocation\n");
 	PlaceId currPlace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
 
 	int temp = 0;
@@ -191,7 +209,7 @@ PlaceId predictLocation(DraculaView dv) {
 }
 
 PlaceId getNearestLocation(DraculaView dv) {
-
+	//printf("Do getNearestLocation\n");
 	int numReturnedLocs = 0;
 	PlaceId * places = DvWhereCanIGo(dv, &numReturnedLocs);
 	for (int i = 0; i < numReturnedLocs; i++)
@@ -211,20 +229,29 @@ PlaceId getNearestLocation(DraculaView dv) {
 	}
 
 	int numPP = 0;
+	int numcurr = 0;
 	PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &numPP);
+	PlaceId* curr = DvGetValidMoves(dv, &numcurr);
 	places = DvWhereCanIGo(dv, &numReturnedLocs);
 
-	for (int i = 0; i < numReturnedLocs; i++) {
+	for (int i = 0; i < numReturnedLocs && numPP > 0; i++) {
 		if (places[i] == pp[0])
-			return pp[0];
+			for (int j = 0; j < numcurr; j++)
+				if (ConvertToAction(dv, places[i]) == curr[j])
+					return pp[0];
 	}
 
 	srand(time(0));
-	return places[rand() % numReturnedLocs];
+
+	if (numcurr == 0)
+		return TELEPORT;
+
+	return curr[rand() % numcurr];
 }
 
 State getDraculaState(DraculaView dv)
 {
+	//printf("Do getDraculaState\n");
 	// need to know hunter thinking
 	static int chacingCount = 0;
 	static int unChacingCount = 0;
@@ -234,17 +261,6 @@ State getDraculaState(DraculaView dv)
 
 	// Detect Hunter Finding Dracula
 	if (numReturnedLocs <= 5) {
-
-		// Detect Hunter Outflack Dracula
-		int chacing = 0;
-		for (int i = 0; i < HUNTERCOUNT; i++) {
-			if (distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA)) == CHACING)
-				chacing++;
-		}
-
-		if (chacing >= 2)
-			return OUTFLANK;
-
 		// Detect Hunter Chacing Dracula
 		State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA));
 		if (s == CHACING) {
@@ -259,12 +275,16 @@ State getDraculaState(DraculaView dv)
 			unChacingCount++;
 			return CHACING;
 		}
+		// Detect Hunter Outflack Dracula
+		if (chacingCount >= 4)
+			return OUTFLANK;
 	}
 	
 	return LOST;
 }
 
 PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
+	//printf("Do goAway\n");
 	PlaceId* place = NULL;
 	PlaceId* allplace = NULL;
 	int numReturnLocs = 0;
@@ -307,13 +327,20 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 	}
 
 	PlaceId p = bestPlace(hunterPlace);
+	if (placeIsReal(p))
+		return p;
+
 	int locs = 0;
 	srand(time(0));
-	return !placeIsReal(p) ? DvGetValidMoves(dv, &locs)[rand() % locs] : p;
+	PlaceId* pp = DvGetValidMoves(dv, &locs);
+	if (locs <= 0)
+		return TELEPORT;
+
+	return pp[rand() % locs];
 }
 
 State distancefromhunter(DraculaView dv, PlaceId place) {
-
+	//printf("Do distancefromhunter\n");
 	int numReturnLocs = 0;
 	for (int i = 0; i < HUNTERCOUNT; i++) {
 		DvGetShortestPathTo(dv, i, place, &numReturnLocs);
@@ -325,6 +352,7 @@ State distancefromhunter(DraculaView dv, PlaceId place) {
 }
 
 PlaceId bestPlace(PlaceId* hunterPlace) {
+	//printf("Do bestPlace\n");
 	HunterPlace hunterBucket[HUNTERCOUNT];
 	PlaceId best = NOWHERE;
 
@@ -367,7 +395,7 @@ PlaceId* DvaddPlace(PlaceId* place, int* num, PlaceId newPlace) {
 
 
 PlaceId ConvertToAction(DraculaView dv, PlaceId place) {
-
+	//printf("Do ConvertToAction\n");
 	// dracula can directly move to that location
 	if (DvCanGo(dv, place))
 		return place;
@@ -396,5 +424,5 @@ PlaceId ConvertToAction(DraculaView dv, PlaceId place) {
 	if (canHide(dv))
 		return HIDE;
 
-	return place;
+	return NOWHERE;
 }
