@@ -20,15 +20,37 @@
 #include "Map.h"
 // our own #includes
 #include <string.h>
+#include <limits.h>
 
 #define MAXCHAR 8
 #define MAXLINE 40
 
-struct draculaView {
-	GameView gv;
+// OUR OWN STRUCTS
+typedef struct QueueRep* Queue;
+
+typedef struct QueueNode {
+	int value;
+	int round;
+	struct QueueNode* next;
+} QueueNode;
+
+struct QueueRep {
+	QueueNode* head; // ptr to first node
+	QueueNode* tail; // ptr to last node
 };
 
-bool canGo(DraculaView dv, PlaceId place);
+typedef struct ShortestPath {
+	PlaceId src;
+	int* dist;
+	int* pred;
+} ShortestPath;
+
+struct draculaView {
+	GameView gv;
+	ShortestPath path[4];
+};
+
+bool DvCanGo(DraculaView dv, PlaceId place);
 int getDoubleBackNum(DraculaView dv, PlaceId place);
 bool canDoubleBack(DraculaView dv);
 bool canHide(DraculaView dv);
@@ -37,19 +59,29 @@ bool canHide(DraculaView dv);
 // Constructor/Destructor
 
 DraculaView DvNew(char* pastPlays, Message messages[]) {
-	DraculaView new_dv = malloc(sizeof(DraculaView));
-	if (new_dv == NULL) {
-		fprintf(stderr, "Couldn't allocate DraculaView\n");
+	DraculaView new = malloc(sizeof(*new));
+	if (new == NULL) {
+		fprintf(stderr, "Couldn't allocate HunterView!\n");
 		exit(EXIT_FAILURE);
 	}
-
-	new_dv->gv = GvNew(pastPlays, messages);
-
-	return new_dv;
+	new->gv = GvNew(pastPlays, messages);
+	for (int i = 0; i < 4; i++) {
+		// set src to NOWHERE if shortest haven't been called
+		new->path[i].src = NOWHERE;
+		new->path[i].dist = NULL;
+		new->path[i].pred = NULL;
+	}
+	return new;
 }
 
 void DvFree(DraculaView dv) {
 	GvFree(dv->gv);
+	for (int i = 0; i < 4; i++) {
+		if (dv->path[i].src != NOWHERE) {
+			free(dv->path[i].pred);
+			free(dv->path[i].dist);
+		}
+	}
 	free(dv);
 }
 
@@ -99,7 +131,7 @@ PlaceId* DvGetValidMoves(DraculaView dv, int* numReturnedMoves) {
 	PlaceId * move = NULL;
 	// search through all the reachable locations
 	for (int i = 0; i < numReachable; i++) {
-		if (canGo(dv, reachable[i])) { // dracula can directly move to that location
+		if (DvCanGo(dv, reachable[i])) { // dracula can directly move to that location
 			move = realloc(move, (*numReturnedMoves + 1) * sizeof(PlaceId));
 			move[*numReturnedMoves] = reachable[i];
 			*numReturnedMoves = *numReturnedMoves + 1;
@@ -159,7 +191,7 @@ PlaceId* DvWhereCanIGoByType(DraculaView dv, bool road, bool boat,
 	PlaceId * place = NULL;
 	// search through all the reachable locations
 	for (int i = 0; i < numReachable; i++) {
-		if (canGo(dv, reachable[i])) { 
+		if (DvCanGo(dv, reachable[i])) { 
 			// dracula can directly move to that location
 			place = realloc(place, (*numReturnedLocs + 1) * sizeof(PlaceId));
 			place[*numReturnedLocs] = reachable[i];
@@ -215,7 +247,7 @@ PlaceId* DvWhereCanTheyGoByType(DraculaView dv, Player player,
 // determine whether the player can directly go to a place
 // input: DraculaView, place
 // output: ture if the place is allowed to go, false otherwise
-bool canGo(DraculaView dv, PlaceId place) {
+bool DvCanGo(DraculaView dv, PlaceId place) {
 
 	if (place == NOWHERE) // Dracula has no movement yet
 		return true;
@@ -302,4 +334,120 @@ bool canHide(DraculaView dv) {
 	if (canFree)
 		free(list);
 	return hide;
+}
+
+// Queue operations
+// create new empty Queue
+static Queue newQueue(void) {
+	Queue new = malloc(sizeof * new);
+	new->head = NULL;
+	new->tail = NULL;
+	return new;
+}
+
+// free the Queue
+static void dropQueue(Queue Q) {
+	assert(Q != NULL);
+	for (QueueNode* curr = Q->head, *next; curr != NULL; curr = next) {
+		next = curr->next;
+		free(curr);
+	}
+	free(Q);
+}
+
+// add item at end of Queue
+static void QueueJoin(Queue Q, int it) {
+	assert(Q != NULL);
+
+	QueueNode * new = malloc(sizeof * new);
+	assert(new != NULL);
+	new->value = it;
+	new->next = NULL;
+
+	if (Q->head == NULL)
+		Q->head = new;
+	if (Q->tail != NULL)
+		Q->tail->next = new;
+	Q->tail = new;
+}
+
+// remove item from front of Queue
+static int QueueLeave(Queue Q) {
+	assert(Q != NULL);
+	assert(Q->head != NULL);
+	int item = Q->head->value;
+	QueueNode * old = Q->head;
+	Q->head = old->next;
+	if (Q->head == NULL)
+		Q->tail = NULL;
+	free(old);
+	return item;
+}
+
+// check for no items
+static int QueueIsEmpty(Queue Q) {
+	return (Q->head == NULL);
+}
+
+PlaceId* DvGetShortestPathTo(DraculaView dv, Player hunter, PlaceId dest, int* pathLength) {
+	PlaceId src = DvGetPlayerLocation(dv, hunter);
+
+	PlaceId* path = NULL;
+	*pathLength = 0;
+	if (src == dest) // if the hunter is at that location
+		return path;
+
+	int w;
+	// if HvGetShortestPathTo haven't been called brfore
+	if (src != dv->path[hunter].src) {
+		// initialise values
+		dv->path[hunter].src = src;
+		Round round = DvGetRound(dv);
+
+		if (GvGetPlayer(dv->gv) > hunter)
+			round++;
+		int* dist = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+		int* pred = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+		*pathLength = 0;
+		for (int i = 0; i < MAX_REAL_PLACE + 1; i++) {
+			dist[i] = INT_MAX;  //infinity
+			pred[i] = -1;
+		}
+		// bfs to the map
+		Queue q = newQueue();
+		dist[src] = 0;
+		pred[src] = src;
+		QueueJoin(q, src);
+		int v;
+		while (!QueueIsEmpty(q)) {
+			w = QueueLeave(q);
+			int numReturnedLocs;
+			PlaceId* reachable = GvGetReachable(dv->gv, hunter,
+												round + dist[w],
+												w, &numReturnedLocs);
+			for (int i = 0; i < numReturnedLocs; i++) {
+				v = reachable[i];
+				if (w != v && pred[v] == -1) {
+					pred[v] = w;
+					dist[v] = dist[w] + 1;
+					QueueJoin(q, v);
+				}
+			}
+			free(reachable);
+		}
+		dropQueue(q);
+		// store the array into HunterView
+		dv->path[hunter].dist = dist;
+		dv->path[hunter].pred = pred;
+	}
+	// store the paths into array
+	*pathLength = dv->path[hunter].dist[dest];
+	path = malloc((*pathLength) * sizeof(PlaceId));
+	w = dest;
+	path[*pathLength - 1] = dest;
+	for (int i = *pathLength - 2; i >= 0; i--) {
+		path[i] = dv->path[hunter].pred[w];
+		w = dv->path[hunter].pred[w];
+	}
+	return path;
 }
