@@ -174,6 +174,8 @@ const char * decideDrSewardMove(HunterView hv) {
 		Round knownDraculaRound = -1;
 		HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
 		PlaceId centerPlace;
+		//printf("%s %s\n", placeIdToName(currPlace), placeIdToName(knownDraculaLocation));
+		//printf("%d %d %d\n", currRound, knownDraculaRound, currRound - knownDraculaRound);
 
 		if (currRound > 20 && ((currRound - knownDraculaRound) > 6 && (currRound - knownDraculaRound) < 16))
 			centerPlace = ROME;
