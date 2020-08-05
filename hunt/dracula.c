@@ -14,8 +14,14 @@
 #include "DraculaView.h"
 #include "Game.h"
 #include "GameView.h"
+
+#include "Places.h"
+#include "Map.h"
 #include <time.h>
 #include <string.h>
+
+#include <stdio.h>
+#include <stdlib.h>
 
 #define AVAILIABLEPLACE 14
 #define SAVELANDPLACELENGTH 17
@@ -25,334 +31,257 @@
 #define HUNTERCOUNT 4
 #define xMsgs { "", "", "", "" }
 
-PlaceId AvailablePlace[] = {
+PlaceId England[] = {
+	GALWAY,
+	DUBLIN,
+	SWANSEA,
+	LONDON,
+	PLYMOUTH,
+	MANCHESTER,
+	LIVERPOOL,
+	EDINBURGH,
+	ADRIATIC_SEA,
+	IRISH_SEA, 
+	ENGLISH_CHANNEL, 
+	NORTH_SEA
+};
+
+PlaceId Spanish[] = {
+	BAY_OF_BISCAY,
+	MADRID,
+	LISBON,
+	CADIZ,
+	GRANADA,
+	ALICANTE,
+	SARAGOSSA,
+	SANTANDER,
+	BARCELONA
+};
+
+PlaceId Italy[] = {
 	GENOA,
-	MARSEILLES,
+	VENICE,
+	FLORENCE,
+	ROME,
+	NAPLES,
+	BARI
+};
+
+PlaceId SpanishToItaly[] = {
 	TOULOUSE,
-	BORDEAUX,
-	NANTES,
+	MARSEILLES
+};
+
+PlaceId EnglandToItaly[] = {
 	LE_HAVRE,
-	BRUSSELS,
-	COLOGNE,
-	HAMBURG,
-	BERLIN,
-	PRAGUE,
-	VIENNA,
+	PARIS,
+	STRASBOURG,
 	MUNICH,
 	VENICE
 };
 
-PlaceId SaveLandPlace[] = {
-	AMSTERDAM,
-	NANTES,
-	CLERMONT_FERRAND,
-	TOULOUSE,
-	GRANADA,
-	CADIZ,
-	CAGLIARI,
-	ZAGREB,
-	SARAJEVO,
-	VALONA,
-	KLAUSENBURG,
-	CASTLE_DRACULA,
-	ATHENS,
-	BARI,
-	NAPLES,
-	GENOA,
-	ROME
-};
 
-PlaceId LandPlace[] = {
-	GALWAY,
-	DUBLIN,
-	AMSTERDAM,
-	NANTES,
-	CLERMONT_FERRAND,
-	TOULOUSE,
-	GRANADA,
-	CADIZ,
-	CAGLIARI,
-	ZAGREB,
-	SARAJEVO,
-	VALONA,
-	KLAUSENBURG,
-	CASTLE_DRACULA,
-	ATHENS,
-};
-
-PlaceId RailPlace[] = {
-	ALICANTE,
-	BARCELONA,
-	BARI,
-	BELGRADE,
-	BERLIN,
-	BORDEAUX,
-	BRUSSELS,
-	BUCHAREST,
-	BUDAPEST,
-	COLOGNE,
-	EDINBURGH,
-	FLORENCE,
-	FRANKFURT,
-	GENEVA,
-	GENOA,
-	LEIPZIG,
-	LE_HAVRE,
-	LISBON,
-	LIVERPOOL,
-	LONDON,
-	MADRID,
-	MARSEILLES,
-	MILAN,
-	MUNICH,
-	NAPLES,
-	PRAGUE,
-	SALONICA,
-	SOFIA,
-	STRASBOURG,
-	VENICE,
-};
-
-PlaceId SeaPlace[] = {
-	ADRIATIC_SEA,
-	ATLANTIC_OCEAN,
-	BAY_OF_BISCAY,
-	BLACK_SEA,
-	ENGLISH_CHANNEL,
-	IONIAN_SEA,
-	IRISH_SEA,
-	MEDITERRANEAN_SEA,
-	NORTH_SEA,
-	TYRRHENIAN_SEA,
-};
-
-typedef struct hunterPlace HunterPlace;
-
-struct hunterPlace {
-	PlaceId place;
-	int total;
-};
-
-typedef enum state {
-	LOST,                    // Hunter Lost the target
-	CHACING,                 // Hunter Chacing dracula
-	OUTFLANK                 // All Hunter Chacing dracula
-}State;
-
-static PlaceId predictLocation(DraculaView dv);
-PlaceId getNearestLocation(DraculaView dv);
-State getDraculaState(DraculaView dv);
-PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size);
-State distancefromhunter(DraculaView dv, PlaceId place);
-PlaceId bestPlace(PlaceId* hunterPlace);
-PlaceId* DvaddPlace(PlaceId* place, int* num, PlaceId newPlace);
+int numberOfHunters(DraculaView dv, PlaceId * places);
+PlaceId doDecideDraculaMove(DraculaView dv);
+PlaceId findStartingPoint(DraculaView dv);
+PlaceId getNextLocation(DraculaView dv, PlaceId currPlace);
+PlaceId dracMoveIsValid(DraculaView dv, PlaceId place);
 
 void decideDraculaMove(DraculaView dv)
 {
-	// TODO: Replace this with something better!
-	PlaceId currPlace = predictLocation(dv);
+	PlaceId place = doDecideDraculaMove(dv);
 
-	if (currPlace == NOWHERE) {
-		int numReturnedLocs;
-		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
-		srand(time(0));
-		currPlace = places[rand() % numReturnedLocs];
-		free(places);
-	}
-
-	char newplace[3];
-	strcpy(newplace, placeIdToAbbrev(currPlace));
-	registerBestPlay(newplace, "come and catch me :)");
+	char * newPlace = malloc(2 * sizeof(char));
+	strcpy(newPlace, placeIdToAbbrev(place));
+	registerBestPlay("CD", "come and catch me :)");
 }
 
-PlaceId predictLocation(DraculaView dv) {
-
+PlaceId doDecideDraculaMove(DraculaView dv) {
 	PlaceId currPlace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
-
-	int temp = 0;
-	if (currPlace == NOWHERE)
-		return goAway(dv, SaveLandPlace, SAVELANDPLACELENGTH);
-
-	// How to move -> depend on state
-	State s = getDraculaState(dv);
-	PlaceId* p = NULL;
-	switch (s) {
-		case LOST:
-			return getNearestLocation(dv);
-		case CHACING:
-			p = DvGetValidMoves(dv, &temp);
-			return goAway(dv, p, temp);
-		case OUTFLANK:
-			p = DvGetValidMoves(dv, &temp);
-			return goAway(dv, p, temp);
-	}
-
-	return currPlace;
+	if (currPlace == 0)
+		return findStartingPoint(dv);
+	return getNextLocation(dv, currPlace);
 }
 
-PlaceId getNearestLocation(DraculaView dv) {
 
-	int numReturnedLocs = 0;
-	PlaceId * places = DvGetValidMoves(dv, &numReturnedLocs);
-	for (int i = 0; i < numReturnedLocs; i++)
-		for (int j = 0; j < AVAILIABLEPLACE; j++)
-			if (places[i] == AvailablePlace[j])
-				return places[i];
+int numberOfHunters(DraculaView dv, PlaceId * places) {
+	PlaceId hunter0 = DvGetPlayerLocation(dv, PLAYER_LORD_GODALMING);
+	PlaceId hunter1 = DvGetPlayerLocation(dv, PLAYER_DR_SEWARD);
+	PlaceId hunter2 = DvGetPlayerLocation(dv, PLAYER_VAN_HELSING);
+	PlaceId hunter3 = DvGetPlayerLocation(dv, PLAYER_MINA_HARKER);
 
-	srand(time(0));
-	int minLength = -1;
-	//PlaceId curr = DvGetPlayerLocation(dv, PLAYER_DRACULA);
-	PlaceId p = NOWHERE;
-	for (int i = 0; i < AVAILIABLEPLACE; i++) {
-		DvGetShortestPathTo(dv, PLAYER_DRACULA, AvailablePlace[i], &numReturnedLocs);
-		if (minLength == -1 || minLength > numReturnedLocs) {
-			p = AvailablePlace[i];
-			minLength = numReturnedLocs;
+	int num = sizeof(places)/4;
+	int hunterNum = 0;
+	for (int i = 0; i < num; i ++) {
+		if (hunter0 == places[i] || hunter1 == places[i] || hunter2 == places[i] || hunter3 == places[i]) {
+			hunterNum++;
 		}
 	}
-	//PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &numReturnedLocs);
-	//for (int i = 0; i < numReturnedLocs; i++)
-	//	printf("The place[%d] = %s\n", i, placeIdToAbbrev(pp[i]));
-
-	return DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &numReturnedLocs)[0];
+	return hunterNum;
 }
 
-State getDraculaState(DraculaView dv)
-{
-	// need to know hunter thinking
-	static int chacingCount = 0;
-	static int unChacingCount = 0;
+PlaceId findStartingPoint(DraculaView dv) {
+	int england = numberOfHunters(dv, England);
+	int spanish = numberOfHunters(dv, Spanish);
+	int italy = numberOfHunters(dv, Italy);
 
-	int numReturnedLocs = 0;
-	DvGetTrapLocations(dv, &numReturnedLocs);
+	int fewer = spanish;
+	if (spanish <= fewer) 
+		fewer = england;
+	if (italy <= fewer)
+		fewer = italy;
 
-	// Detect Hunter Finding Dracula
-	if (numReturnedLocs <= 5) {
+    if (fewer == spanish)
+        return ALICANTE;
+    else if (fewer == england)
+        return GALWAY;
+    else
+        return VENICE;
+}
 
-		// Detect Hunter Outflack Dracula
-		int chacing = 0;
-		for (int i = 0; i < HUNTERCOUNT; i++) {
-			if (distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA)) == CHACING)
-				chacing++;
-		}
-
-		if (chacing >= 2)
-			return OUTFLANK;
-
-		// Detect Hunter Chacing Dracula
-		State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA));
-		if (s == CHACING) {
-			chacingCount++;
-			return CHACING;
-		}
-		if (unChacingCount >= 2) {
-			chacingCount = unChacingCount = 0;
-			return LOST;
-		}
-		if (s == LOST && chacingCount >= 2) {
-			unChacingCount++;
-			return CHACING;
+PlaceId getNextLocation(DraculaView dv, PlaceId currPlace) {
+	// spanish
+	if (currPlace == ALICANTE) {
+		if (numberOfHunters(dv, Spanish) == 0)
+			return BARCELONA;
+		else 
+			return MEDITERRANEAN_SEA;
+	} 
+	if (currPlace == BARCELONA) {
+		if (numberOfHunters(dv, Spanish) != 0) {
+			if (numberOfHunters(dv, SpanishToItaly) == 0 && numberOfHunters(dv, Italy) == 0)
+				return TOULOUSE;
+			else
+				return MEDITERRANEAN_SEA;
+		} else {
+			return SARAGOSSA;
 		}
 	}
+	if (currPlace == SARAGOSSA) 
+		return SANTANDER;
+	if (currPlace == SANTANDER)
+		return MADRID;
+	if (currPlace == MADRID)
+		return LISBON;
+	if (currPlace == LISBON) {
+		if (numberOfHunters(dv, Spanish) != 0)
+			return ATLANTIC_OCEAN;
+		else
+			return CADIZ;
+	}		
+	if (currPlace == CADIZ) {
+		if (numberOfHunters(dv, Spanish) != 0)
+			return ATLANTIC_OCEAN;
+		else
+			return GRANADA;
+	}
+	if (currPlace == GRANADA)
+		return ALICANTE;
+	// spanish to italy
+	if (currPlace == TOULOUSE)
+		return MARSEILLES;
+	if (currPlace == MARSEILLES)
+		return GENOA;
+	if (currPlace == GENOA) {
+		//if (numberOfHunters(dv, Italy) != 0)
+		return VENICE;
+	}
+	if (currPlace == VENICE)
+		return FLORENCE;
+	if (currPlace == FLORENCE)
+		return ROME;
+	if (currPlace == ROME) {
+		if (numberOfHunters(dv, Italy) != 0) 
+			return TYRRHENIAN_SEA;
+		else 
+			return BARI;
+	}
+	if (currPlace == BARI)
+		return NAPLES;
+	if (currPlace == NAPLES)
+		return TYRRHENIAN_SEA;
 	
-	return LOST;
+	if (currPlace == TYRRHENIAN_SEA)
+		return MEDITERRANEAN_SEA;
+
+	if (currPlace == MEDITERRANEAN_SEA) {
+		if (numberOfHunters(dv, SpanishToItaly) == 0 && numberOfHunters(dv, Italy) == 0) 
+			return MARSEILLES;
+		else if (numberOfHunters(dv, Spanish) == 0)
+			return ALICANTE;
+		else if (numberOfHunters(dv, England) == 0)
+			return ATLANTIC_OCEAN;
+		else 
+			return MARSEILLES;
+	} 
+	if (currPlace == ATLANTIC_OCEAN) {	
+		if (numberOfHunters(dv, England) == 0)
+			return CADIZ;
+		else if (numberOfHunters(dv, Spanish) == 0)
+			return LISBON;
+		else if (numberOfHunters(dv, SpanishToItaly) == 0 && numberOfHunters(dv, Italy) == 0)
+			return MEDITERRANEAN_SEA;
+		else 
+			return LISBON;
+	}
+
+	//England
+	if (currPlace == GALWAY)
+		return DUBLIN;
+	if (currPlace == DUBLIN)
+		return SWANSEA;
+	if (currPlace == SWANSEA)
+		return LIVERPOOL;
+	if (currPlace == LIVERPOOL) {
+		return MANCHESTER;
+	} 
+	if (currPlace == MANCHESTER)
+		return PLYMOUTH;
+	if (currPlace == PLYMOUTH)
+		return ENGLISH_CHANNEL;
+	if (currPlace == ENGLISH_CHANNEL) {
+		if (numberOfHunters(dv, EnglandToItaly) == 0 && numberOfHunters(dv, Italy) == 0)
+			return LE_HAVRE;
+		else 
+			return ATLANTIC_OCEAN;
+	}
+
+
+	//England To Itlay
+	if (currPlace == LE_HAVRE)
+		return PARIS;
+	if (currPlace == PARIS)
+		return STRASBOURG;
+	if (currPlace == STRASBOURG)
+		return MUNICH;
+	if (currPlace == MUNICH)
+		return VENICE;
+
+	return NOWHERE;
 }
 
-PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
-	PlaceId* place = NULL;
-	PlaceId* allplace = NULL;
-	int numReturnLocs = 0;
-	int allplacecount = 0;
 
-	for (int i = 0; i < HUNTERCOUNT; i++) {
-		allplace = DvaddPlace(allplace, &allplacecount, DvGetPlayerLocation(dv, i));
-	}
-
-	for (int i = 0; i < HUNTERCOUNT; i++) {
-		place = DvWhereCanTheyGo(dv, i, &numReturnLocs);
-		for (int j = 0; j < numReturnLocs; j++) {
-			allplace = DvaddPlace(allplace, &allplacecount, place[j]);
+PlaceId dracMoveIsValid(DraculaView dv, PlaceId place) {
+	bool isValid = false;
+	int numLocs;
+	PlaceId * places;
+	if (place != NOWHERE) {
+		places = DvWhereCanIGo(dv, &numLocs);
+		for (int i = 0; i < numLocs; i++) {
+			if (place == places[i])
+			isValid = true;
 		}
-	}
+	} else
+		isValid = false;
 	
-	numReturnLocs = 0;
-	int maxLength = 0;
-	bool sameplace = false;
-	PlaceId hunterPlace[HUNTERCOUNT];
-	for (int i = 0; i < HUNTERCOUNT; i++) {
-		for (int j = 0; j < size; j++) {
-			sameplace = false;
-			for (int k = 0; k < allplacecount; k++)
-				if (nextmove[j] == allplace[k])
-					sameplace = true;
-			if (sameplace) continue;
-
-			if (!placeIsReal(nextmove[j]))
-				continue;
-
-			DvGetShortestPathTo(dv, i, nextmove[j], &numReturnLocs);
-			if (numReturnLocs > maxLength)
-			{ hunterPlace[i] = nextmove[j]; maxLength = numReturnLocs; }
-
-		}
-		maxLength = 0;
+	if (!isValid) {
+		srand(time(0));
+		place = places[rand() % numLocs];
 	}
 
-	PlaceId p = bestPlace(hunterPlace);
-	int locs = 0;
-
-	return !placeIsReal(p) ? DvGetValidMoves(dv, &locs)[rand() % locs] : p;
-}
-
-State distancefromhunter(DraculaView dv, PlaceId place) {
-
-	int numReturnLocs = 0;
-	for (int i = 0; i < HUNTERCOUNT; i++) {
-		DvGetShortestPathTo(dv, i, place, &numReturnLocs);
-		if (numReturnLocs <= 2)
-			return CHACING;
-	}
-
-	return LOST;
-}
-
-PlaceId bestPlace(PlaceId* hunterPlace) {
-	HunterPlace hunterBucket[HUNTERCOUNT];
-	PlaceId best = NOWHERE;
-
-	for (int i = 0; i < HUNTERCOUNT; i++) {
-		//printf("%s\n", placeIdToName(hunterPlace[i]));
-		hunterBucket[i].place = hunterPlace[i];
-		hunterBucket[i].total = 1;
-	}
-
-	for (int i = 0; i < HUNTERCOUNT; i++)
-		for (int j = 0; j < HUNTERCOUNT; j++) {
-			if (hunterBucket[i].place == hunterBucket[j].place && i != j) {
-				hunterBucket[j].place = NOWHERE;
-				hunterBucket[i].total++;
-			}
-		}
-
-	int max = 0;
-	for (int i = 0; i < HUNTERCOUNT; i++)
-		if (max < hunterBucket[i].total && hunterBucket[i].total != NOWHERE) {
-			max = hunterBucket[i].total;
-			best = hunterBucket[i].place;
-		}
-
-	return best;
-}
-
-// add a place to a given PlaceId array if that place haven't been added before
-// input: PlaceId array, total number in array, new place
-// output: the new PlaceId array
-PlaceId* DvaddPlace(PlaceId* place, int* num, PlaceId newPlace) {
-	for (int i = 0; i < *num; i++) {
-		if (place[i] == newPlace) return place;
-	}
-	place = realloc(place, (*num + 1) * sizeof(PlaceId));
-	place[*num] = newPlace;
-	*num = *num + 1;
+	if (numLocs > 0)
+		free(places);
+	else 
+		return TELEPORT;
 	return place;
 }
