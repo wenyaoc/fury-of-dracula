@@ -114,7 +114,7 @@ const char * decideLordGodalmingMove(HunterView hv) {
 		if (currRound % 26 >= 21 && currRound % 26 < 25)
 			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, LIVERPOOL, &pathLength);
 		else
-			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, FRANKFURT, &pathLength);
+			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, STRASBOURG, &pathLength);
 		
 		//printf("path = %d\n", pathLength);
 		if (pathLength > 2 || placeIsSea(currPlace)) { // if Hunter is far away from the center
@@ -317,6 +317,10 @@ PlaceId getMove(HunterView hv, Player player) {
 	//printf("%s %s\n", placeIdToName(currPlace), placeIdToName(knownDraculaLocation));
 	//printf("%d %d\n", round, knownDraculaRound);
 	if (knownDraculaRound == -1 || round - knownDraculaRound > 6) {
+		//if(round - knownDraculaRound > 10) {
+			// losing dracula for a long time -> research
+		//	return currPlace;
+		//}
 		PlaceId newPlace = NOWHERE;
 		int numDracMoves = 0;
 		bool canFreeMoves;
