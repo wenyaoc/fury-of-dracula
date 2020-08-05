@@ -22,6 +22,16 @@
 #include <stdlib.h>
 #include <time.h>
 
+PlaceId England[] = {
+	GALWAY,
+	DUBLIN,
+	SWANSEA,
+	LONDON,
+	PLYMOUTH,
+	MANCHESTER,
+	LIVERPOOL,
+	EDINBURGH,
+};
 
 const char * decideLordGodalmingMove(HunterView hv);
 const char * decideDrSewardMove(HunterView hv);
@@ -44,6 +54,7 @@ bool canGo(HunterView hv, PlaceId place);
 bool planToTeleport(PlaceId * moves, int numMoves, PlaceId place);
 bool placeCanTeleport(PlaceId place);
 bool hasSpecialMove(HunterView hv, int numMoves);
+bool inEngland(PlaceId * places, PlaceId * newPlace);
 
 void decideHunterMove(HunterView hv) {
 	Player player = HvGetPlayer(hv);
@@ -765,4 +776,14 @@ PlaceId getVampire(HunterView hv, Player player, PlaceId place) {
 			free(shortestPath);
 	}
 	return newPlace;
+}
+
+
+bool inEngland(PlaceId * places, PlaceId * newPlace) {
+	int flag = false;
+	for(int i = 0; i < 8; i++) {
+		if (places[i] == newPlace)
+			flag = true;
+	}
+	return flag;
 }
