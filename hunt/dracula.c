@@ -15,9 +15,10 @@
 #include "GameView.h"
 #include <time.h>
 #include <string.h>
+#include <stdio.h>
 
 #define AVAILIABLEPLACE 14
-#define SAVELANDPLACELENGTH 17
+#define SAVELANDPLACELENGTH 20
 #define LANDPLACELENGTH 15
 #define RAILPLACELENGTH 30
 #define SEAPLACELENGTH 10
@@ -42,6 +43,8 @@ PlaceId AvailablePlace[] = {
 };
 
 PlaceId SaveLandPlace[] = {
+	GALWAY,
+	DUBLIN,
 	AMSTERDAM,
 	NANTES,
 	CLERMONT_FERRAND,
@@ -58,7 +61,8 @@ PlaceId SaveLandPlace[] = {
 	BARI,
 	NAPLES,
 	GENOA,
-	ROME
+	ROME,
+	MANCHESTER
 };
 
 PlaceId LandPlace[] = {
@@ -152,8 +156,21 @@ void decideDraculaMove(DraculaView dv)
 	// TODO: Replace this with something better!
 	PlaceId currPlace = predictLocation(dv);
 
-	if (currPlace == NOWHERE || currPlace == UNKNOWN_PLACE) {
-		int numReturnedLocs;
+	bool checkplace = false;
+	if (DvGetRound(dv) != 0) {
+		int numReturnedLocs = 0;
+		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
+
+		for (int i = 0; i < numReturnedLocs; i++)
+			if (ConvertToAction(dv, currPlace) == places[i])
+				checkplace = true;
+
+		free(places);
+	}
+	else checkplace = true;
+
+	if (currPlace == NOWHERE || currPlace == UNKNOWN_PLACE || checkplace == false) {
+		int numReturnedLocs = 0;
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
 		srand(time(0));
 		currPlace = places[rand() % numReturnedLocs];
@@ -175,6 +192,7 @@ PlaceId predictLocation(DraculaView dv) {
 
 	// How to move -> depend on state
 	State s = getDraculaState(dv);
+	printf("State = %d\n", s);
 	PlaceId* p = NULL;
 	switch (s) {
 		case LOST:
@@ -211,16 +229,24 @@ PlaceId getNearestLocation(DraculaView dv) {
 	}
 
 	int numPP = 0;
+	int numcurr = 0;
 	PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &numPP);
+	PlaceId* curr = DvGetValidMoves(dv, &numcurr);
 	places = DvWhereCanIGo(dv, &numReturnedLocs);
 
-	for (int i = 0; i < numReturnedLocs; i++) {
+	for (int i = 0; i < numReturnedLocs && numPP > 0; i++) {
 		if (places[i] == pp[0])
-			return pp[0];
+			for (int j = 0; j < numcurr; j++)
+				if (ConvertToAction(dv, places[i]) == curr[j])
+					return pp[0];
 	}
 
 	srand(time(0));
-	return places[rand() % numReturnedLocs];
+	
+	if (numcurr == 0)
+		return TELEPORT;
+
+	return curr[rand() % numcurr];
 }
 
 State getDraculaState(DraculaView dv)
@@ -307,9 +333,16 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 	}
 
 	PlaceId p = bestPlace(hunterPlace);
+	if (placeIsReal(p))
+		return p;
+
 	int locs = 0;
 	srand(time(0));
-	return !placeIsReal(p) ? DvGetValidMoves(dv, &locs)[rand() % locs] : p;
+	PlaceId* pp = DvGetValidMoves(dv, &locs);
+	if (locs <= 0)
+		return TELEPORT;
+
+	return pp[rand() % locs];
 }
 
 State distancefromhunter(DraculaView dv, PlaceId place) {
