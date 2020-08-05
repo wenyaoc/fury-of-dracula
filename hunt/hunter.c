@@ -169,6 +169,7 @@ const char * decideDrSewardMove(HunterView hv) {
 	PlaceId newPlace = getMove(hv, PLAYER_DR_SEWARD);
 	//printf("currPlace = %s newPlace = %s\n", placeIdToName(currPlace), placeIdToName(newPlace));
 	if (newPlace == NOWHERE) {
+		if (HvGetRound(hv) == 1) return "VE";
 
 		Round knownDraculaRound = -1;
 		HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
@@ -178,14 +179,16 @@ const char * decideDrSewardMove(HunterView hv) {
 			centerPlace = ROME;
 		else if (currRound > 20 && ((currRound - knownDraculaRound) > 16 && (currRound - knownDraculaRound) < 26))
 			centerPlace = MADRID;
-		else if ((currRound % 26 >= 1 && currRound % 26 <= 6) && hasSeaMove(hv, 6))
+		else if (currRound % 26 >= 1 && currRound % 26 <= 5)
 			centerPlace = MUNICH;
-		else 
-			centerPlace = BUCHAREST;
+		else if (currRound % 26 > 5 && currRound % 26 <= 15)
+			centerPlace = NAPLES;
+		else
+			centerPlace = MUNICH;
 		int pathLength;
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, centerPlace, &pathLength);
 
-		if (pathLength > 3) {
+		if (pathLength > 2) {
 			newPlace = shortestPath[0];
 		} else {
 			int numReturnedLocs;
@@ -355,6 +358,7 @@ PlaceId getMove(HunterView hv, Player player) {
 		if (canFreeMoves && DraculaMoves != NULL)
 			free(DraculaMoves);
 		// let hunters randomly pick a place
+		//printf("%s\n", placeIdToName(newPlace));
 		return newPlace;
 	} else if (round == knownDraculaRound + 1) { 
 		// dracula's current place is known
@@ -421,10 +425,10 @@ PlaceId getMove(HunterView hv, Player player) {
 				places = possiblePlaces;
 				numLocs = possibleNumLocs;
 			} 
-			for(int i = 0; i < numLocs; i++) {
-				printf("%s\n", placeIdToName(places[i]));
-			}	
-			printf("\n");
+			//for(int i = 0; i < numLocs; i++) {
+			//	printf("%s\n", placeIdToName(places[i]));
+			//}	
+			//printf("\n");
 			newPlace = getRandomLocation(hv, places, player, numLocs);
 			//printf("newplace = %s %d\n\n", placeIdToName(newPlace), i);
 			free (places);
@@ -454,6 +458,8 @@ PlaceId getMove(HunterView hv, Player player) {
 		// return the predict dracula place directly for further decision
 		if (player == PLAYER_MINA_HARKER)
 			return newPlace;
+		else if (player == PLAYER_VAN_HELSING)
+			newPlace = MADRID;
 		int pathLength;
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, player, newPlace, &pathLength);
 		//for(int i = 0; i < pathLength; i++) {
