@@ -121,11 +121,7 @@ const char * decideLordGodalmingMove(HunterView hv) {
 			centerPlace = STRASBOURG;
 
 		int pathLength = 0;
-		PlaceId *shortestPath;
-		if (placeIsLand(currPlace))
-			shortestPath = HvGetShortestPathWithoutBoatTo(hv, PLAYER_LORD_GODALMING, centerPlace, &pathLength);
-		else
-			shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, centerPlace, &pathLength);
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_LORD_GODALMING, centerPlace, &pathLength);
 		
 		//printf("path = %d\n", pathLength);
 		if (pathLength > 2 || placeIsSea(currPlace)) { // if Hunter is far away from the center
@@ -178,7 +174,7 @@ const char * decideDrSewardMove(HunterView hv) {
 		HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
 		PlaceId centerPlace;
 
-		if ((currRound > 20 && ((currRound - knownDraculaRound) > 6 && (currRound - knownDraculaRound) < 16)) || (knownDraculaRound == -1 && currRound > 10))
+		if (currRound > 20 && ((currRound - knownDraculaRound) > 6 && (currRound - knownDraculaRound) < 16))
 			centerPlace = ROME;
 		else if (currRound > 20 && ((currRound - knownDraculaRound) > 16 && (currRound - knownDraculaRound) < 26))
 			centerPlace = MADRID;
@@ -187,15 +183,7 @@ const char * decideDrSewardMove(HunterView hv) {
 		else 
 			centerPlace = BUCHAREST;
 		int pathLength;
-		PlaceId *shortestPath;
-		if (placeIsLand(currPlace))
-			shortestPath = HvGetShortestPathWithoutBoatTo(hv, PLAYER_DR_SEWARD, centerPlace, &pathLength);
-		else 
-			shortestPath = HvGetShortestPathWithoutBoatTo(hv, PLAYER_DR_SEWARD, centerPlace, &pathLength);
-		//for(int i = 0; i < pathLength; i++) {
-		//	printf("%s\n", placeIdToName(shortestPath[i]));
-		//}	
-		//printf("\n");
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_DR_SEWARD, centerPlace, &pathLength);
 
 		if (pathLength > 3) {
 			newPlace = shortestPath[0];
@@ -254,11 +242,7 @@ const char * decideVanHelsingMove(HunterView hv) {
 		}
 
 		int pathLength;
-		PlaceId *shortestPath;
-		if (placeIsLand(currPlace))
-			shortestPath = HvGetShortestPathWithoutBoatTo(hv, PLAYER_VAN_HELSING, MADRID, &pathLength);
-		else 
-			shortestPath = HvGetShortestPathWithoutBoatTo(hv, PLAYER_VAN_HELSING, MADRID, &pathLength);
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_VAN_HELSING, MADRID, &pathLength);
 	    //printf("path = %d\n", pathLength);
 		if (pathLength > 2 || placeIsSea(currPlace)) {
 			newPlace = shortestPath[0];
@@ -300,7 +284,7 @@ const char * decideMinaHarkerMove(HunterView hv) {
 		newPlace = getMove(hv, PLAYER_MINA_HARKER);
 		//printf("%s %s\n", placeIdToName(currPlace),placeIdToName(newPlace));
 		int pathLength;
-		PlaceId *shortestPath = HvGetShortestPathWithoutBoatTo(hv, PLAYER_MINA_HARKER, newPlace, &pathLength);
+		PlaceId *shortestPath = HvGetShortestPathTo(hv, PLAYER_MINA_HARKER, newPlace, &pathLength);
 		// if dracula is too far away, keep staying at castle
 		if (hasLotOfSeaMove(hv)) {
 			free(shortestPath);
@@ -313,8 +297,6 @@ const char * decideMinaHarkerMove(HunterView hv) {
 			newPlace = GALATZ;
 		else
 			newPlace = currPlace;
-
-		free (shortestPath);
 	} else {
 		int pathLength;
 		PlaceId * shortestPath = HvGetShortestPathTo(hv, PLAYER_MINA_HARKER, CASTLE_DRACULA, &pathLength);
@@ -439,10 +421,10 @@ PlaceId getMove(HunterView hv, Player player) {
 				places = possiblePlaces;
 				numLocs = possibleNumLocs;
 			} 
-			//for(int i = 0; i < numLocs; i++) {
-			//	printf("%s\n", placeIdToName(places[i]));
-			//}	
-			//printf("\n");
+			for(int i = 0; i < numLocs; i++) {
+				printf("%s\n", placeIdToName(places[i]));
+			}	
+			printf("\n");
 			newPlace = getRandomLocation(hv, places, player, numLocs);
 			//printf("newplace = %s %d\n\n", placeIdToName(newPlace), i);
 			free (places);
