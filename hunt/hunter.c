@@ -366,7 +366,6 @@ PlaceId getMove(HunterView hv, Player player) {
 			//printf("\n");
 			int possibleNumLocs = numLocs;	
 			PlaceId * possiblePlaces  = removeImpossibleLocations(hv, PLAYER_DRACULA, places, newPlace, &possibleNumLocs);
-			
 			if (possibleNumLocs == 1) {
 				int pathLength;
 				PlaceId *shortestPath = HvGetShortestPathTo(hv, player, possiblePlaces[0], &pathLength);
@@ -555,14 +554,15 @@ PlaceId * removeImpossibleLocations(HunterView hv, Player player, PlaceId * plac
 				bool canFree = true;
 				PlaceId * lastLocs = HvGetLastLocations(hv, j, 2, &numLocs, &canFree);
 				if (numLocs == 2) {
-					if (lastLocs[0] == places[i] || lastLocs[1] == places[i]) 
+					if ((lastLocs[0] == places[i] || lastLocs[1] == places[i]) && placeIsLand(places[i]))
 						hasOtherHunter = true;
 				}
 				if (numLocs > 0 && canFree)
 					free(lastLocs);
 			}
+			//printf("%d\n", hasOtherHunter);
 			if(!hasOtherHunter && places[i] != ST_JOSEPH_AND_ST_MARY && places[i] != CASTLE_DRACULA){
-				//;
+				//printf("hello\n");
 				availablePlace[num] = places[i];
 				num++;
 			}
@@ -893,7 +893,7 @@ PlaceId findDracFromEngland(HunterView hv, Player player, PlaceId knownDraculaLo
 		else if (player == PLAYER_VAN_HELSING) centerPlace = SANTANDER;
 		else centerPlace = SZEGED;
 		int dist = 2;
-		printf("%s\n", placeIdToName(centerPlace));
+		//printf("%s\n", placeIdToName(centerPlace));
 		return searchingAround(hv, player, centerPlace, dist);
 	} else
 		return NOWHERE;
@@ -901,6 +901,7 @@ PlaceId findDracFromEngland(HunterView hv, Player player, PlaceId knownDraculaLo
 
 PlaceId findDracFromCastle(HunterView hv, Player player, PlaceId knownDraculaLocation, Round knownDraculaRound) {
 	Round currRound = HvGetRound(hv);
+	PlaceId currPlace = HvGetPlayerLocation(hv, player);
 	if ( !hasSeaMove(hv, currRound - knownDraculaRound)) {
 		int centerPlace;
 		if (currRound - knownDraculaRound < 7) {
@@ -916,7 +917,18 @@ PlaceId findDracFromCastle(HunterView hv, Player player, PlaceId knownDraculaLoc
 		}
 		int dist = 2;
 		return searchingAround(hv, player, centerPlace, dist);
-	} else
+	} else {
+		int numSeaMove = getValidSeaMove(hv, currRound - knownDraculaLocation);
+		if(numSeaMove >= 3) {
+			if(currPlace == TYRRHENIAN_SEA) {
+				if (player == 0 || player == 1) return ROME;
+				else return NAPLES;
+			} else if (currPlace == ADRIATIC_SEA) {
+				if (player == 0 || player == 1) return BARI;
+				else return VENICE;
+			}
+		}
+	}
 		return NOWHERE;
 }
 
@@ -946,7 +958,7 @@ PlaceId findDracFromWestEurope(HunterView hv, Player player, PlaceId knownDracul
 			return searchingAround(hv, player, LIVERPOOL, 1);
 			
 	}
-		return NOWHERE;
+	return NOWHERE;
 }
 
 PlaceId findDracFromMiddleEurope(HunterView hv, Player player, PlaceId knownDraculaLocation, Round knownDraculaRound) {
