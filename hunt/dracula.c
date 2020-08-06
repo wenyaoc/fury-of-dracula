@@ -162,6 +162,7 @@ void decideDraculaMove(DraculaView dv)
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
 
 		for (int i = 0; i < numReturnedLocs; i++) {
+			//printf("Can go to = %s\n", placeIdToAbbrev(places[i]));
 			if (ConvertToAction(dv, currPlace) == places[i])
 				checkplace = true;
 		}
@@ -173,8 +174,12 @@ void decideDraculaMove(DraculaView dv)
 	if (currPlace == NOWHERE || currPlace == UNKNOWN_PLACE || checkplace == false) {
 		int numReturnedLocs = 0;
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
-		srand(time(0));
-		currPlace = places[rand() % numReturnedLocs];
+		if (numReturnedLocs == 0)
+			currPlace = TELEPORT;
+		else {
+			srand(time(0));
+			currPlace = places[rand() % numReturnedLocs];
+		}
 		free(places);
 	}
 
