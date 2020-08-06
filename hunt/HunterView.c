@@ -281,6 +281,72 @@ PlaceId* HvGetLastLocations(HunterView hv, Player player, int numLocs,
 
 
 
+PlaceId *HvGetShortestPathWithoutBoatTo(HunterView hv, Player hunter, PlaceId dest, int *pathLength) {
+	PlaceId src = HvGetPlayerLocation(hv, hunter);
+
+	PlaceId * path = NULL;
+	*pathLength = 0;
+	if (src == dest) // if the hunter is at that location
+		return path;
+		
+	int w;
+	printf("%s %s\n", placeIdToName(src), placeIdToName(dest));
+	// initialise values
+	hv->path[hunter].src = src;
+	Round round = HvGetRound(hv);
+
+	if (HvGetPlayer(hv) > hunter) 
+		round++;
+	int * dist = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+	int * pred = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+	*pathLength = 0;
+	for (int i = 0; i < MAX_REAL_PLACE + 1; i++) {
+		dist[i] = INT_MAX;  //infinity
+		pred[i] = -1;
+	}
+	// bfs to the map
+	Queue q = newQueue();
+	dist[src] = 0;
+	pred[src] = src;
+	QueueJoin(q, src);
+	int v;
+	while (!QueueIsEmpty(q)) {
+		w = QueueLeave(q);
+		int numReturnedLocs;
+		//printf("%d\n", placeIsLand(BAY_OF_BISCAY));
+		PlaceId * reachable = GvGetReachableByType(hv->gv, hunter, 
+		                                     round + dist[w], 
+		                                     w, true, true, false, &numReturnedLocs);
+		
+		for (int i = 0; i < numReturnedLocs; i++) {
+			v = reachable[i];
+			//printf("%s\n", placeIdToName(reachable[i]));
+			if (w != v && pred[v] == -1) {
+				pred[v] = w;
+				dist[v] = dist[w] + 1;
+				QueueJoin(q, v);
+			}
+		}
+		//printf("hello");
+		if (numReturnedLocs > 0)
+			free(reachable);
+		//printf("hello");
+	}
+	dropQueue(q);
+	
+	// store the paths into array
+	*pathLength = dist[dest];
+	path = malloc((*pathLength) * sizeof(PlaceId));
+	w = dest;
+	path[*pathLength - 1] = dest;
+	for (int i = *pathLength - 2; i >= 0; i--) {
+		path[i] = pred[w];
+		w = pred[w];
+	}
+	free (dist);
+	free (pred);
+	return path;
+}
 
 
 
