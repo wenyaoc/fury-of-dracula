@@ -253,20 +253,22 @@ bool DvCanGo(DraculaView dv, PlaceId place) {
 	int num = -1;
 	bool canFree = false;
 	bool go = true;
-	PlaceId* list = GvGetLastLocations(dv->gv, PLAYER_DRACULA, 5, &num, &canFree);
+	PlaceId * list = GvGetLastMoves(dv->gv, PLAYER_DRACULA, 5, &num, &canFree);
 
-	for (int i = 0; i < num; i++) {	
-		if (list[i] == place) // the place is already in the trail
+	for (int i = 0; i < num; i++) {
+		if (list[i] == place)
 			go = false;
-		else if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5 
-		         && list[i] - DOUBLE_BACK_1 < num) {
+		if (list[i] >= DOUBLE_BACK_1 && list[i] <= DOUBLE_BACK_5
+			&& list[i] - DOUBLE_BACK_1 < num) {
 			if (list[list[i] - DOUBLE_BACK_1] == place) // already double back before
 				go = false;
-		} else if (i + 1 == 6 && num >= 6) {
+		}
+		else if (i + 1 == 6 && num >= 6) {
 			if (list[i] == HIDE && list[i + 1] == place) // already hide before
 				go = false;
 		}
 	}
+
 	if (canFree)
 		free(list); // free the location list
 	return go;
