@@ -887,7 +887,7 @@ PlaceId findDracFromEngland(HunterView hv, Player player, PlaceId knownDraculaLo
 		else if (player == PLAYER_VAN_HELSING) centerPlace = SANTANDER;
 		else centerPlace = SZEGED;
 		int dist = 2;
-		//printf("%s\n", placeIdToName(centerPlace));
+		printf("%s\n", placeIdToName(centerPlace));
 		return searchingAround(hv, player, centerPlace, dist);
 	} else
 		return NOWHERE;
@@ -938,7 +938,7 @@ PlaceId findDracFromWestEurope(HunterView hv, Player player, PlaceId knownDracul
 }
 
 PlaceId findDracFromMiddleEurope(HunterView hv, Player player, PlaceId knownDraculaLocation, Round knownDraculaRound) {
-	//printf("%d known = %s ",player, placeIdToName(knownDraculaLocation));
+	printf("%d known = %s ",player, placeIdToName(knownDraculaLocation));
 	Round currRound = HvGetRound(hv);
 	if (!hasSeaMove(hv, currRound - knownDraculaLocation)) {
 		int centerPlace;

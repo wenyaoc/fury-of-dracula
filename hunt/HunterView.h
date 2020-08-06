@@ -231,6 +231,4 @@ PlaceId* HvGetLastMoves(HunterView hv, Player player, int numMoves,
 PlaceId* HvGetLastLocations(HunterView hv, Player player, int numLocs,
                             int* numReturnedLocs, bool* canFree);
 
-PlaceId *HvGetShortestPathWithoutBoatTo(HunterView hv, Player hunter, PlaceId dest, int *pathLength);
-
 #endif // !defined (FOD__HUNTER_VIEW_H_)
