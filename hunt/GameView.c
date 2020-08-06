@@ -150,8 +150,14 @@ PlaceId GvGetPlayerLocation(GameView gv, Player player) {
 			return node->place;
 		else if (node->place == HIDE) { // the move is HIDE
 			HistoryNode real = node->next;
-			if (!placeIsReal(real->place)) // the move is DOUBLE_BACK# + HIDE
-				real = findDBCity(real);
+			while (!placeIsReal(real->place)) {// the move is DOUBLE_BACK# + HIDE
+				if (real->place == HIDE) // the move is HIDE + DOUBLE_BACK# 
+					real = real->next;
+				if (real->place == TELEPORT)
+					return CASTLE_DRACULA;
+				if (!placeIsReal(real->place))
+					real = findDBCity(real);
+			}
 			if (placeIsLand(real->place)) 
 				return real->place;
 			else if (placeIsSea(node->next->place)) 

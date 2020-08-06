@@ -1,8 +1,8 @@
-[0;36mCreated a temp directory '/tmp/tmp.2VQo2QfkwK' for checking your submission[0m
-[0;36mCopying your files into '/tmp/tmp.2VQo2QfkwK'[0m
+[0;36mCreated a temp directory '/tmp/tmp.bbANYMShN7' for checking your submission[0m
+[0;36mCopying your files into '/tmp/tmp.bbANYMShN7'[0m
 [0;36mChecking that your submission includes all the required files[0m
 [0;36mChecking that your submission does NOT include files that shouldn't be modified[0m
-[0;36mCopying our versions of files that shouldn't be modified into '/tmp/tmp.2VQo2QfkwK'[0m
+[0;36mCopying our versions of files that shouldn't be modified into '/tmp/tmp.bbANYMShN7'[0m
 [0;36mCopying in the remaining files that you weren't required to modify or submit[0m
 [0;36mCheck your Makefile for 'LIBS'[0m
 [0;36mChecking that your code compiles[0m
@@ -53,18 +53,18 @@ Running with input: "past_plays": ""
 Program Output (0): 
 ==============================================================
 Move:  {
+  "timer": 13,
   "move": "ED",
-  "message": "I like Dracula",
-  "timer": 9
+  "message": "I like Dracula"
 }
 > Game score: 366
 > Moving from: undefined
 > Life Points: 9
 > Player 0 made move:
 > +++
+  timer: 13
   move: ED
   message: I like Dracula
-  timer: 9
 > ---
 --------------------------------------------------------------------------
 > Running player 1... 
@@ -73,18 +73,18 @@ Running with input: "past_plays": "GED...."
 Program Output (0): 
 ==============================================================
 Move:  {
+  "timer": 14,
   "move": "BD",
-  "message": "I like Dracula",
-  "timer": 10
+  "message": "I like Dracula"
 }
 > Game score: 366
 > Moving from: undefined
 > Life Points: 9
 > Player 1 made move:
 > +++
+  timer: 14
   move: BD
   message: I like Dracula
-  timer: 10
 > ---
 --------------------------------------------------------------------------
 > Running player 2... 
@@ -95,7 +95,7 @@ Program Output (0):
 Move:  {
   "move": "PA",
   "message": "I like Dracula",
-  "timer": 9
+  "timer": 14
 }
 > Game score: 366
 > Moving from: undefined
@@ -104,7 +104,7 @@ Move:  {
 > +++
   move: PA
   message: I like Dracula
-  timer: 9
+  timer: 14
 > ---
 --------------------------------------------------------------------------
 > Running player 3... 
@@ -113,38 +113,43 @@ Running with input: "past_plays": "GED.... SBD.... HPA...."
 Program Output (0): 
 ==============================================================
 Move:  {
-  "message": "I like Dracula",
+  "timer": 15,
   "move": "CD",
-  "timer": 15
+  "message": "I like Dracula"
 }
 > Game score: 366
 > Moving from: undefined
 > Life Points: 9
 > Player 3 made move:
 > +++
-  message: I like Dracula
-  move: CD
   timer: 15
+  move: CD
+  message: I like Dracula
 > ---
 --------------------------------------------------------------------------
 > Running player 4... 
 Running with input: "past_plays": "GED.... SBD.... HPA.... MCD...."
 ==============================================================
-Program Output (0): 
+Program Output (82): Do decideDraculaMove
+Do predictLocation
+Do goAway
+Do bestPlace
+Do ConvertToAction
+
 ==============================================================
 Move:  {
-  "message": "come and catch me :)",
-  "move": "DU",
-  "timer": 15439
+  "move": "VA",
+  "timer": 20848,
+  "message": "See you :-)"
 }
 > Game score: 366
 > Moving from: undefined
 > Blood Points: 40
 > Player 4 made move:
 > +++
-  message: come and catch me :)
-  move: DU
-  timer: 15439
+  move: VA
+  timer: 20848
+  message: See you :-)
 > ---
 > End of Round:  0
 > Starting Round:  1
@@ -156,8 +161,8 @@ Program Output (0):
 ==============================================================
 Move:  {
   "move": "MN",
-  "timer": 64,
-  "message": "I like Dracula"
+  "message": "I like Dracula",
+  "timer": 87
 }
 > Game score: 365
 > Moving from: ED
@@ -165,8 +170,8 @@ Move:  {
 > Player 0 made move:
 > +++
   move: MN
-  timer: 64
   message: I like Dracula
+  timer: 87
 > ---
 --------------------------------------------------------------------------
 > Running player 1... 
@@ -177,7 +182,7 @@ Program Output (0):
 Move:  {
   "move": "VE",
   "message": "I like Dracula",
-  "timer": 13
+  "timer": 17
 }
 > Game score: 365
 > Moving from: BD
@@ -186,7 +191,7 @@ Move:  {
 > +++
   move: VE
   message: I like Dracula
-  timer: 13
+  timer: 17
 > ---
 --------------------------------------------------------------------------
 > Running player 2... 
@@ -195,18 +200,18 @@ Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN..
 Program Output (0): 
 ==============================================================
 Move:  {
+  "timer": 20,
   "move": "MA",
-  "message": "I like Dracula",
-  "timer": 15
+  "message": "I like Dracula"
 }
 > Game score: 365
 > Moving from: PA
 > Life Points: 9
 > Player 2 made move:
 > +++
+  timer: 20
   move: MA
   message: I like Dracula
-  timer: 15
 > ---
 --------------------------------------------------------------------------
 > Running player 3... 
@@ -215,736 +220,3471 @@ Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN..
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "CD",
-  "timer": 124,
-  "message": "I like Dracula"
+  "move": "KL",
+  "message": "I like Dracula",
+  "timer": 128
 }
 > Game score: 365
 > Moving from: CD
 > Life Points: 9
 > Player 3 made move:
 > +++
-  move: CD
-  timer: 124
+  move: KL
   message: I like Dracula
+  timer: 128
 > ---
 --------------------------------------------------------------------------
 > Running player 4... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DDU.V.. GMN.... SVE.... HMA.... MCD...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL...."
 ==============================================================
-Program Output (60): Can go to = IR
-Can go to = GW
-Can go to = D1
-Can go to = HI
+Program Output (703): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 6 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getNextLoopLocation
+Do getLoopLocation
+Do checkRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
 
 ==============================================================
 Move:  {
-  "timer": 29293,
-  "move": "IR",
-  "message": "come and catch me :)"
+  "move": "IO",
+  "message": "See you :-)",
+  "timer": 18329
 }
 > Game score: 365
-> Moving from: DU
+> Moving from: VA
 > Blood Points: 40
-> Legal Drac moves: GW IR D1 HI
+> Legal Drac moves: AT SA SJ SO IO D1 HI
 > Player 4 made move:
 > +++
-  timer: 29293
-  move: IR
-  message: come and catch me :)
+  move: IO
+  message: See you :-)
+  timer: 18329
 > ---
 > End of Round:  1
 > Starting Round:  2
 --------------------------------------------------------------------------
 > Running player 0... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "timer": 61,
   "move": "LV",
-  "message": "I like Dracula"
+  "message": "I like Dracula",
+  "timer": 75
 }
 > Game score: 364
 > Moving from: MN
 > Life Points: 9
 > Player 0 made move:
 > +++
-  timer: 61
   move: LV
   message: I like Dracula
+  timer: 75
 > ---
 --------------------------------------------------------------------------
 > Running player 1... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "FL",
+  "move": "BR",
   "message": "I like Dracula",
-  "timer": 2758
+  "timer": 4917
 }
 > Game score: 364
 > Moving from: VE
 > Life Points: 9
 > Player 1 made move:
 > +++
-  move: FL
+  move: BR
   message: I like Dracula
-  timer: 2758
+  timer: 4917
 > ---
 --------------------------------------------------------------------------
 > Running player 2... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "AL",
-  "message": "I like Dracula",
-  "timer": 118
+  "timer": 133,
+  "move": "SR",
+  "message": "I like Dracula"
 }
 > Game score: 364
 > Moving from: MA
 > Life Points: 9
 > Player 2 made move:
 > +++
-  move: AL
+  timer: 133
+  move: SR
   message: I like Dracula
-  timer: 118
 > ---
 --------------------------------------------------------------------------
 > Running player 3... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "GA",
+  "move": "SZ",
   "message": "I like Dracula",
-  "timer": 100
+  "timer": 3736
 }
 > Game score: 364
-> Moving from: CD
+> Moving from: KL
 > Life Points: 9
 > Player 3 made move:
 > +++
-  move: GA
+  move: SZ
   message: I like Dracula
-  timer: 100
+  timer: 3736
 > ---
 --------------------------------------------------------------------------
 > Running player 4... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DDU.V.. GMN.... SVE.... HMA.... MCD.... DIR.... GLV.... SFL.... HAL.... MGA...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ...."
 ==============================================================
-Program Output (75): Can go to = SW
-Can go to = LV
-Can go to = D2
-Can go to = AO
-Can go to = D1
+Program Output (673): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 6 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getNextLoopLocation
+Do getLoopLocation
+Do checkRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
 
 ==============================================================
 Move:  {
-  "move": "AO",
-  "message": "come and catch me :)",
-  "timer": 20254
+  "timer": 17668,
+  "message": "See you :-)",
+  "move": "D1"
 }
 > Game score: 364
-> Moving from: IR
+> Moving from: IO
 > Blood Points: 38
-> Legal Drac moves: LV SW AO D1 D2
+> Legal Drac moves: AT SA TS AS BS D1 D2
 > Player 4 made move:
 > +++
-  move: AO
-  message: come and catch me :)
-  timer: 20254
+  timer: 17668
+  message: See you :-)
+  move: D1
 > ---
 > End of Round:  2
 > Starting Round:  3
 --------------------------------------------------------------------------
 > Running player 0... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
+  "move": "ED",
   "message": "I like Dracula",
-  "move": "SW",
-  "timer": 55
+  "timer": 3615
 }
 > Game score: 363
 > Moving from: LV
 > Life Points: 9
 > Player 0 made move:
 > +++
+  move: ED
   message: I like Dracula
-  move: SW
-  timer: 55
+  timer: 3615
 > ---
 --------------------------------------------------------------------------
 > Running player 1... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "GO",
+  "move": "PR",
   "message": "I like Dracula",
-  "timer": 3744
+  "timer": 4042
 }
 > Game score: 363
-> Moving from: FL
+> Moving from: BR
 > Life Points: 9
 > Player 1 made move:
 > +++
-  move: GO
+  move: PR
   message: I like Dracula
-  timer: 3744
+  timer: 4042
 > ---
 --------------------------------------------------------------------------
 > Running player 2... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "GR",
-  "timer": 2882,
+  "move": "BO",
+  "timer": 4907,
   "message": "I like Dracula"
 }
 > Game score: 363
-> Moving from: AL
+> Moving from: SR
 > Life Points: 9
 > Player 2 made move:
 > +++
-  move: GR
-  timer: 2882
+  move: BO
+  timer: 4907
   message: I like Dracula
 > ---
 --------------------------------------------------------------------------
 > Running player 3... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "timer": 8563,
-  "move": "BC",
-  "message": "I like Dracula"
+  "message": "I like Dracula",
+  "move": "GA",
+  "timer": 4815
 }
 > Game score: 363
-> Moving from: GA
+> Moving from: SZ
 > Life Points: 9
 > Player 3 made move:
 > +++
-  timer: 8563
-  move: BC
   message: I like Dracula
+  move: GA
+  timer: 4815
 > ---
 --------------------------------------------------------------------------
 > Running player 4... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DDU.V.. GMN.... SVE.... HMA.... MCD.... DIR.... GLV.... SFL.... HAL.... MGA.... DAO.... GSW.... SGO.... HGR.... MBC...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA...."
 ==============================================================
-Program Output (135): Can go to = NS
-Can go to = MS
-Can go to = LS
-Can go to = D2
-Can go to = GW
-Can go to = EC
-Can go to = CA
-Can go to = BB
-Can go to = D1
+Program Output (605): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 6 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getNextLoopLocation
+Do getLoopLocation
+Do checkRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
 
 ==============================================================
 Move:  {
-  "move": "MS",
-  "timer": 15292,
-  "message": "come and catch me :)"
+  "move": "TS",
+  "message": "come and catch me :-)",
+  "timer": 23602
 }
 > Game score: 363
-> Moving from: AO
+> Moving from: IO
 > Blood Points: 36
-> Legal Drac moves: CA GW LS NS EC BB MS D1 D2
+> Legal Drac moves: AT SA TS AS BS
 > Player 4 made move:
 > +++
-  move: MS
-  timer: 15292
-  message: come and catch me :)
+  move: TS
+  message: come and catch me :-)
+  timer: 23602
 > ---
 > End of Round:  3
 > Starting Round:  4
 --------------------------------------------------------------------------
 > Running player 0... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "MN",
+  "message": "I like Dracula",
+  "timer": 103
+}
+> Game score: 362
+> Moving from: ED
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: MN
+  message: I like Dracula
+  timer: 103
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "VI",
+  "message": "I like Dracula",
+  "timer": 6001
+}
+> Game score: 362
+> Moving from: PR
+> Life Points: 9
+> Player 1 made move:
+> +++
+  move: VI
+  message: I like Dracula
+  timer: 6001
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BA",
+  "message": "I like Dracula",
+  "timer": 5167
+}
+> Game score: 362
+> Moving from: BO
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: BA
+  message: I like Dracula
+  timer: 5167
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "CN",
+  "message": "I like Dracula",
+  "timer": 4953
+}
+> Game score: 362
+> Moving from: GA
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: CN
+  message: I like Dracula
+  timer: 4953
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN...."
+==============================================================
+Program Output (218): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "message": "See you :-)",
+  "move": "RO",
+  "timer": 19418
+}
+> Game score: 362
+> Moving from: TS
+> Blood Points: 34
+> Legal Drac moves: CG GO NP RO MS
+> Player 4 made move:
+> +++
+  message: See you :-)
+  move: RO
+  timer: 19418
+> ---
+> End of Round:  4
+> Starting Round:  5
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "LV",
+  "message": "I like Dracula",
+  "timer": 105
+}
+> Game score: 361
+> Moving from: MN
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: LV
+  message: I like Dracula
+  timer: 105
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "BD",
+  "timer": 19807
+}
+> Game score: 361
+> Moving from: VI
+> Life Points: 9
+> Player 1 made move:
+> +++
+  message: I like Dracula
+  move: BD
+  timer: 19807
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "SN",
+  "timer": 4929
+}
+> Game score: 361
+> Moving from: BA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  message: I like Dracula
+  move: SN
+  timer: 4929
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "GA",
+  "message": "I like Dracula",
+  "timer": 4976
+}
+> Game score: 361
+> Moving from: CN
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: GA
+  message: I like Dracula
+  timer: 4976
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA...."
+==============================================================
+Program Output (616): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 3 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getNextLoopLocation
+Do getLoopLocation
+Do checkRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "HI",
+  "message": "See you :-)",
+  "timer": 23453
+}
+> Game score: 361
+> Moving from: RO
+> Blood Points: 34
+> Legal Drac moves: BI FL NP HI
+> Player 4 made move:
+> +++
+  move: HI
+  message: See you :-)
+  timer: 23453
+> ---
+> End of Round:  5
+> Starting Round:  6
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T..."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
   "move": "LO",
   "message": "I like Dracula",
-  "timer": 60
+  "timer": 5022
 }
-> Game score: 362
-> Moving from: SW
+> Game score: 360
+> Moving from: LV
 > Life Points: 9
 > Player 0 made move:
 > +++
   move: LO
   message: I like Dracula
-  timer: 60
+  timer: 5022
 > ---
 --------------------------------------------------------------------------
 > Running player 1... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "timer": 2763,
-  "move": "MR",
-  "message": "I like Dracula"
+  "move": "VE",
+  "message": "I like Dracula",
+  "timer": 5061
 }
-> Game score: 362
-> Moving from: GO
+> Game score: 360
+> Moving from: BD
 > Life Points: 9
 > Player 1 made move:
 > +++
-  timer: 2763
-  move: MR
+  move: VE
   message: I like Dracula
+  timer: 5061
 > ---
 --------------------------------------------------------------------------
 > Running player 2... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "CA",
-  "timer": 2914,
+  "timer": 4915,
+  "move": "MA",
   "message": "I like Dracula"
 }
-> Game score: 362
-> Moving from: GR
+> Game score: 360
+> Moving from: SN
 > Life Points: 9
 > Player 2 made move:
 > +++
-  move: CA
-  timer: 2914
+  timer: 4915
+  move: MA
   message: I like Dracula
 > ---
 --------------------------------------------------------------------------
 > Running player 3... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "KL",
+  "message": "I like Dracula",
+  "timer": 4916
+}
+> Game score: 360
+> Moving from: GA
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: KL
+  message: I like Dracula
+  timer: 4916
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL...."
+==============================================================
+Program Output (180): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "timer": 16764,
+  "move": "BI",
+  "message": "See you :-)"
+}
+> Game score: 360
+> Moving from: RO
+> Blood Points: 34
+> Legal Drac moves: BI FL NP
+> Player 4 made move:
+> +++
+  timer: 16764
+  move: BI
+  message: See you :-)
+> ---
+> End of Round:  6
+> Starting Round:  7
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "EC",
+  "message": "I like Dracula",
+  "timer": 3254
+}
+> Game score: 346
+> Moving from: LO
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: EC
+  message: I like Dracula
+  timer: 3254
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "AS",
+  "message": "I like Dracula",
+  "timer": 3273
+}
+> Game score: 346
+> Moving from: VE
+> Life Points: 9
+> Player 1 made move:
+> +++
+  move: AS
+  message: I like Dracula
+  timer: 3273
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "AL",
+  "message": "I like Dracula",
+  "timer": 135
+}
+> Game score: 346
+> Moving from: MA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: AL
+  message: I like Dracula
+  timer: 135
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BD",
+  "message": "I like Dracula",
+  "timer": 3998
+}
+> Game score: 346
+> Moving from: KL
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: BD
+  message: I like Dracula
+  timer: 3998
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD...."
+==============================================================
+Program Output (161): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "NP",
+  "timer": 17720,
+  "message": "See you :-)"
+}
+> Game score: 346
+> Moving from: BI
+> Blood Points: 34
+> Legal Drac moves: NP AS
+> Player 4 made move:
+> +++
+  move: NP
+  timer: 17720
+  message: See you :-)
+> ---
+> End of Round:  7
+> Starting Round:  8
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "LE",
+  "timer": 2853,
+  "message": "I like Dracula"
+}
+> Game score: 345
+> Moving from: EC
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: LE
+  timer: 2853
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "IO",
+  "message": "I like Dracula",
+  "timer": 2799
+}
+> Game score: 345
+> Moving from: AS
+> Life Points: 9
+> Player 1 made move:
+> +++
+  move: IO
+  message: I like Dracula
+  timer: 2799
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 2864,
+  "move": "SR",
+  "message": "I like Dracula"
+}
+> Game score: 345
+> Moving from: AL
+> Life Points: 9
+> Player 2 made move:
+> +++
+  timer: 2864
+  move: SR
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
   "move": "GA",
   "message": "I like Dracula",
-  "timer": 2703
+  "timer": 2779
 }
-> Game score: 362
+> Game score: 345
+> Moving from: BD
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: GA
+  message: I like Dracula
+  timer: 2779
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA...."
+==============================================================
+Program Output (199): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "D5",
+  "message": "lucky kids :-O",
+  "timer": 11172
+}
+> Game score: 345
+> Moving from: NP
+> Blood Points: 34
+> Legal Drac moves: D1 D2 D3 D4 D5
+> Player 4 made move:
+> +++
+  move: D5
+  message: lucky kids :-O
+  timer: 11172
+> ---
+> End of Round:  8
+> Starting Round:  9
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "PA",
+  "message": "I like Dracula",
+  "timer": 2804
+}
+> Game score: 344
+> Moving from: LE
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: PA
+  message: I like Dracula
+  timer: 2804
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 2983,
+  "move": "SA",
+  "message": "I like Dracula"
+}
+> Game score: 344
+> Moving from: IO
+> Life Points: 9
+> Player 1 made move:
+> +++
+  timer: 2983
+  move: SA
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BO",
+  "message": "I like Dracula",
+  "timer": 2853
+}
+> Game score: 344
+> Moving from: SR
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: BO
+  message: I like Dracula
+  timer: 2853
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 2801,
+  "move": "CN",
+  "message": "I like Dracula"
+}
+> Game score: 344
+> Moving from: GA
+> Life Points: 9
+> Player 3 made move:
+> +++
+  timer: 2801
+  move: CN
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN...."
+==============================================================
+Program Output (218): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "CG",
+  "message": "See you :-)",
+  "timer": 11094
+}
+> Game score: 344
+> Moving from: TS
+> Blood Points: 32
+> Legal Drac moves: CG GO MS IO
+> Player 4 made move:
+> +++
+  move: CG
+  message: See you :-)
+  timer: 11094
+> ---
+> End of Round:  9
+> Starting Round:  10
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "ST",
+  "message": "I like Dracula",
+  "timer": 2916
+}
+> Game score: 343
+> Moving from: PA
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: ST
+  message: I like Dracula
+  timer: 2916
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "IO",
+  "message": "I like Dracula",
+  "timer": 2782
+}
+> Game score: 343
+> Moving from: SA
+> Life Points: 9
+> Player 1 made move:
+> +++
+  move: IO
+  message: I like Dracula
+  timer: 2782
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 2850,
+  "move": "TO",
+  "message": "I like Dracula"
+}
+> Game score: 343
+> Moving from: BO
+> Life Points: 9
+> Player 2 made move:
+> +++
+  timer: 2850
+  move: TO
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DC?T... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "GA",
+  "message": "I like Dracula",
+  "timer": 2801
+}
+> Game score: 343
+> Moving from: CN
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: GA
+  message: I like Dracula
+  timer: 2801
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA...."
+==============================================================
+Program Output (161): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "MS",
+  "message": "See you :-)",
+  "timer": 10843
+}
+> Game score: 343
+> Moving from: CG
+> Blood Points: 32
+> Legal Drac moves: MS TS
+> Player 4 made move:
+> +++
+  move: MS
+  message: See you :-)
+  timer: 10843
+> ---
+> End of Round:  10
+> Starting Round:  11
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "ZU",
+  "message": "I like Dracula",
+  "timer": 132
+}
+> Game score: 342
+> Moving from: ST
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: ZU
+  message: I like Dracula
+  timer: 132
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 2869,
+  "move": "VA",
+  "message": "I like Dracula"
+}
+> Game score: 342
+> Moving from: IO
+> Life Points: 9
+> Player 1 made move:
+> +++
+  timer: 2869
+  move: VA
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "MR",
+  "message": "I like Dracula",
+  "timer": 2846
+}
+> Game score: 342
+> Moving from: TO
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: MR
+  message: I like Dracula
+  timer: 2846
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BC",
+  "message": "I like Dracula",
+  "timer": 2999
+}
+> Game score: 342
+> Moving from: GA
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: BC
+  message: I like Dracula
+  timer: 2999
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC...."
+==============================================================
+Program Output (635): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 4 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getShortestPathToRegion
+Do getNextShorestPathToRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "TS",
+  "message": "See you :-)",
+  "timer": 13746
+}
+> Game score: 342
+> Moving from: MS
+> Blood Points: 30
+> Legal Drac moves: AL BA MR AO TS
+> Player 4 made move:
+> +++
+  move: TS
+  message: See you :-)
+  timer: 13746
+> ---
+> End of Round:  11
+> Starting Round:  12
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "MU",
+  "timer": 2823
+}
+> Game score: 341
+> Moving from: ZU
+> Life Points: 9
+> Player 0 made move:
+> +++
+  message: I like Dracula
+  move: MU
+  timer: 2823
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "IO",
+  "timer": 3261
+}
+> Game score: 341
+> Moving from: VA
+> Life Points: 9
+> Player 1 made move:
+> +++
+  message: I like Dracula
+  move: IO
+  timer: 3261
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "MI",
+  "message": "I like Dracula",
+  "timer": 2895
+}
+> Game score: 341
+> Moving from: MR
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: MI
+  message: I like Dracula
+  timer: 2895
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "GA",
+  "message": "I like Dracula",
+  "timer": 2801
+}
+> Game score: 341
 > Moving from: BC
 > Life Points: 9
 > Player 3 made move:
 > +++
   move: GA
   message: I like Dracula
-  timer: 2703
+  timer: 2801
 > ---
 --------------------------------------------------------------------------
 > Running player 4... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DDU.V.. GMN.... SVE.... HMA.... MCD.... DIR.... GLV.... SFL.... HAL.... MGA.... DAO.... GSW.... SGO.... HGR.... MBC.... DMS.... GLO.... SMR.... HCA.... MGA...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA...."
 ==============================================================
-Program Output (105): Can go to = TS
-Can go to = MR
-Can go to = CG
-Can go to = BA
-Can go to = D2
-Can go to = AL
-Can go to = D1
+Program Output (597): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 3 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getNextLoopLocation
+Do getLoopLocation
+Do checkRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
 
 ==============================================================
 Move:  {
-  "move": "MR",
-  "timer": 11440,
-  "message": "come and catch me :)"
+  "move": "RO",
+  "message": "lucky kids :-O",
+  "timer": 13461
 }
-> Game score: 362
-> Moving from: MS
-> Blood Points: 34
-> Legal Drac moves: AL BA CG MR TS D1 D2
+> Game score: 341
+> Moving from: TS
+> Blood Points: 28
+> Legal Drac moves: GO RO IO
 > Player 4 made move:
 > +++
-  move: MR
-  timer: 11440
-  message: come and catch me :)
+  move: RO
+  message: lucky kids :-O
+  timer: 13461
 > ---
-> End of Round:  4
-> Starting Round:  5
+> End of Round:  12
+> Starting Round:  13
 --------------------------------------------------------------------------
 > Running player 0... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT..."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DC?T.M."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "timer": 11313,
-  "move": "EC",
-  "message": "I like Dracula"
+  "move": "NU",
+  "message": "I like Dracula",
+  "timer": 3321
 }
-> Game score: 361
-> Moving from: LO
+> Game score: 340
+> Moving from: MU
 > Life Points: 9
 > Player 0 made move:
 > +++
-  timer: 11313
-  move: EC
+  move: NU
   message: I like Dracula
+  timer: 3321
 > ---
 --------------------------------------------------------------------------
 > Running player 1... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DC?T.M. GNU...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "timer": 87,
-  "move": "MR",
+  "timer": 3473,
+  "move": "TS",
   "message": "I like Dracula"
 }
-> Game score: 361
-> Moving from: MR
+> Game score: 340
+> Moving from: IO
 > Life Points: 9
 > Player 1 made move:
 > +++
-  timer: 87
-  move: MR
+  timer: 3473
+  move: TS
   message: I like Dracula
 > ---
 --------------------------------------------------------------------------
 > Running player 2... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DC?T.M. GNU.... STS...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "AO",
-  "timer": 3546,
+  "move": "ST",
+  "timer": 2844,
   "message": "I like Dracula"
 }
-> Game score: 361
-> Moving from: CA
+> Game score: 340
+> Moving from: MI
 > Life Points: 9
 > Player 2 made move:
 > +++
-  move: AO
-  timer: 3546
+  move: ST
+  timer: 2844
   message: I like Dracula
 > ---
 --------------------------------------------------------------------------
 > Running player 3... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DC?T.M. GNU.... STS.... HST...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "KL",
+  "message": "I like Dracula",
+  "timer": 3321
+}
+> Game score: 340
+> Moving from: GA
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: KL
+  message: I like Dracula
+  timer: 3321
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL...."
+==============================================================
+Program Output (199): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "BI",
+  "message": "See you :-)",
+  "timer": 12836
+}
+> Game score: 340
+> Moving from: RO
+> Blood Points: 28
+> Legal Drac moves: BI FL NP HI
+> Player 4 made move:
+> +++
+  move: BI
+  message: See you :-)
+  timer: 12836
+> ---
+> End of Round:  13
+> Starting Round:  14
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DC?T.M. GNU.... STS.... HST.... MKL.... DC?.VM."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "LI",
+  "message": "I like Dracula",
+  "timer": 3336
+}
+> Game score: 339
+> Moving from: NU
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: LI
+  message: I like Dracula
+  timer: 3336
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DC?T.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "RO",
+  "message": "I like Dracula",
+  "timer": 3329
+}
+> Game score: 339
+> Moving from: TS
+> Life Points: 9
+> Player 1 made move:
+> +++
+  move: RO
+  message: I like Dracula
+  timer: 3329
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "PA",
+  "message": "I like Dracula",
+  "timer": 3311
+}
+> Game score: 339
+> Moving from: ST
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: PA
+  message: I like Dracula
+  timer: 3311
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BD",
+  "message": "I like Dracula",
+  "timer": 3280
+}
+> Game score: 339
+> Moving from: KL
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: BD
+  message: I like Dracula
+  timer: 3280
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD...."
+==============================================================
+Program Output (218): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "AS",
+  "message": "See you :-)",
+  "timer": 12636
+}
+> Game score: 339
+> Moving from: BI
+> Blood Points: 28
+> Legal Drac moves: NP AS D1 D2 HI
+> Player 4 made move:
+> +++
+  move: AS
+  message: See you :-)
+  timer: 12636
+> ---
+> End of Round:  14
+> Starting Round:  15
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "MU",
+  "message": "I like Dracula",
+  "timer": 2677
+}
+> Game score: 338
+> Moving from: LI
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: MU
+  message: I like Dracula
+  timer: 2677
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "NP",
+  "timer": 2611
+}
+> Game score: 338
+> Moving from: RO
+> Life Points: 7
+> Player 1 made move:
+> +++
+  message: I like Dracula
+  move: NP
+  timer: 2611
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BO",
+  "message": "I like Dracula",
+  "timer": 2655
+}
+> Game score: 338
+> Moving from: PA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: BO
+  message: I like Dracula
+  timer: 2655
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "KL",
+  "message": "I like Dracula",
+  "timer": 2694
+}
+> Game score: 338
+> Moving from: BD
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: KL
+  message: I like Dracula
+  timer: 2694
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL...."
+==============================================================
+Program Output (586): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 2 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getShortestPathToRegion
+Do getNextShorestPathToRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "IO",
+  "timer": 12277,
+  "message": "See you :-)"
+}
+> Game score: 338
+> Moving from: AS
+> Blood Points: 26
+> Legal Drac moves: VE IO D1 D2
+> Player 4 made move:
+> +++
+  move: IO
+  timer: 12277
+  message: See you :-)
+> ---
+> End of Round:  15
+> Starting Round:  16
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "VE",
+  "message": "I like Dracula",
+  "timer": 2628
+}
+> Game score: 337
+> Moving from: MU
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: VE
+  message: I like Dracula
+  timer: 2628
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "RO",
+  "message": "I like Dracula",
+  "timer": 2648
+}
+> Game score: 337
+> Moving from: NP
+> Life Points: 7
+> Player 1 made move:
+> +++
+  move: RO
+  message: I like Dracula
+  timer: 2648
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "MA",
+  "message": "I like Dracula",
+  "timer": 2656
+}
+> Game score: 337
+> Moving from: BO
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: MA
+  message: I like Dracula
+  timer: 2656
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
   "move": "CD",
-  "message": "I like Dracula",
-  "timer": 4751
+  "timer": 2611,
+  "message": "I like Dracula"
 }
-> Game score: 361
-> Moving from: GA
+> Game score: 337
+> Moving from: KL
 > Life Points: 9
 > Player 3 made move:
 > +++
   move: CD
+  timer: 2611
   message: I like Dracula
-  timer: 4751
 > ---
 --------------------------------------------------------------------------
 > Running player 4... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DDU.V.. GMN.... SVE.... HMA.... MCD.... DIR.... GLV.... SFL.... HAL.... MGA.... DAO.... GSW.... SGO.... HGR.... MBC.... DMS.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD...."
 ==============================================================
-Program Output (135): Can go to = D2
-Can go to = ZU
-Can go to = TO
-Can go to = MI
-Can go to = GO
-Can go to = GE
-Can go to = CF
-Can go to = D1
-Can go to = HI
+Program Output (703): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 6 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getNextLoopLocation
+Do getLoopLocation
+Do checkRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
 
 ==============================================================
 Move:  {
-  "move": "TO",
-  "message": "come and catch me :)",
-  "timer": 11534
+  "timer": 12153,
+  "move": "D1",
+  "message": "See you :-)"
 }
-> Game score: 361
-> Moving from: MR
+> Game score: 337
+> Moving from: IO
 > Blood Points: 24
-> Legal Drac moves: CF GE GO MI TO ZU D1 D2 HI
+> Legal Drac moves: AT SA VA BS D1 D2 D5
 > Player 4 made move:
 > +++
-  move: TO
-  message: come and catch me :)
-  timer: 11534
+  timer: 12153
+  move: D1
+  message: See you :-)
 > ---
-> End of Round:  5
-> Starting Round:  6
+> End of Round:  16
+> Starting Round:  17
 --------------------------------------------------------------------------
 > Running player 0... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T..."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "LE",
+  "move": "FL",
   "message": "I like Dracula",
-  "timer": 10451
+  "timer": 2716
 }
-> Game score: 360
-> Moving from: EC
+> Game score: 336
+> Moving from: VE
 > Life Points: 9
 > Player 0 made move:
 > +++
-  move: LE
+  move: FL
   message: I like Dracula
-  timer: 10451
+  timer: 2716
 > ---
 --------------------------------------------------------------------------
 > Running player 1... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T... GLE...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DC?.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "CF",
+  "move": "BI",
   "message": "I like Dracula",
-  "timer": 3695
+  "timer": 2583
 }
-> Game score: 360
-> Moving from: MR
-> Life Points: 6
+> Game score: 336
+> Moving from: RO
+> Life Points: 7
 > Player 1 made move:
 > +++
-  move: CF
+  move: BI
   message: I like Dracula
-  timer: 3695
+  timer: 2583
 > ---
 --------------------------------------------------------------------------
 > Running player 2... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T... GLE.... SCF...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "MA",
+  "message": "I like Dracula",
+  "timer": 2590
+}
+> Game score: 336
+> Moving from: MA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: MA
+  message: I like Dracula
+  timer: 2590
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "KL",
+  "timer": 2580,
+  "message": "I like Dracula"
+}
+> Game score: 336
+> Moving from: CD
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: KL
+  timer: 2580
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL...."
+==============================================================
+Program Output (218): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "VA",
+  "message": "See you :-)",
+  "timer": 9965
+}
+> Game score: 336
+> Moving from: IO
+> Blood Points: 22
+> Legal Drac moves: AT SA VA TS BS
+> Player 4 made move:
+> +++
+  move: VA
+  message: See you :-)
+  timer: 9965
+> ---
+> End of Round:  17
+> Starting Round:  18
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "VE",
+  "message": "I like Dracula",
+  "timer": 2585
+}
+> Game score: 335
+> Moving from: FL
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: VE
+  message: I like Dracula
+  timer: 2585
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "AS",
+  "message": "I like Dracula",
+  "timer": 2578
+}
+> Game score: 335
+> Moving from: BI
+> Life Points: 7
+> Player 1 made move:
+> +++
+  move: AS
+  message: I like Dracula
+  timer: 2578
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "MA",
+  "message": "I like Dracula",
+  "timer": 2618
+}
+> Game score: 335
+> Moving from: MA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: MA
+  message: I like Dracula
+  timer: 2618
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "CD",
+  "timer": 2668
+}
+> Game score: 335
+> Moving from: KL
+> Life Points: 9
+> Player 3 made move:
+> +++
+  message: I like Dracula
+  move: CD
+  timer: 2668
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD...."
+==============================================================
+Program Output (218): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "SO",
+  "message": "See you :-)",
+  "timer": 10045
+}
+> Game score: 335
+> Moving from: VA
+> Blood Points: 22
+> Legal Drac moves: AT SA SJ SO HI
+> Player 4 made move:
+> +++
+  move: SO
+  message: See you :-)
+  timer: 10045
+> ---
+> End of Round:  18
+> Starting Round:  19
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BD",
+  "message": "I like Dracula",
+  "timer": 9988
+}
+> Game score: 334
+> Moving from: VE
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: BD
+  message: I like Dracula
+  timer: 9988
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "IO",
+  "timer": 2643
+}
+> Game score: 334
+> Moving from: AS
+> Life Points: 7
+> Player 1 made move:
+> +++
+  message: I like Dracula
+  move: IO
+  timer: 2643
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 2583,
+  "move": "MA",
+  "message": "I like Dracula"
+}
+> Game score: 334
+> Moving from: MA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  timer: 2583
+  move: MA
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "KL",
+  "message": "I like Dracula",
+  "timer": 6328
+}
+> Game score: 334
+> Moving from: CD
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: KL
+  message: I like Dracula
+  timer: 6328
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL...."
+==============================================================
+Program Output (684): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 0 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getShortestPathToRegion
+Do getNextShorestPathToRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "SJ",
+  "message": "See you :-)",
+  "timer": 19374
+}
+> Game score: 334
+> Moving from: SO
+> Blood Points: 22
+> Legal Drac moves: BE BC SA SJ VR HI
+> Player 4 made move:
+> +++
+  move: SJ
+  message: See you :-)
+  timer: 19374
+> ---
+> End of Round:  19
+> Starting Round:  20
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 6862,
+  "move": "ZA",
+  "message": "I like Dracula"
+}
+> Game score: 333
+> Moving from: BD
+> Life Points: 9
+> Player 0 made move:
+> +++
+  timer: 6862
+  move: ZA
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "AS",
+  "message": "I like Dracula",
+  "timer": 6474
+}
+> Game score: 333
+> Moving from: IO
+> Life Points: 7
+> Player 1 made move:
+> +++
+  move: AS
+  message: I like Dracula
+  timer: 6474
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "SR",
+  "message": "I like Dracula",
+  "timer": 783
+}
+> Game score: 333
+> Moving from: MA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: SR
+  message: I like Dracula
+  timer: 783
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "SZ",
+  "message": "I like Dracula",
+  "timer": 2594
+}
+> Game score: 333
+> Moving from: KL
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: SZ
+  message: I like Dracula
+  timer: 2594
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ...."
+==============================================================
+Program Output (627): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 0 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getShortestPathToRegion
+Do getNextShorestPathToRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "message": "See you :-)",
+  "move": "ZA",
+  "timer": 16564
+}
+> Game score: 333
+> Moving from: SJ
+> Blood Points: 22
+> Legal Drac moves: BE ZA HI
+> Player 4 made move:
+> +++
+  message: See you :-)
+  move: ZA
+  timer: 16564
+> ---
+> End of Round:  20
+> Starting Round:  21
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR.... MSZ.... DZAT..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "ZA",
+  "message": "I like Dracula",
+  "timer": 95
+}
+> Game score: 332
+> Moving from: ZA
+> Life Points: 9
+> Player 0 made move:
+> +++
+  move: ZA
+  message: I like Dracula
+  timer: 95
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "VE",
+  "message": "I like Dracula",
+  "timer": 2559
+}
+> Game score: 332
+> Moving from: AS
+> Life Points: 7
+> Player 1 made move:
+> +++
+  move: VE
+  message: I like Dracula
+  timer: 2559
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "PA",
+  "message": "I like Dracula",
+  "timer": 2550
+}
+> Game score: 332
+> Moving from: SR
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: PA
+  message: I like Dracula
+  timer: 2550
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "ZA",
+  "timer": 2567,
+  "message": "I like Dracula"
+}
+> Game score: 332
+> Moving from: SZ
+> Life Points: 9
+> Player 3 made move:
+> +++
+  move: ZA
+  timer: 2567
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD..."
+==============================================================
+Program Output (695): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 0 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getShortestPathToRegion
+Do getNextShorestPathToRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "MU",
+  "timer": 7512,
+  "message": "See you :-)"
+}
+> Game score: 332
+> Moving from: ZA
+> Blood Points: 2
+> Legal Drac moves: BD MU SZ VI HI
+> Player 4 made move:
+> +++
+  move: MU
+  timer: 7512
+  message: See you :-)
+> ---
+> End of Round:  21
+> Starting Round:  22
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 2644,
+  "move": "VI",
+  "message": "I like Dracula"
+}
+> Game score: 331
+> Moving from: ZA
+> Life Points: 6
+> Player 0 made move:
+> +++
+  timer: 2644
+  move: VI
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "VI",
+  "message": "I like Dracula",
+  "timer": 10698
+}
+> Game score: 331
+> Moving from: VE
+> Life Points: 7
+> Player 1 made move:
+> +++
+  move: VI
+  message: I like Dracula
+  timer: 10698
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "NA",
+  "message": "I like Dracula",
+  "timer": 2627
+}
+> Game score: 331
+> Moving from: PA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: NA
+  message: I like Dracula
+  timer: 2627
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DC?T... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "SJ",
+  "message": "I like Dracula",
+  "timer": 6622
+}
+> Game score: 331
+> Moving from: ZA
+> Life Points: 5
+> Player 3 made move:
+> +++
+  move: SJ
+  message: I like Dracula
+  timer: 6622
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DMUT... GVI.... SVI.... HNA.... MSJT..."
+==============================================================
+Program Output (711): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 2 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getShortestPathToRegion
+Do getNextShorestPathToRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "ST",
+  "message": "See you :-)",
+  "timer": 15934
+}
+> Game score: 331
+> Moving from: MU
+> Blood Points: 2
+> Legal Drac moves: MI NU ST VE VI ZU D1 D2 HI
+> Player 4 made move:
+> +++
+  move: ST
+  message: See you :-)
+  timer: 15934
+> ---
+> End of Round:  22
+> Starting Round:  23
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "BD",
+  "timer": 2791
+}
+> Game score: 330
+> Moving from: VI
+> Life Points: 6
+> Player 0 made move:
+> +++
+  message: I like Dracula
+  move: BD
+  timer: 2791
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 2737,
+  "move": "BD",
+  "message": "I like Dracula"
+}
+> Game score: 330
+> Moving from: VI
+> Life Points: 7
+> Player 1 made move:
+> +++
+  timer: 2737
+  move: BD
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BO",
+  "message": "I like Dracula",
+  "timer": 6526
+}
+> Game score: 330
+> Moving from: NA
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: BO
+  message: I like Dracula
+  timer: 6526
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BE",
+  "message": "I like Dracula",
+  "timer": 2759
+}
+> Game score: 330
+> Moving from: SJ
+> Life Points: 3
+> Player 3 made move:
+> +++
+  move: BE
+  message: I like Dracula
+  timer: 2759
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DMUT... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE...."
+==============================================================
+Program Output (313): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "GE",
+  "message": "See you :-)",
+  "timer": 10957
+}
+> Game score: 330
+> Moving from: ST
+> Blood Points: 2
+> Player 4 made move:
+> +++
+  move: GE
+  message: See you :-)
+  timer: 10957
+> ---
+> End of Round:  23
+> Starting Round:  24
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "SZ",
+  "message": "I like Dracula",
+  "timer": 2740
+}
+> Game score: 329
+> Moving from: BD
+> Life Points: 6
+> Player 0 made move:
+> +++
+  move: SZ
+  message: I like Dracula
+  timer: 2740
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "VI",
+  "message": "I like Dracula",
+  "timer": 2614
+}
+> Game score: 329
+> Moving from: BD
+> Life Points: 7
+> Player 1 made move:
+> +++
+  move: VI
+  message: I like Dracula
+  timer: 2614
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "MA",
+  "message": "I like Dracula",
+  "timer": 2596
+}
+> Game score: 329
+> Moving from: BO
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: MA
+  message: I like Dracula
+  timer: 2596
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "VI",
+  "message": "I like Dracula",
+  "timer": 4931
+}
+> Game score: 329
+> Moving from: BE
+> Life Points: 3
+> Player 3 made move:
+> +++
+  move: VI
+  message: I like Dracula
+  timer: 4931
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DMUT... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DGET.M. GSZ.... SVI.... HMA.... MVI...."
+==============================================================
+Program Output (256): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "CF",
+  "message": "See you :-)",
+  "timer": 9880
+}
+> Game score: 329
+> Moving from: GE
+> Blood Points: 2
+> Legal Drac moves: CF MR PA ZU D1 D2 HI
+> Player 4 made move:
+> +++
+  move: CF
+  message: See you :-)
+  timer: 9880
+> ---
+> End of Round:  24
+> Starting Round:  25
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "BC",
+  "message": "I like Dracula",
+  "timer": 144
+}
+> Game score: 328
+> Moving from: SZ
+> Life Points: 6
+> Player 0 made move:
+> +++
+  move: BC
+  message: I like Dracula
+  timer: 144
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 273,
+  "move": "BR",
+  "message": "I like Dracula"
+}
+> Game score: 328
+> Moving from: VI
+> Life Points: 7
+> Player 1 made move:
+> +++
+  timer: 273
+  move: BR
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
   "move": "LS",
   "message": "I like Dracula",
-  "timer": 3879
+  "timer": 145
 }
-> Game score: 360
-> Moving from: AO
+> Game score: 328
+> Moving from: MA
 > Life Points: 9
 > Player 2 made move:
 > +++
   move: LS
   message: I like Dracula
-  timer: 3879
+  timer: 145
 > ---
 --------------------------------------------------------------------------
 > Running player 3... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T... GLE.... SCF.... HLS...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
   "message": "I like Dracula",
-  "move": "GA",
-  "timer": 24563
+  "move": "VI",
+  "timer": 2591
 }
-> Game score: 360
-> Moving from: CD
-> Life Points: 9
+> Game score: 328
+> Moving from: VI
+> Life Points: 3
 > Player 3 made move:
 > +++
   message: I like Dracula
-  move: GA
-  timer: 24563
+  move: VI
+  timer: 2591
 > ---
 --------------------------------------------------------------------------
 > Running player 4... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DDU.V.. GMN.... SVE.... HMA.... MCD.... DIR.... GLV.... SFL.... HAL.... MGA.... DAO.... GSW.... SGO.... HGR.... MBC.... DMS.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DTOT... GLE.... SCF.... HLS.... MGA...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DMUT... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DGET.M. GSZ.... SVI.... HMA.... MVI.... DCFT.M. GBC.... SBR.... HLS.... MVI...."
 ==============================================================
-Program Output (105): Can go to = SR
-Can go to = D2
-Can go to = CF
-Can go to = BO
-Can go to = BA
-Can go to = D1
-Can go to = HI
+Program Output (722): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 0 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getNextLoopLocation
+Do getLoopLocation
+Do checkRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
 
 ==============================================================
 Move:  {
-  "move": "D2",
-  "message": "come and catch me :)",
-  "timer": 31048
+  "move": "HI",
+  "message": "See you :-)",
+  "timer": 17859
 }
-> Game score: 360
-> Moving from: TO
-> Blood Points: 24
-> Legal Drac moves: BA BO CF SR D1 D2 HI
+> Game score: 328
+> Moving from: CF
+> Blood Points: 2
+> Legal Drac moves: BO MR NA PA TO D1 D2 HI
 > Player 4 made move:
 > +++
-  move: D2
-  message: come and catch me :)
-  timer: 31048
+  move: HI
+  message: See you :-)
+  timer: 17859
 > ---
-> End of Round:  6
-> Starting Round:  7
+> End of Round:  25
+> Starting Round:  26
 --------------------------------------------------------------------------
 > Running player 0... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T... GLE.... SCF.... HLS.... MGA.... DD2T.V."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T..."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "timer": 2613,
-  "move": "MR",
-  "message": "I like Dracula"
+  "move": "CN",
+  "message": "I like Dracula",
+  "timer": 182
 }
-> Game score: 346
-> Moving from: LE
-> Life Points: 9
+> Game score: 327
+> Moving from: BC
+> Life Points: 6
 > Player 0 made move:
 > +++
-  timer: 2613
-  move: MR
+  move: CN
   message: I like Dracula
+  timer: 182
 > ---
 --------------------------------------------------------------------------
 > Running player 1... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T... GLE.... SCF.... HLS.... MGA.... DD2T.V. GMRTD.."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "MR",
+  "move": "CO",
   "message": "I like Dracula",
-  "timer": 2703
+  "timer": 153
 }
-> Game score: 346
-> Moving from: CF
-> Life Points: 6
+> Game score: 327
+> Moving from: BR
+> Life Points: 7
 > Player 1 made move:
 > +++
-  move: MR
+  move: CO
   message: I like Dracula
-  timer: 2703
+  timer: 153
 > ---
 --------------------------------------------------------------------------
 > Running player 2... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T... GLE.... SCF.... HLS.... MGA.... DD2T.V. GMRTD.. SMRD..."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "move": "AO",
-  "timer": 2752,
-  "message": "I like Dracula"
+  "move": "LS",
+  "message": "I like Dracula",
+  "timer": 147
 }
-> Game score: 346
+> Game score: 327
 > Moving from: LS
 > Life Points: 9
 > Player 2 made move:
 > +++
-  move: AO
-  timer: 2752
+  move: LS
   message: I like Dracula
+  timer: 147
 > ---
 --------------------------------------------------------------------------
 > Running player 3... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T... GLE.... SCF.... HLS.... MGA.... DD2T.V. GMRTD.. SMRD... HAO...."
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "VI",
+  "message": "I like Dracula",
+  "timer": 2605
+}
+> Game score: 327
+> Moving from: VI
+> Life Points: 6
+> Player 3 made move:
+> +++
+  move: VI
+  message: I like Dracula
+  timer: 2605
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DMUT... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DGET.M. GSZ.... SVI.... HMA.... MVI.... DCFT.M. GBC.... SBR.... HLS.... MVI.... DHIT... GCN.... SCO.... HLS.... MVI...."
+==============================================================
+Program Output (632): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 2 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getShortestPathToRegion
+Do getNextShorestPathToRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "move": "PA",
+  "message": "See you :-)",
+  "timer": 12102
+}
+> Game score: 327
+> Moving from: CF
+> Blood Points: 2
+> Legal Drac moves: BO MR NA PA TO D1 D2 D3
+> Player 4 made move:
+> +++
+  move: PA
+  message: See you :-)
+  timer: 12102
+> ---
+> End of Round:  26
+> Starting Round:  27
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS.... MVI.... DC?.V.."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
   "message": "I like Dracula",
-  "move": "SZ",
-  "timer": 2706
+  "move": "BS",
+  "timer": 2548
 }
-> Game score: 346
-> Moving from: GA
-> Life Points: 9
-> Player 3 made move:
+> Game score: 326
+> Moving from: CN
+> Life Points: 6
+> Player 0 made move:
 > +++
   message: I like Dracula
-  move: SZ
-  timer: 2706
+  move: BS
+  timer: 2548
 > ---
 --------------------------------------------------------------------------
-> Running player 4... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DDU.V.. GMN.... SVE.... HMA.... MCD.... DIR.... GLV.... SFL.... HAL.... MGA.... DAO.... GSW.... SGO.... HGR.... MBC.... DMS.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DTOT... GLE.... SCF.... HLS.... MGA.... DD2T.V. GMRTD.. SMRD... HAO.... MSZ...."
-==============================================================
-Program Output (90): Can go to = ZU
-Can go to = MI
-Can go to = GO
-Can go to = GE
-Can go to = CF
-Can go to = HI
-
-==============================================================
-Move:  {
-  "move": "GO",
-  "message": "come and catch me :)",
-  "timer": 5553
-}
-> Game score: 346
-> Moving from: MR
-> Blood Points: 4
-> Legal Drac moves: CF GE GO MI ZU HI
-> Player 4 made move:
-> +++
-  move: GO
-  message: come and catch me :)
-  timer: 5553
-> ---
-> End of Round:  7
-> Starting Round:  8
---------------------------------------------------------------------------
-> Running player 0... 
-Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MCD.... DS?.... GLV.... SFL.... HAL.... MGA.... DS?.... GSW.... SGO.... HGR.... MBC.... DS?.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DC?T... GLE.... SCF.... HLS.... MGA.... DD2T.V. GMRTD.. SMRD... HAO.... MSZ.... DC?T..."
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DC?T... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS.... MVI.... DC?.V.. GBS...."
 ==============================================================
 Program Output (0): 
 ==============================================================
 Move:  {
-  "timer": 3721,
-  "move": "GO",
+  "move": "ST",
+  "timer": 2578,
   "message": "I like Dracula"
 }
-> Game score: 345
-> Moving from: MR
-> Life Points: 3
-> Player 0 made move:
+> Game score: 326
+> Moving from: CO
+> Life Points: 7
+> Player 1 made move:
 > +++
-  timer: 3721
-  move: GO
+  move: ST
+  timer: 2578
   message: I like Dracula
 > ---
 --------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS.... MVI.... DC?.V.. GBS.... SSTT..."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "LS",
+  "timer": 716,
+  "message": "I like Dracula"
+}
+> Game score: 326
+> Moving from: LS
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: LS
+  timer: 716
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS.... MVI.... DC?.V.. GBS.... SSTT... HLS...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 4690,
+  "move": "VI",
+  "message": "I like Dracula"
+}
+> Game score: 326
+> Moving from: VI
+> Life Points: 9
+> Player 3 made move:
+> +++
+  timer: 4690
+  move: VI
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DMUT... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DGET.M. GSZ.... SVI.... HMA.... MVI.... DCFT.M. GBC.... SBR.... HLS.... MVI.... DHIT... GCN.... SCO.... HLS.... MVI.... DPA.V.. GBS.... SSTT... HLS.... MVI...."
+==============================================================
+Program Output (643): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do getNearestLocation
+Do getRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do checkRegion
+Do decideRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+Do getNextShorestPathToRegion
+-----------------------
+--- The Region = 2 ---
+-----------------------
+Do IsInRegion
+Do checkDraculaRegion
+Do getShortestPathToRegion
+Do getNextShorestPathToRegion
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "timer": 12283,
+  "move": "LE",
+  "message": "See you :-)"
+}
+> Game score: 326
+> Moving from: PA
+> Blood Points: 2
+> Legal Drac moves: BU LE NA D1 D2 D3 D4 D5
+> Player 4 made move:
+> +++
+  timer: 12283
+  move: LE
+  message: See you :-)
+> ---
+> End of Round:  27
+> Starting Round:  28
+--------------------------------------------------------------------------
+> Running player 0... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS.... MVI.... DC?.V.. GBS.... SSTT... HLS.... MVI.... DC?T.M."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "timer": 144,
+  "move": "BS",
+  "message": "I like Dracula"
+}
+> Game score: 325
+> Moving from: BS
+> Life Points: 6
+> Player 0 made move:
+> +++
+  timer: 144
+  move: BS
+  message: I like Dracula
+> ---
+--------------------------------------------------------------------------
+> Running player 1... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS.... MVI.... DC?.V.. GBS.... SSTT... HLS.... MVI.... DC?T.M. GBS...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "FR",
+  "timer": 159
+}
+> Game score: 325
+> Moving from: ST
+> Life Points: 5
+> Player 1 made move:
+> +++
+  message: I like Dracula
+  move: FR
+  timer: 159
+> ---
+--------------------------------------------------------------------------
+> Running player 2... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS.... MVI.... DC?.V.. GBS.... SSTT... HLS.... MVI.... DC?T.M. GBS.... SFR...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "move": "AL",
+  "message": "I like Dracula",
+  "timer": 185
+}
+> Game score: 325
+> Moving from: LS
+> Life Points: 9
+> Player 2 made move:
+> +++
+  move: AL
+  message: I like Dracula
+  timer: 185
+> ---
+--------------------------------------------------------------------------
+> Running player 3... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DC?.V.. GMN.... SVE.... HMA.... MKL.... DS?.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DS?.... GMN.... SVI.... HBA.... MCN.... DC?T... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DC?T.V. GEC.... SAS.... HAL.... MBD.... DC?T... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DC?T... GST.... SIO.... HTO.... MGA.... DS?..M. GZU.... SVA.... HMR.... MBC.... DS?..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DS?.... GMU.... SNP.... HBO.... MKL.... DS?..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DC?T... GVE.... SAS.... HMA.... MCD.... DC?T... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DC?T... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DC?T.M. GSZ.... SVI.... HMA.... MVI.... DC?T.M. GBC.... SBR.... HLS.... MVI.... DC?T... GCN.... SCO.... HLS.... MVI.... DC?.V.. GBS.... SSTT... HLS.... MVI.... DC?T.M. GBS.... SFR.... HAL...."
+==============================================================
+Program Output (0): 
+==============================================================
+Move:  {
+  "message": "I like Dracula",
+  "move": "VI",
+  "timer": 2568
+}
+> Game score: 325
+> Moving from: VI
+> Life Points: 9
+> Player 3 made move:
+> +++
+  message: I like Dracula
+  move: VI
+  timer: 2568
+> ---
+--------------------------------------------------------------------------
+> Running player 4... 
+Running with input: "past_plays": "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DMUT... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DGET.M. GSZ.... SVI.... HMA.... MVI.... DCFT.M. GBC.... SBR.... HLS.... MVI.... DHIT... GCN.... SCO.... HLS.... MVI.... DPA.V.. GBS.... SSTT... HLS.... MVI.... DLET.M. GBS.... SFR.... HAL.... MVI...."
+==============================================================
+Program Output (218): Do decideDraculaMove
+Do predictLocation
+Do getDraculaState
+Do distancefromhunter
+Do goAway
+Do bestPlace
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+Do ConvertToAction
+
+==============================================================
+Move:  {
+  "timer": 10290,
+  "move": "EC",
+  "message": "See you :-)"
+}
+> Game score: 325
+> Moving from: LE
+> Blood Points: 2
+> Legal Drac moves: BU NA EC D1 D2
+> Player 4 made move:
+> +++
+  timer: 10290
+  move: EC
+  message: See you :-)
+> ---
+> End of Round:  28
+> Starting Round:  29
+--------------------------------------------------------------------------
 > End of game: 
 > +++
-  score: 339
-  revealedPastPlays: GED.... SBD.... HPA.... MCD.... DDU.V.. GMN.... SVE.... HMA.... MCD.... DIR.... GLV.... SFL.... HAL.... MGA.... DAO.... GSW.... SGO.... HGR.... MBC.... DMS.... GLO.... SMR.... HCA.... MGA.... DMRT... GEC.... SMRTD.. HAO.... MCD.... DTOT... GLE.... SCF.... HLS.... MGA.... DD2T.V. GMRTD.. SMRD... HAO.... MSZ.... DGOT... GGOTD..
-  messages: ["I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :)","I like Dracula"]
+  score: 324
+  revealedPastPlays: GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SVE.... HMA.... MKL.... DIO.... GLV.... SBR.... HSR.... MSZ.... DD1.... GED.... SPR.... HBO.... MGA.... DTS.... GMN.... SVI.... HBA.... MCN.... DROT... GLV.... SBD.... HSN.... MGA.... DHIT... GLO.... SVE.... HMA.... MKL.... DBIT.V. GEC.... SAS.... HAL.... MBD.... DNPT... GLE.... SIO.... HSR.... MGA.... DD5.... GPA.... SSA.... HBO.... MCN.... DCGT... GST.... SIO.... HTO.... MGA.... DMS..M. GZU.... SVA.... HMR.... MBC.... DTS..M. GMU.... SIO.... HMI.... MGA.... DROT.M. GNU.... STS.... HST.... MKL.... DBI.VM. GLI.... SROT... HPA.... MBD.... DAS.... GMU.... SNP.... HBO.... MKL.... DIO..M. GVE.... SRO.... HMA.... MCD.... DD1.... GFL.... SBIV... HMA.... MKL.... DVAT... GVE.... SAS.... HMA.... MCD.... DSOT... GBD.... SIO.... HMA.... MKL.... DSJT... GZA.... SAS.... HSR.... MSZ.... DZAT... GZATD.. SVE.... HPA.... MZAD... DMUT... GVI.... SVI.... HNA.... MSJT... DSTT... GBD.... SBD.... HBO.... MBE.... DGET.M. GSZ.... SVI.... HMA.... MVI.... DCFT.M. GBC.... SBR.... HLS.... MVI.... DHIT... GCN.... SCO.... HLS.... MVI.... DPA.V.. GBS.... SSTT... HLS.... MVI.... DLET.M. GBS.... SFR.... HAL.... MVI.... DEC....
+  messages: ["I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","come and catch me :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","lucky kids :-O","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","lucky kids :-O","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)","I like Dracula","I like Dracula","I like Dracula","I like Dracula","See you :-)"]
 > ---
 > Game Over
-339
-8
-Final score: 339
-Final round: 8
+324
+29
+Final score: 324
+Final round: 29
