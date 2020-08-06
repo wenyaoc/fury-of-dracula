@@ -15,6 +15,7 @@
 #include "GameView.h"
 #include <time.h>
 #include <string.h>
+#include <stdio.h>
 
 #define AVAILIABLEPLACE 14
 #define SAVELANDPLACELENGTH 20
@@ -162,6 +163,7 @@ void decideDraculaMove(DraculaView dv)
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
 
 		for (int i = 0; i < numReturnedLocs; i++) {
+			printf("Can go to = %s\n", placeIdToAbbrev(places[i]));
 			if (ConvertToAction(dv, currPlace) == places[i])
 				checkplace = true;
 		}
@@ -173,8 +175,12 @@ void decideDraculaMove(DraculaView dv)
 	if (currPlace == NOWHERE || currPlace == UNKNOWN_PLACE || checkplace == false) {
 		int numReturnedLocs = 0;
 		PlaceId* places = DvGetValidMoves(dv, &numReturnedLocs);
-		srand(time(0));
-		currPlace = places[rand() % numReturnedLocs];
+		if (numReturnedLocs == 0)
+			currPlace = TELEPORT;
+		else {
+			srand(time(0));
+			currPlace = places[rand() % numReturnedLocs];
+		}
 		free(places);
 	}
 
@@ -186,7 +192,6 @@ void decideDraculaMove(DraculaView dv)
 PlaceId predictLocation(DraculaView dv) {
 	//printf("Do predictLocation\n");
 	PlaceId currPlace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
-
 	int temp = 0;
 	if (currPlace == NOWHERE)
 		return goAway(dv, SaveLandPlace, SAVELANDPLACELENGTH);
@@ -249,8 +254,7 @@ PlaceId getNearestLocation(DraculaView dv) {
 	return curr[rand() % numcurr];
 }
 
-State getDraculaState(DraculaView dv)
-{
+State getDraculaState(DraculaView dv) {
 	//printf("Do getDraculaState\n");
 	// need to know hunter thinking
 	static int chacingCount = 0;
@@ -342,11 +346,19 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 State distancefromhunter(DraculaView dv, PlaceId place) {
 	//printf("Do distancefromhunter\n");
 	int numReturnLocs = 0;
+	int numOfHunter = 0;
+
 	for (int i = 0; i < HUNTERCOUNT; i++) {
 		DvGetShortestPathTo(dv, i, place, &numReturnLocs);
 		if (numReturnLocs <= 2)
-			return CHACING;
+			numOfHunter++;
 	}
+
+	if (numOfHunter == 1)
+		return CHACING;
+
+	if (numOfHunter >= 2)
+		return OUTFLANK;
 
 	return LOST;
 }
