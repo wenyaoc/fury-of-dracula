@@ -226,11 +226,13 @@ PlaceId getNearestLocation(DraculaView dv) {
 	//PlaceId curr = DvGetPlayerLocation(dv, PLAYER_DRACULA);
 	PlaceId p = NOWHERE;
 	for (int i = 0; i < AVAILIABLEPLACE; i++) {
-		DvGetShortestPathTo(dv, PLAYER_DRACULA, AvailablePlace[i], &numReturnedLocs);
+		PlaceId* list = DvGetShortestPathTo(dv, PLAYER_DRACULA, AvailablePlace[i], &numReturnedLocs);
 		if (minLength == -1 || minLength > numReturnedLocs) {
 			p = AvailablePlace[i];
 			minLength = numReturnedLocs;
 		}
+		if (numReturnedLocs > 0)
+			free(list);
 	}
 
 	int numPP = 0;
@@ -240,18 +242,28 @@ PlaceId getNearestLocation(DraculaView dv) {
 	places = DvWhereCanIGo(dv, &numReturnedLocs);
 
 	for (int i = 0; i < numReturnedLocs && numPP > 0; i++) {
-		if (places[i] == pp[0])
+		if (places[i] == pp[0]) {
 			for (int j = 0; j < numcurr; j++)
-				if (ConvertToAction(dv, places[i]) == curr[j])
-					return pp[0];
+				if (ConvertToAction(dv, places[i]) == curr[j]) {
+					p = pp[0];
+					break;
+				}
+			break;
+		}
 	}
+
+	if (numPP > 0)
+		free(pp);
 
 	srand(time(0));
 
 	if (numcurr == 0)
-		return TELEPORT;
+		p = TELEPORT;
 
-	return curr[rand() % numcurr];
+	if (p == NOWHERE || p == UNKNOWN_PLACE)
+		p = curr[rand() % numcurr];
+
+	return p;
 }
 
 State getDraculaState(DraculaView dv) {
@@ -304,7 +316,7 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 			allplace = DvaddPlace(allplace, &allplacecount, place[j]);
 		}
 	}
-	
+
 	numReturnLocs = 0;
 	int maxLength = 0;
 	bool sameplace = false;
@@ -322,9 +334,13 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 			if (!placeIsReal(nextmove[j]))
 				continue;
 
-			DvGetShortestPathTo(dv, i, nextmove[j], &numReturnLocs);
-			if (numReturnLocs > maxLength)
-			{ hunterPlace[i] = nextmove[j]; maxLength = numReturnLocs; }
+			PlaceId * list = DvGetShortestPathTo(dv, i, nextmove[j], &numReturnLocs);
+			if (numReturnLocs > maxLength) {
+				hunterPlace[i] = nextmove[j]; 
+				maxLength = numReturnLocs;
+			}
+			if (numReturnLocs > 0)
+				free(list);
 
 		}
 		maxLength = 0;
@@ -349,9 +365,11 @@ State distancefromhunter(DraculaView dv, PlaceId place) {
 	int numOfHunter = 0;
 
 	for (int i = 0; i < HUNTERCOUNT; i++) {
-		DvGetShortestPathTo(dv, i, place, &numReturnLocs);
+		PlaceId* list = DvGetShortestPathTo(dv, i, place, &numReturnLocs);
 		if (numReturnLocs <= 2)
 			numOfHunter++;
+		if (numReturnLocs > 0)
+			free(list);
 	}
 
 	if (numOfHunter == 1)
@@ -422,11 +440,16 @@ PlaceId ConvertToAction(DraculaView dv, PlaceId place) {
 			int numReturned = 0;
 			// get the last move in the history
 			if (numReturned > 0) {
-				if (GvGetLastMoves(getGameView(dv), PLAYER_DRACULA, 1, &numReturned, &canFree)[0] == HIDE) {
+				PlaceId* list = GvGetLastMoves(getGameView(dv), PLAYER_DRACULA, 1, &numReturned, &canFree);
+				if (list[0] == HIDE) {
 					// if the last move is HIDE, add DOUBLE_BACK_1 to moves
-					return DOUBLE_BACK_1;
+					place = DOUBLE_BACK_1;
 				}
+				if (canFree)
+					free(list);
 			}
+
+
 		}
 		// add DOUBLE_BACK_# to the history
 		return DOUBLE_BACK_1 + DBnumber - 1;
