@@ -60,7 +60,7 @@ typedef DraculaView View;
 # define decideMove decideDraculaMove
 # define ViewFree DvFree
 
-# define xPastPlays "GED.... SBD.... HPA.... MCD.... DSJ.V.. GMN.... SVI.... HMA.... MCD.... "
+# define xPastPlays "GED.... SBD.... HPA.... MCD.... DCF.V.. GMN.... SVE.... HMA.... MGA.... DHIT... GLV.... SSZ.... HGR.... MCN.... DMRT... GSW.... SZA.... HAL.... MGA.... DGET... GLO.... SMU.... HMA.... MBC.... DSTT... GPL.... SVI.... HBA.... MKL.... DFRT... GEC.... SVE.... HSR.... MSZ.... DCOT.V. GLE.... SFL.... HMA.... MGA.... DHIT.M. GPA.... SRO.... HAL.... MCN.... DD3T.M. GGET... SFL.... HMS.... MBC.... DLIT... GSTT... SST.... HAO.... MBE.... DHAT... GGO.... SZU.... HLS.... MVR.... DBRT.M. GVE.... SGE.... HMA.... MBE.... DPRT.M. GFL.... SMR.... HBO.... MSJ.... DVI.VM. GZU.... SGO.... HSR.... MBE.... DMUT.M. GZU.... SGO.... HSR.... MBE.... DSTT.M. GMI.... SFL.... HPA.... MVR.... DFRT.M. GMR.... SZU.... HNA.... MCN.... DLIT.M. GGO.... SMUT... HBO.... MGA.... DHAT.M. GSTT... SVE.... HCF.... MBC.... DNS..V. GFRT... SVI.... HPA.... MGA.... DEDT... GLIT... SBD.... HMA.... MCD.... DMNT... GBR.... SVI.... HGR.... MKL.... DLVT... GNU.... SZA.... HAL.... MBE.... DSWT... GLI.... SMU.... HMA.... MGA.... DLOT.M. GHA.... SVE.... HPA.... MCN.... DPLT... GNS.... SMI.... HNA.... MGA.... DEC..M. GED.... SZU.... HBO.... MBC.... DAO..M. GED.... SZU.... HBO.... MBC.... DMS..M. GMN.... SFL.... HMA.... MKL.... DD2..M. GLOT... SMI.... HGR.... MSZ.... DNS.... GSW.... SGO.... HAL.... MGA.... DAMT.M. GLV.... SFL.... HMA.... MCN.... DBUT... GMN.... SZU.... HPA.... MGA.... DLET... GED.... SRO.... HNA.... MBC.... DPAT... GED.... SRO.... HNA.... MBC.... DSTT... GMN.... SNP.... HPAT... MBE.... DZUT... GLO.... SFL.... HLET... MSJ.... DMUT.M. GEC.... SSTT... HEC.... MZA.... DVET.M. "
 # define xMsgs { "", "", "", "" }
 
 #else
@@ -71,7 +71,7 @@ typedef HunterView View;
 # define decideMove decideHunterMove
 # define ViewFree HvFree
 
-# define xPastPlays "GED.... SBD.... HPA.... MCD.... DVA.V.. GMN.... SBE.... HMA.... MKL.... DATT... GLV.... SGA.... HGR.... MSZ.... DIO.... GSW.... SKL.... HAL.... MGA.... DTS.... GLO.... SBC.... HBA.... MCN.... DROT... GPL.... SBD.... HSN.... MGA.... DD2.... GEC.... SGA.... HBB.... MCD.... DGOT.V. GLE.... SCN.... HSN.... MKL.... DVET.M. GNA.... SVR.... HSR.... MBD.... DAS.... GCF.... SSA.... HPA.... MKL.... DBIT... GMR.... SBE.... HNA.... MGA.... DNPT.M. GGOT... SSZ.... HPA.... MSZ.... DROT... GMI.... SBD.... HMR.... MVET... DTS.... GVE.... SVE.... HMI.... MAS.... DMS.... GPR.... SVI.... HMR.... MVE.... DBAT... GLI.... SMU.... HMS.... MBD.... DTOT.M. GCO.... SST.... HCG.... MGA.... DMRT.M. GAM.... SMU.... HMS.... MBC.... DGOT.M. GBU.... SMI.... HAL.... MGA.... DTS.... GBO.... SVE.... HGR.... MCN.... DROT... GNA.... SFL.... HMA.... MGA.... DBIT.M. GBB.... SVE.... HBO.... MCD.... DNPT.M. GAO.... SBD.... HCF.... MKL.... DD4..M. GIR.... SSZ.... HMR.... MBE.... DIO..M. GLV.... SJM.... HGE.... MGA.... DBS.... GIR.... SZA.... HMR.... MCN...." 
+# define xPastPlays "" 
 # define xMsgs { "", "", "" }
 
 #endif
