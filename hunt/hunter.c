@@ -97,6 +97,7 @@ const char * decideMinaHarkerMove(HunterView hv);
 PlaceId getMove(HunterView hv, Player player);
 PlaceId getVampire(HunterView hv, Player player, PlaceId place);
 PlaceId getRandomLocation(HunterView hv, PlaceId * places, Player player, int numReturnedLocs);
+PlaceId getCloestLocation(HunterView hv, PlaceId * places, Player player, int numReturnedLocs);
 PlaceId * removeSameLocations(HunterView hv, Player player, PlaceId * places, int * numReturnedLocs);
 PlaceId * removeImpossibleLocations(HunterView hv, Player player, PlaceId * places, PlaceId currPlace, int * numReturnedLocs);
 PlaceId * removeBoat(PlaceId * places, int * numReturnedLocs);
@@ -302,7 +303,7 @@ const char * decideMinaHarkerMove(HunterView hv) {
 				places = removedPlaces;
 				numReturnedLocs = numLocs;
 			}
-			newPlace = getRandomLocation(hv, places, PLAYER_MINA_HARKER, numReturnedLocs);
+			newPlace = getCloestLocation(hv, places, PLAYER_MINA_HARKER, numReturnedLocs);
 			free(places);
 		}
 		newPlace = getVampire(hv, PLAYER_MINA_HARKER, newPlace);
@@ -411,7 +412,7 @@ PlaceId getMove(HunterView hv, Player player) {
 				numLocs = possibleNumLocs;
 			} 
 
-			newPlace = getRandomLocation(hv, places, player, numLocs);
+			newPlace = getCloestLocation(hv, places, player, numLocs);
 			//printf("newplace = %s %d\n\n", placeIdToName(newPlace), i);
 			free (places);
 		}
@@ -498,8 +499,49 @@ PlaceId getRandomLocation(HunterView hv, PlaceId * places, Player player, int nu
 	return newPlace;
 }
 
+PlaceId getCloestLocation(HunterView hv, PlaceId * places, Player player, int numReturnedLocs) {
+	if (numReturnedLocs == 0 || numReturnedLocs == 1)
+		return places[0];
+
+	PlaceId src;
+	if (player == PLAYER_LORD_GODALMING) src = GALWAY;
+	else if (player == PLAYER_DR_SEWARD) src = BERLIN;
+	else if (player == PLAYER_VAN_HELSING) src = CADIZ;
+	else src = CONSTANTA;
+	int * dest = HvGetShortestPathToAll(hv, src);
+
+	int cloest = dest[places[0]];
+	PlaceId cloestPlace;
+	int totalNumber = 1;
+	for (int i = 0; i < numReturnedLocs; i++) {
+		//printf("%s %d\n", placeIdToName(places[i]), dest[places[i]]);
+		if (dest[places[i]] < cloest) {
+			
+			cloest = dest[places[i]];
+			cloestPlace = places[i];
+			totalNumber = 1;
+		}
+		if (dest[places[i]] == cloest)
+			totalNumber++;
+	}
+	if (totalNumber == 1) return cloestPlace;
+	else {
+		int newNum = 0;
+		PlaceId * newPlaces = malloc(totalNumber * sizeof(PlaceId));
+		for (int i = 0; i < numReturnedLocs; i++) {
+			if (dest[places[i]] == cloest) {
+				newPlaces[newNum] = places[i];
+				newNum++;
+			}
+		}
+		//printf("%d\n", newNum);
+		return getRandomLocation(hv, newPlaces, player, newNum);
+	}
+}
+
+
 PlaceId * removeSameLocations(HunterView hv, Player player, PlaceId * places, int * numReturnedLocs) {
-	//printf("hello///////////////\n");
+	//printf("hello///////////////\n")
 	PlaceId * newPlaces = malloc(*numReturnedLocs * sizeof(PlaceId));
 	int num = 0;
 	for(int i = 0; i < *numReturnedLocs; i++) {
