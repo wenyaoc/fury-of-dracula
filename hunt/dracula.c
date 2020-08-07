@@ -8,7 +8,7 @@
 // 2020-07-10	v3.0	Team Dracula <cs2521@cse.unsw.edu.au>
 //
 ////////////////////////////////////////////////////////////////////////
-//#define DEBUG
+
 #include "dracula.h"
 #include "DraculaView.h"
 #include "Game.h"
@@ -16,7 +16,7 @@
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
-
+#define DEBUG
 #define SAVELANDPLACELENGTH 20
 #define PALAND 15
 #define MULAND 12
@@ -39,7 +39,7 @@ PlaceId PAland[] = {
 	TOULOUSE,
 	CLERMONT_FERRAND,
 	HIDE,
-	DOUBLE_BACK_2,
+	TOULOUSE,
 	MARSEILLES,
 	GENEVA,
 	STRASBOURG,
@@ -71,7 +71,7 @@ PlaceId MNland[] = {
 	LONDON,
 	PLYMOUTH,
 	HIDE,
-	DOUBLE_BACK_1,
+	LONDON,
 	ENGLISH_CHANNEL
 };
 //E
@@ -118,31 +118,18 @@ PlaceId BSland[] = {
 	VARNA,
 	HIDE,
 	CONSTANTA,
-	DOUBLE_BACK_2,
+	VARNA,
 	BLACK_SEA
 };
 
-PlaceId SaveLandPlace[] = {
-	GALWAY,
-	DUBLIN,
-	AMSTERDAM,
-	NANTES,
+PlaceId StartLocation[] = {
 	CLERMONT_FERRAND,
-	TOULOUSE,
-	GRANADA,
-	CADIZ,
-	CAGLIARI,
-	ZAGREB,
-	SARAJEVO,
-	VALONA,
-	KLAUSENBURG,
-	CASTLE_DRACULA,
-	ATHENS,
-	BARI,
-	NAPLES,
+	ZURICH,
+	MANCHESTER,
 	GENOA,
-	ROME,
-	MANCHESTER
+	GRANADA,
+	CASTLE_DRACULA,
+	SARAJEVO
 };
 
 typedef struct hunterPlace HunterPlace;
@@ -163,8 +150,8 @@ typedef enum region {
 	MULOOP,					 // Dracula will follow the region
 	MNLOOP,                  // loop the moves
 	TSLOOP,
-	CDLOOP,
 	MALOOP,
+	CDLOOP,
 	BSLOOP,
 	UNKNOWN_LOOP = -1
 }Region;
@@ -173,17 +160,19 @@ static PlaceId predictLocation(DraculaView dv);
 PlaceId getNearestLocation(DraculaView dv);
 PlaceId getShortestPathToRegion(DraculaView dv, Region r);
 PlaceId getNextShorestPathToRegion(DraculaView dv, Region r, PlaceId* place, int num);
-bool IsInRegion(DraculaView dv, Region r, PlaceId place);
-PlaceId getNextLoopLocation(DraculaView dv, Region r, PlaceId* placehunter, int* continueRound, int* loopRound);
+int getNumPathToRegion(DraculaView dv, Region r);
+int getAllShorestPathToRegion(DraculaView dv, Region r, PlaceId* place, int num);
+bool IsDraculaInRegion(DraculaView dv, Region r, PlaceId place, int* loopRound);
+PlaceId getNextLoopLocation(DraculaView dv, Region r, PlaceId* placehunter, int* loopRound);
 PlaceId getLoopLocation(DraculaView dv, Region r, 
 						PlaceId* placehunter, PlaceId* places,
-						int* continueRound, int* loopRound, int maxRound);
+						int* loopRound, int maxRound);
 Region getRegion(DraculaView dv);
 Region decideRegion(DraculaView dv, bool region[7]);
 Region checkRegion(PlaceId* placehunter, PlaceId* Place, Region r, int land);
-Region checkDraculaRegion(PlaceId place, PlaceId* Place, Region r, int land);
+Region checkDraculaRegion(PlaceId place, PlaceId* Place, Region r, int land, int* loopRound);
 State getDraculaState(DraculaView dv);
-PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size);
+PlaceId goAway(DraculaView dv, PlaceId* nextmove, State state);
 State distancefromhunter(DraculaView dv, PlaceId place);
 PlaceId bestPlace(PlaceId* hunterPlace);
 PlaceId* DvaddPlace(PlaceId* place, int* num, PlaceId newPlace);
@@ -231,43 +220,36 @@ void decideDraculaMove(DraculaView dv)
 }
 
 PlaceId predictLocation(DraculaView dv) {
-#ifdef DEBUG
-	printf("Do predictLocation\n");
-#endif
 	PlaceId currPlace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
 	int temp = 0;
 	if (currPlace == NOWHERE)
-		return goAway(dv, SaveLandPlace, SAVELANDPLACELENGTH);
+		return goAway(dv, StartLocation, LOST);
 
 	// How to move -> depend on state
 	State s = getDraculaState(dv);
-	PlaceId* p = NULL;
+#ifdef DEBUG
+	printf("Do predictLocation\n");
+	printf("----------------------\n");
+	printf("--- The State = %d ---\n", s);
+	printf("----------------------\n");
+#endif
 	switch (s) {
 		case LOST:
 			return getNearestLocation(dv);
 		case CHACING:
-			p = DvGetValidMoves(dv, &temp);
-			return goAway(dv, p, temp);
+			return goAway(dv, DvGetValidMoves(dv, &temp), CHACING);
 		case OUTFLANK:
-			p = DvGetValidMoves(dv, &temp);
-			return goAway(dv, p, temp);
+			return goAway(dv, DvGetValidMoves(dv, &temp), OUTFLANK);
 	}
 
 	return currPlace;
 }
 
 PlaceId getNearestLocation(DraculaView dv) {
+	int loopRound = 0;
+	Region r = getRegion(dv);
 #ifdef DEBUG
 	printf("Do getNearestLocation\n");
-#endif
-	static int loopRound = 0;
-	static int continueRound = 0;
-	static Region r = UNKNOWN_LOOP;
-	if (continueRound == 0) {
-		r = getRegion(dv);
-		continueRound = 1;
-	}
-#ifdef DEBUG
 	printf("-----------------------\n");
 	printf("--- The Region = %d ---\n", r);
 	printf("-----------------------\n");
@@ -276,11 +258,17 @@ PlaceId getNearestLocation(DraculaView dv) {
 	int num = 0;
 	for (int i = 0; i < HUNTERCOUNT; i++)
 		placehunter = DvaddPlace(placehunter, &num, DvGetPlayerLocation(dv, i));
-
-	if (IsInRegion(dv, r, DvGetPlayerLocation(dv, PLAYER_DRACULA))) {
-		PlaceId p = getNextLoopLocation(dv, r, placehunter, &continueRound, &loopRound);
-		return p;
+	
+	if (DvGetHealth(dv, PLAYER_DRACULA) <= 14) {
+		while (r == TSLOOP || r == BSLOOP) {
+			r = rand() % 7;
+		}
 	}
+	else if (DvGetHealth(dv, PLAYER_DRACULA) <= 6) r = MULOOP;
+	
+
+	if (IsDraculaInRegion(dv, r, DvGetPlayerLocation(dv, PLAYER_DRACULA), &loopRound))
+		return getNextLoopLocation(dv, r, placehunter, &loopRound);
 
 	return getShortestPathToRegion(dv, r);
 }
@@ -289,7 +277,6 @@ PlaceId getShortestPathToRegion(DraculaView dv, Region r) {
 #ifdef DEBUG
 	printf("Do getShortestPathToRegion\n");
 #endif
-
 	PlaceId p = UNKNOWN_PLACE;
 
 	switch ((int)r) {
@@ -313,11 +300,8 @@ PlaceId getNextShorestPathToRegion(DraculaView dv, Region r, PlaceId* place, int
 	int numReturnedLocs = 0;
 	PlaceId p = UNKNOWN_PLACE;
 	for (int i = 0; i < num; i++) {
-		//printf("Place = %s\n", placeIdToName(place[i]));
 		if (!placeIsReal(place[i]))
 			continue;
-		if (DvGetPlayerLocation(dv, PLAYER_DRACULA) == place[i])
-			return place[i];
 		PlaceId* list = DvGetShortestPathTo(dv, PLAYER_DRACULA, place[i], &numReturnedLocs);
 		if ((minLength == -1 && numReturnedLocs > 0) || (minLength > numReturnedLocs && numReturnedLocs > 0)) {
 			p = list[0];
@@ -329,50 +313,99 @@ PlaceId getNextShorestPathToRegion(DraculaView dv, Region r, PlaceId* place, int
 	return p;
 }
 
-bool IsInRegion(DraculaView dv, Region r, PlaceId place) {
+int getNumPathToRegion(DraculaView dv, Region r) {
 #ifdef DEBUG
-	printf("Do IsInRegion\n");
+	printf("Do getNumPathToRegion\n");
+#endif
+	int locs = 0;
+	switch ((int)r) {
+		case PALOOP: return getAllShorestPathToRegion(dv, r, PAland, PALAND);
+		case MULOOP: return getAllShorestPathToRegion(dv, r, MUland, MULAND);
+		case MNLOOP: return getAllShorestPathToRegion(dv, r, MNland, MNLAND);
+		case TSLOOP: return getAllShorestPathToRegion(dv, r, TSland, TSLAND);
+		case MALOOP: return getAllShorestPathToRegion(dv, r, MAland, MALAND);
+		case CDLOOP: return getAllShorestPathToRegion(dv, r, CDland, CDLAND);
+		case BSLOOP: return getAllShorestPathToRegion(dv, r, BSland, BSLAND);
+	}
+
+	return locs;
+}
+
+int getAllShorestPathToRegion(DraculaView dv, Region r, PlaceId* place, int num) {
+#ifdef DEBUG
+	printf("Do getAllShorestPathToRegion\n");
+#endif
+	int minLength = -1;
+	int numReturnedLocs = 0;
+	for (int i = 0; i < num; i++) {
+		if (!placeIsReal(place[i]))
+			continue;
+		PlaceId* list = DvGetShortestPathTo(dv, PLAYER_DRACULA, place[i], &numReturnedLocs);
+		if ((minLength == -1 && numReturnedLocs > 0) || (minLength > numReturnedLocs && numReturnedLocs > 0))
+			minLength = numReturnedLocs;
+		if (numReturnedLocs > 0)
+			free(list);
+	}
+	return minLength;
+}
+
+bool IsDraculaInRegion(DraculaView dv, Region r, PlaceId place, int* loopRound) {
+#ifdef DEBUG
+	printf("Do IsDraculaInRegion\n");
 #endif
 	switch ((int)r) {
-		case PALOOP: return checkDraculaRegion(place, PAland, r, PALAND) != UNKNOWN_LOOP;
-		case MULOOP: return checkDraculaRegion(place, MUland, r, MULAND) != UNKNOWN_LOOP;
-		case MNLOOP: return checkDraculaRegion(place, MNland, r, MNLAND) != UNKNOWN_LOOP;
-		case TSLOOP: return checkDraculaRegion(place, TSland, r, TSLAND) != UNKNOWN_LOOP;
-		case MALOOP: return checkDraculaRegion(place, MAland, r, MALAND) != UNKNOWN_LOOP;
-		case CDLOOP: return checkDraculaRegion(place, CDland, r, CDLAND) != UNKNOWN_LOOP;
-		case BSLOOP: return checkDraculaRegion(place, BSland, r, BSLAND) != UNKNOWN_LOOP;
+		case PALOOP: return checkDraculaRegion(place, PAland, r, PALAND, loopRound) != UNKNOWN_LOOP;
+		case MULOOP: return checkDraculaRegion(place, MUland, r, MULAND, loopRound) != UNKNOWN_LOOP;
+		case MNLOOP: return checkDraculaRegion(place, MNland, r, MNLAND, loopRound) != UNKNOWN_LOOP;
+		case TSLOOP: return checkDraculaRegion(place, TSland, r, TSLAND, loopRound) != UNKNOWN_LOOP;
+		case MALOOP: return checkDraculaRegion(place, MAland, r, MALAND, loopRound) != UNKNOWN_LOOP;
+		case CDLOOP: return checkDraculaRegion(place, CDland, r, CDLAND, loopRound) != UNKNOWN_LOOP;
+		case BSLOOP: return checkDraculaRegion(place, BSland, r, BSLAND, loopRound) != UNKNOWN_LOOP;
 	}
 	return false;
 }
 
-PlaceId getNextLoopLocation(DraculaView dv, Region r, PlaceId* placehunter, int* continueRound, int* loopRound) {
+bool IsHunterInRegion(DraculaView dv, Region r, PlaceId* place) {
+#ifdef DEBUG
+	printf("Do IsHunterInRegion\n");
+#endif
+	switch ((int)r) {
+		case PALOOP: return checkRegion(place, PAland, r, PALAND) == UNKNOWN_LOOP;
+		case MULOOP: return checkRegion(place, MUland, r, MULAND) == UNKNOWN_LOOP;
+		case MNLOOP: return checkRegion(place, MNland, r, MNLAND) == UNKNOWN_LOOP;
+		case TSLOOP: return checkRegion(place, TSland, r, TSLAND) == UNKNOWN_LOOP;
+		case MALOOP: return checkRegion(place, MAland, r, MALAND) == UNKNOWN_LOOP;
+		case CDLOOP: return checkRegion(place, CDland, r, CDLAND) == UNKNOWN_LOOP;
+		case BSLOOP: return checkRegion(place, BSland, r, BSLAND) == UNKNOWN_LOOP;
+	}
+	return false;
+}
+
+PlaceId getNextLoopLocation(DraculaView dv, Region r, PlaceId* placehunter, int* loopRound) {
 #ifdef DEBUG
 	printf("Do getNextLoopLocation\n");
 #endif
 	switch ((int)r) {
-		case PALOOP: return getLoopLocation(dv, r, placehunter, PAland, continueRound, loopRound, PALAND);
-		case MULOOP: return getLoopLocation(dv, r, placehunter, MUland, continueRound, loopRound, MULAND);
-		case MNLOOP: return getLoopLocation(dv, r, placehunter, MNland, continueRound, loopRound, MNLAND);
-		case TSLOOP: return getLoopLocation(dv, r, placehunter, TSland, continueRound, loopRound, TSLAND);
-		case MALOOP: return getLoopLocation(dv, r, placehunter, MAland, continueRound, loopRound, MALAND);
-		case CDLOOP: return getLoopLocation(dv, r, placehunter, CDland, continueRound, loopRound, CDLAND);
-		case BSLOOP: return getLoopLocation(dv, r, placehunter, BSland, continueRound, loopRound, BSLAND);
+		case PALOOP: return getLoopLocation(dv, r, placehunter, PAland, loopRound, PALAND);
+		case MULOOP: return getLoopLocation(dv, r, placehunter, MUland, loopRound, MULAND);
+		case MNLOOP: return getLoopLocation(dv, r, placehunter, MNland, loopRound, MNLAND);
+		case TSLOOP: return getLoopLocation(dv, r, placehunter, TSland, loopRound, TSLAND);
+		case MALOOP: return getLoopLocation(dv, r, placehunter, MAland, loopRound, MALAND);
+		case CDLOOP: return getLoopLocation(dv, r, placehunter, CDland, loopRound, CDLAND);
+		case BSLOOP: return getLoopLocation(dv, r, placehunter, BSland, loopRound, BSLAND);
 	}
 	return UNKNOWN_PLACE;
 }
 
 PlaceId getLoopLocation(DraculaView dv, Region r, 
 						PlaceId* placehunter, PlaceId* places,
-						int* continueRound, int* loopRound, int maxRound) {
+						int* loopRound, int maxRound) {
 #ifdef DEBUG
 	printf("Do getLoopLocation\n");
 #endif
-	if (checkRegion(placehunter, places, r, maxRound) == UNKNOWN_LOOP && getDraculaState(dv) != LOST) {
-		*continueRound = 0;
+	if (checkRegion(placehunter, places, r, maxRound) == UNKNOWN_LOOP && getDraculaState(dv) != LOST)
 		return getNearestLocation(dv);
-	}
-
-	if (*loopRound <= maxRound)
+	if (*loopRound < maxRound)
 		return places[*loopRound++];
 
 	*loopRound = 0;
@@ -384,129 +417,71 @@ Region getRegion(DraculaView dv) {
 	printf("Do getRegion\n");
 #endif
 	PlaceId* placehunter = NULL;
-	Region r = UNKNOWN_LOOP;
 	int num = 0;
 	for (int i = 0; i < HUNTERCOUNT; i++)
 		placehunter = DvaddPlace(placehunter, &num, DvGetPlayerLocation(dv, i));
 
 	bool regioncheck[7] = { false,false,false,false,false,false,false };
 
-	r = checkRegion(placehunter, PAland, PALOOP, PALAND);
-	if (r == PALOOP) {
-		regioncheck[0] = true;
+	for (int i = 0; i < 7; i++) {
+		if (IsHunterInRegion(dv, i, placehunter) || getDraculaState(dv) == LOST)
+			regioncheck[i] = true;
 	}
-	r = checkRegion(placehunter, MUland, MULOOP, MULAND);
-	if (r == MULOOP) {
-		regioncheck[1] = true;
-	}
-	r = checkRegion(placehunter, MNland, MNLOOP, MNLAND);
-	if (r == MNLOOP) {
-		regioncheck[2] = true;
-	}
-	r = checkRegion(placehunter, TSland, TSLOOP, TSLAND);
-	if (r == TSLOOP) {
-		regioncheck[3] = true;
-	}
-	r = checkRegion(placehunter, MAland, MALOOP, MALAND);
-	if (r == MALOOP) {
-		regioncheck[4] = true;
-	}
-	r = checkRegion(placehunter, CDland, CDLOOP, CDLAND);
-	if (r == CDLOOP) {
-		regioncheck[5] = true;
-	}
-	r = checkRegion(placehunter, BSland, BSLOOP, BSLAND);
-	if (r == BSLOOP) {
-		regioncheck[6] = true;
-	}
+
 	free(placehunter);
 	return decideRegion(dv, regioncheck);
 }
 
 Region decideRegion(DraculaView dv, bool region[7]) {
+	int shortestdistance[7] = { -1,-1,-1,-1,-1,-1,-1 };
+	for (int i = 0; i < 7; i++)	
+		if (region[i]) 
+			shortestdistance[i] = getNumPathToRegion(dv, i);
+
 #ifdef DEBUG
 	printf("Do decideRegion\n");
+	for (int i = 0; i < 7; i++) {
+		printf("%d  ", shortestdistance[i]);
+	}
+	printf("\n");
 #endif
-	int shortestdistance[7] = { -1,-1,-1,-1,-1,-1,-1 };
-	if (region[0]) {
 
-		PlaceId p = getNextShorestPathToRegion(dv, PALOOP, PAland, PALAND);
-		PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &shortestdistance[0]);
-		if (shortestdistance[0] > 0)
-			free(pp);
-	}
-	if (region[1]) {
-	
-		PlaceId p = getNextShorestPathToRegion(dv, PALOOP, MUland, MULAND);
-		PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &shortestdistance[1]);
-		if (shortestdistance[1] > 0)
-			free(pp);
-	}
-	if (region[2]) {
-	
-		PlaceId p = getNextShorestPathToRegion(dv, PALOOP, MNland, MNLAND);
-		PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &shortestdistance[2]);
-		if (shortestdistance[2] > 0)
-			free(pp);
-	}
-	if (region[3]) {
-		
-		PlaceId p = getNextShorestPathToRegion(dv, PALOOP, TSland, TSLAND);
-		PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &shortestdistance[3]);
-		if (shortestdistance[3] > 0)
-			free(pp);
-	}
-	if (region[4]) {
-		
-		PlaceId p = getNextShorestPathToRegion(dv, PALOOP, MAland, MALAND);
-		PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &shortestdistance[4]);
-		if (shortestdistance[4] > 0)
-			free(pp);
-	}
-	if (region[5]) {
-		
-		PlaceId p = getNextShorestPathToRegion(dv, PALOOP, CDland, CDLAND);
-		PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &shortestdistance[5]);
-		if (shortestdistance[5] > 0)
-			free(pp);
-	}
-	if (region[6]) {
-		
-		PlaceId p = getNextShorestPathToRegion(dv, PALOOP, BSland, BSLAND);
-		PlaceId* pp = DvGetShortestPathTo(dv, PLAYER_DRACULA, p, &shortestdistance[6]);
-		if (shortestdistance[6] > 0)
-			free(pp);
-	}
 
-	int min = 100;
-	Region r = UNKNOWN_LOOP;
+	int temp = 0;
 	for (int i = 0; i < 7; i++)
-		if (min > shortestdistance[i] && shortestdistance[i] != -1) {
-			min = shortestdistance[i];
-			r = i;
+		if (IsDraculaInRegion(dv, i, DvGetPlayerLocation(dv, PLAYER_DRACULA), &temp) &&
+			getDraculaState(dv) == LOST)
+			return i;
+
+	for (int i = 0; i < 7; i++)
+		if (shortestdistance[i] != -1) {
+			return i;
 		}
-	return r;
+
+	return UNKNOWN_LOOP;
 }
 
 Region checkRegion(PlaceId* placehunter, PlaceId* Place, Region r, int land) {
 #ifdef DEBUG
 	printf("Do checkRegion\n");
 #endif
-	for (int i = 0; i < land; i++) {
-		for (int j = 0; j < HUNTERCOUNT; j++)
-			if (placehunter[j] == Place[i]) {
+	for (int i = 0; i < HUNTERCOUNT; i++) {
+		for (int j = 0; j < land; j++) {
+			if (placehunter[i] == Place[j]) {
 				return UNKNOWN_LOOP;
 			}
+		}
 	}
 	return r;
 }
 
-Region checkDraculaRegion(PlaceId place, PlaceId* Place, Region r, int land) {
+Region checkDraculaRegion(PlaceId place, PlaceId* Place, Region r, int land, int* loopRound) {
 #ifdef DEBUG
 	printf("Do checkDraculaRegion\n");
 #endif
 	for (int i = 0; i < land; i++) {
 		if (place == Place[i]) {
+			*loopRound = i + 1;
 			return r;
 		}
 	}
@@ -518,40 +493,66 @@ State getDraculaState(DraculaView dv) {
 	printf("Do getDraculaState\n");
 #endif
 	// need to know hunter thinking
-	static int chacingCount = 0;
-	static int unChacingCount = 0;
-
 	int numReturnedLocs = 0;
-	DvGetTrapLocations(dv, &numReturnedLocs);
+	PlaceId *p = DvGetTrapLocations(dv, &numReturnedLocs);
+	if (numReturnedLocs > 0)
+		free(p);
+
+	bool canFree = false;
+	int trapsNums = 0;
+	p = GvGetLastLocations(getGameView(dv), PLAYER_DRACULA, 5, &trapsNums, &canFree);
+
+	int temp = trapsNums;
+	for (int i = 0; i < temp; i++)
+		if (placeIdToType(p[i]) == SEA)
+			trapsNums--;
+
+	if (canFree)
+		free(p);
 
 	// Detect Hunter Finding Dracula
-	if (numReturnedLocs <= 5) {
+	if (numReturnedLocs < trapsNums) {
 		// Detect Hunter Chacing Dracula
 		State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA));
-		if (s == CHACING) {
-			chacingCount++;
+		if (s == CHACING)
 			return CHACING;
-		}
-		if (unChacingCount >= 2) {
-			chacingCount = unChacingCount = 0;
-			return LOST;
-		}
-		if (s == LOST && chacingCount >= 2) {
-			unChacingCount++;
-			return CHACING;
-		}
 		// Detect Hunter Outflack Dracula
-		if (chacingCount >= 4)
+		if (s == OUTFLANK)
 			return OUTFLANK;
 	}
 	
 	return LOST;
 }
 
-PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
+PlaceId goAway(DraculaView dv, PlaceId* nextmove, State state) {
 #ifdef DEBUG
 	printf("Do goAway\n");
 #endif
+
+	PlaceId* placehunter = NULL;
+	int num = 0;
+	for (int i = 0; i < HUNTERCOUNT; i++)
+		placehunter = DvaddPlace(placehunter, &num, DvGetPlayerLocation(dv, i));
+
+	// Decide The Starting Land
+	if (DvGetPlayerLocation(dv, PLAYER_DRACULA) == NOWHERE) {
+
+		bool regioncheck[7] = { false,false,false,false,false,false,false };
+		for (int i = 0; i < 7; i++) {
+			if (!IsHunterInRegion(dv, i, placehunter)) {
+				regioncheck[i] = true;
+			}
+		}
+
+		for (int i = 0; i < 7; i++)
+			if (regioncheck[i])
+				return nextmove[i];
+
+		srand(time(0));
+		return MUland[rand() % MULAND];
+	}
+
+	// Go Away From Hunter
 	PlaceId* allplace = NULL;
 	int numReturnLocs = 0;
 	int allplacecount = 0;
@@ -569,37 +570,53 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 			free(place);
 	}
 
+
+	int currCount = 0;
+	PlaceId* currPlace = NULL;
+
+	// If Outflank dracula , dracula can decide moving to sea
+	if (DvGetHealth(dv, PLAYER_DRACULA) <= 4 && state != OUTFLANK)
+		currPlace = DvWhereCanIGoByType(dv, true, false, &currCount);
+	else
+		currPlace = DvWhereCanIGo(dv, &currCount);
+
+	int canGoNum = 0;
+	PlaceId * canGo = NULL;
 	numReturnLocs = 0;
 	int maxLength = 0;
 	bool sameplace = false;
 	PlaceId hunterPlace[HUNTERCOUNT];
 	for (int i = 0; i < HUNTERCOUNT; i++)
 		hunterPlace[i] = UNKNOWN_PLACE;
-	for (int i = 0; i < HUNTERCOUNT; i++) {
-		for (int j = 0; j < size; j++) {
-			sameplace = false;
-			for (int k = 0; k < allplacecount; k++)
-				if (nextmove[j] == allplace[k])
-					sameplace = true;
-			if (sameplace) continue;
 
-			if (!placeIsReal(nextmove[j]))
-				continue;
+	for (int j = 0; j < currCount; j++) {
+		sameplace = false;
+		for (int k = 0; k < allplacecount; k++)
+			if (currPlace[j] == allplace[k])
+				sameplace = true;
+		if (sameplace) continue;
 
-			PlaceId * list = DvGetShortestPathTo(dv, i, nextmove[j], &numReturnLocs);
-			if (numReturnLocs > maxLength && numReturnLocs > 0) {
-				hunterPlace[i] = nextmove[j]; 
-				maxLength = numReturnLocs;
-			}
-			if (numReturnLocs > 0)
-				free(list);
+		if (!placeIsReal(currPlace[j]))
+			continue;
 
-		}
-		maxLength = 0;
+		canGo = DvaddPlace(canGo, &canGoNum, currPlace[j]);
 	}
 
 	if (allplace != NULL)
 		free(allplace);
+
+	for (int i = 0; i < HUNTERCOUNT; i++) {
+		for (int j = 0; j < canGoNum; j++) {
+			PlaceId* list = DvGetShortestPathTo(dv, i, canGo[j], &numReturnLocs);
+			if (numReturnLocs > maxLength && numReturnLocs > 0) {
+				hunterPlace[i] = canGo[j];
+				maxLength = numReturnLocs;
+			}
+			if (numReturnLocs > 0)
+				free(list);
+		}
+		maxLength = 0;
+	}
 
 	PlaceId p = bestPlace(hunterPlace);
 	if (placeIsReal(p))
@@ -613,7 +630,6 @@ PlaceId goAway(DraculaView dv, PlaceId* nextmove, int size) {
 
 	p = pp[rand() % locs];
 	free(pp);
-
 	return p;
 }
 
@@ -626,7 +642,7 @@ State distancefromhunter(DraculaView dv, PlaceId place) {
 
 	for (int i = 0; i < HUNTERCOUNT; i++) {
 		PlaceId* list = DvGetShortestPathTo(dv, i, place, &numReturnLocs);
-		if (numReturnLocs <= 2)
+		if (numReturnLocs < 2)
 			numOfHunter++;
 		if (numReturnLocs > 0)
 			free(list);
