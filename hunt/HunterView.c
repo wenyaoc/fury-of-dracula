@@ -349,7 +349,49 @@ PlaceId *HvGetShortestPathWithoutBoatTo(HunterView hv, Player hunter, PlaceId de
 }
 
 
+int * HvGetShortestPathToAll(HunterView hv, PlaceId src) {
+	int w;
+	//printf("%s %s\n", placeIdToName(src), placeIdToName(dest));
+	// initialise values
 
+	int * dist = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+	int * pred = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+	for (int i = 0; i < MAX_REAL_PLACE + 1; i++) {
+		dist[i] = INT_MAX;  //infinity
+		pred[i] = -1;
+	}
+
+	Map m = MapNew(); // creat a map
+	ConnList connection;
+	
+	// bfs to the map
+	Queue q = newQueue();
+	dist[src] = 0;
+	pred[src] = src;
+	QueueJoin(q, src);
+	int v;
+	while (!QueueIsEmpty(q)) {
+		w = QueueLeave(q);
+
+		connection = MapGetConnections(m, w);
+		ConnList curr = connection;
+		
+		while (curr != NULL) {
+			v = curr->p;
+			//printf("%s\n", placeIdToName(reachable[i]));
+			if (w != v && pred[v] == -1 ) {
+				pred[v] = w;
+				dist[v] = dist[w] + 1;
+				QueueJoin(q, v);
+			}
+			curr = curr->next;
+		}
+	}
+	dropQueue(q);
+	
+	free (pred);
+	return dist;
+}
 
 
 /////////////////////////////////////////////////////////////////////////
