@@ -17,7 +17,6 @@
 #include <string.h>
 #include <stdio.h>
 //#define DEBUG
-#define SAVELANDPLACELENGTH 20
 #define PALAND 15
 #define MULAND 12
 #define MNLAND 10
