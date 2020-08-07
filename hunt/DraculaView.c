@@ -459,3 +459,70 @@ PlaceId* DvGetShortestPathTo(DraculaView dv, Player hunter, PlaceId dest, int* p
 	}
 	return path;
 }
+
+PlaceId* DvGetShortestPathWithoutBoatTo(DraculaView dv, Player hunter, PlaceId dest, int* pathLength) {
+	PlaceId src = DvGetPlayerLocation(dv, hunter);
+
+	PlaceId* path = NULL;
+	*pathLength = 0;
+	if (src == dest) // if the hunter is at that location
+		return path;
+
+	int w;
+
+	// initialise values
+	dv->path[hunter].src = src;
+	Round round = DvGetRound(dv);
+
+	if (GvGetPlayer(dv->gv) > hunter)
+		round++;
+	int* dist = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+	int* pred = malloc((MAX_REAL_PLACE + 1) * sizeof(int));
+	*pathLength = 0;
+	for (int i = 0; i < MAX_REAL_PLACE + 1; i++) {
+		dist[i] = INT_MAX;  //infinity
+		pred[i] = -1;
+	}
+	// bfs to the map
+	Queue q = newQueue();
+	dist[src] = 0;
+	pred[src] = src;
+	QueueJoin(q, src);
+	int v;
+	while (!QueueIsEmpty(q)) {
+		w = QueueLeave(q);
+		int numReturnedLocs;
+
+		PlaceId* reachable = GvGetReachableByType(dv->gv, hunter,
+			round + dist[w],
+			w, true, true, false, &numReturnedLocs);
+
+		for (int i = 0; i < numReturnedLocs; i++) {
+			v = reachable[i];
+
+			if (w != v && pred[v] == -1) {
+				pred[v] = w;
+				dist[v] = dist[w] + 1;
+				QueueJoin(q, v);
+			}
+		}
+
+		if (numReturnedLocs > 0)
+			free(reachable);
+
+	}
+	dropQueue(q);
+
+	// store the paths into array
+	*pathLength = dist[dest];
+	path = malloc((*pathLength) * sizeof(PlaceId));
+	w = dest;
+	path[*pathLength - 1] = dest;
+	for (int i = *pathLength - 2; i >= 0; i--) {
+		path[i] = pred[w];
+		w = pred[w];
+	}
+	free(dist);
+	free(pred);
+	return path;
+}
