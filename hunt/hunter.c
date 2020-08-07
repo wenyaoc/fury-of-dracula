@@ -1091,16 +1091,17 @@ PlaceId findDracFromCastle(HunterView hv, Player player, PlaceId knownDraculaLoc
 		int centerPlace;
 		if (currRound - knownDraculaRound < 7) {
 			if (player == PLAYER_LORD_GODALMING) centerPlace = STRASBOURG;
-			else if (player == PLAYER_DR_SEWARD) centerPlace = SARAJEVO;
+			else if (player == PLAYER_DR_SEWARD) centerPlace = SOFI;
 			else if (player == PLAYER_VAN_HELSING) centerPlace = MILAN;
-			else centerPlace = GALATZ;
+			else centerPlace = CASTLE_DRACULA;
 		} else {
 			if (player == PLAYER_LORD_GODALMING) centerPlace = STRASBOURG;
 			else if (player == PLAYER_DR_SEWARD) centerPlace = SARAJEVO;
 			else if (player == PLAYER_VAN_HELSING) centerPlace = SARAGOSSA;
-			else centerPlace = GALATZ;
+			else centerPlace = CASTLE_DRACULA;
 		}
 		int dist = 2;
+		if (player == 3) dist = 1;
 		return searchingAround(hv, player, centerPlace, dist);
 	} else {
 		if(numSeaMove >= 3) {
@@ -1182,8 +1183,8 @@ PlaceId findDracFromMiddleEurope(HunterView hv, Player player, PlaceId knownDrac
 		if (currRound - knownDraculaRound < 7) {
 			if (player == PLAYER_LORD_GODALMING) centerPlace = HAMBURG;
 			else if (player == PLAYER_DR_SEWARD) centerPlace = VENICE;
-			else if (player == PLAYER_VAN_HELSING) centerPlace = MADRID;
-			else centerPlace = VIENNA;
+			else if (player == PLAYER_VAN_HELSING) centerPlace = LISBON;
+			else centerPlace = KLAUSENBURG;
 		} else {
 			if (player == PLAYER_LORD_GODALMING) centerPlace = BUCHAREST;
 			else if (player == PLAYER_DR_SEWARD) centerPlace = ROME;
