@@ -16,7 +16,7 @@
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
-#define DEBUG
+//#define DEBUG
 #define SAVELANDPLACELENGTH 20
 #define PALAND 15
 #define MULAND 12
