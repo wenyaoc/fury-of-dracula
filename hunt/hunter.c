@@ -538,8 +538,12 @@ PlaceId getCloestLocation(HunterView hv, PlaceId * places, Player player, int nu
 			src = CADIZ;
 	}
 	else {
-		if (inCountry(Castle, HvGetPlayerLocation(hv, player), 17)) {
-			src = CASTLE_DRACULA;
+		PlaceId currPlace = HvGetPlayerLocation(hv, player);
+		if (inCountry(Castle,currPlace, 17)) {
+			if (currPlace == ZAGREB || currPlace == SZEGED)
+				src = BLACK_SEA;
+			else 
+				src = CASTLE_DRACULA;
 		} else 
 			src = BLACK_SEA;
 	}
@@ -549,7 +553,7 @@ PlaceId getCloestLocation(HunterView hv, PlaceId * places, Player player, int nu
 	PlaceId cloestPlace;
 	int totalNumber = 1;
 	for (int i = 0; i < numReturnedLocs; i++) {
-		printf("%s %d\n", placeIdToName(places[i]), dest[places[i]]);
+		//printf("%s %d\n", placeIdToName(places[i]), dest[places[i]]);
 		if (dest[places[i]] < cloest) {
 			
 			cloest = dest[places[i]];
@@ -1030,8 +1034,20 @@ PlaceId findDracFromItaly(HunterView hv, Player player, PlaceId knownDraculaLoca
 		else centerPlace = SZEGED;
 		int dist = 2;
 		return searchingAround(hv, player, centerPlace, dist);
-	} else 
-		return NOWHERE;
+	} else  {
+		if (numSeaMove == 2){
+		
+			if (player == PLAYER_DR_SEWARD) return searchingAround(hv, player, VALONA, 1);
+			else if (player == PLAYER_VAN_HELSING) {
+				if (countryHasOtherHunter(hv, player, Spanish, 8)) return searchingAround(hv, player, MADRID, 1);
+				else return searchingAround(hv, player, NAPLES, 1);
+			} else if (player == PLAYER_LORD_GODALMING) {
+				if (countryHasOtherHunter(hv, player, Castle, 17)) return searchingAround(hv, player, ZAGREB, 1);
+				return searchingAround(hv, player, VALONA, 1);
+			}
+		}
+	}
+	return NOWHERE;
 }
 
 
@@ -1129,7 +1145,7 @@ PlaceId findDracFromCastle(HunterView hv, Player player, PlaceId knownDraculaLoc
 		if (player == 2 || player == 3) dist = 1;
 		return searchingAround(hv, player, centerPlace, dist);
 	} else {
-		printf("numSea = %d\n", numSeaMove);
+		//printf("numSea = %d\n", numSeaMove);
 		if(numSeaMove == 3 || numSeaMove == 4) {
 			if(currPlace == TYRRHENIAN_SEA) {
 				if (player == 0 || player == 1) return ROME;
@@ -1154,7 +1170,7 @@ PlaceId findDracFromCastle(HunterView hv, Player player, PlaceId knownDraculaLoc
 					//printf("hello\n");
 					return searchingAround(hv, player, VALONA, 1);
 				}
-			} else if (knownDraculaLocation == SOFIA || knownDraculaLocation == BUCHAREST || knownDraculaLocation == GALATZ) {
+			} else {// if (knownDraculaLocation == SOFIA || knownDraculaLocation == BUCHAREST || knownDraculaLocation == GALATZ) {
 				if (!placeHasOtherHunter(hv, VALONA) && !placeHasOtherHunter(hv, ATHENS) && !placeHasOtherHunter(hv, SALONICA)) {
 					if (player == PLAYER_DR_SEWARD) return searchingAround(hv, player, VALONA, 1);
 					else if (player == PLAYER_VAN_HELSING) {
