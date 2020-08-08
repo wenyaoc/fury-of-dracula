@@ -1288,6 +1288,7 @@ PlaceId findDracFromMiddleEurope(HunterView hv, Player player, PlaceId knownDrac
 			else centerPlace = CASTLE_DRACULA;
 		}
 		int dist = 1;
+		if (player == PLAYER_DR_SEWARD) dist = 2;
 		return searchingAround(hv, player, centerPlace, dist);
 	} else {
 		// printf("%d\n", numSeaMove);
