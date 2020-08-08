@@ -298,7 +298,11 @@ const char * decideMinaHarkerMove(HunterView hv) {
 	if (newPlace == NOWHERE) {
 		int pathLength;
 		PlaceId * shortestPath = HvGetShortestPathTo(hv, PLAYER_MINA_HARKER, CASTLE_DRACULA, &pathLength);
-		if (pathLength > 2){
+		//for(int i = 0; i < pathLength; i++) {
+		//	printf("->%s\n", placeIdToName(shortestPath[i]));
+		//}	
+		//printf("\n");
+		if (pathLength > 0){
 			newPlace = shortestPath[0];
 			free(shortestPath);
 		} else {
@@ -455,13 +459,13 @@ PlaceId getMove(HunterView hv, Player player) {
 			free(DraculaMoves);
 		// if the player is Mina Harker, we need to consideration related the path length
 		// return the predict dracula place directly for further decision
-		if (player == PLAYER_MINA_HARKER)
-			return newPlace;
+		//if (player == PLAYER_MINA_HARKER)
+		//	return newPlace;
 
 		int pathLength;
 		PlaceId *shortestPath = HvGetShortestPathTo(hv, player, newPlace, &pathLength);
 		//for(int i = 0; i < pathLength; i++) {
-		//	printf("%s\n", placeIdToName(shortestPath[i]));
+		//	printf("->%s\n", placeIdToName(shortestPath[i]));
 		//}	
 		//printf("\n");
 		if (pathLength > 0) {
