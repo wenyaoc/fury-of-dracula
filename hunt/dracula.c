@@ -842,6 +842,7 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 	else
 		currPlace = DvWhereCanIGo(dv, &currCount);
 
+	*canGoNum = 0;
 	PlaceId* canGo = NULL;
 	bool sameplace = false;
 
@@ -876,13 +877,7 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 		canGo = DvaddPlace(canGo, canGoNum, currPlace[j]);
 	}
 
-#ifdef DEBUG
-	for (int i = 0; i < *canGoNum; i++) {
-		printf("Can Go without their next Availible place =  %s\n", placeIdToAbbrev(canGo[i]));
-	}
-#endif
-
-	if (canGoNum > 0) {
+	if (*canGoNum > 0) {
 		if (allplacecount > 0)
 			free(allplace);
 		if (canNotallplacecount > 0)
@@ -907,15 +902,17 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 		canGo = DvaddPlace(canGo, canGoNum, currPlace[j]);
 	}
 
+	PlaceId* hunterplace = NULL;
+	canNotallplacecount = 0;
 	// away from hunter -> dont go the hunter place
 	for (int i = 0; i < HUNTERCOUNT; i++) {
-		canNotallplace = DvaddPlace(canNotallplace, &canNotallplacecount, DvGetPlayerLocation(dv, i));
+		hunterplace = DvaddPlace(hunterplace, &canNotallplacecount, DvGetPlayerLocation(dv, i));
 	}
 
 	for (int j = 0; j < currCount; j++) {
 		sameplace = false;
 		for (int k = 0; k < canNotallplacecount; k++)
-			if (currPlace[j] == canNotallplace[k] || currPlace[j] == draculaplace)
+			if (currPlace[j] == hunterplace[k] || currPlace[j] == draculaplace)
 				sameplace = true;
 		if (sameplace) continue;
 
@@ -929,20 +926,16 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 		free(currPlace);
 
 	if (canNotallplacecount > 0)
-		free(canNotallplace);
+		free(hunterplace);
 
 	if (allplace != NULL)
 		free(allplace);
 
-	if (canGoNum > 0)
+	if (*canGoNum > 0)
 		return canGo;
 
-#ifdef DEBUG
-	for (int i = 0; i < *canGoNum; i++) {
-		printf("Can Go with their next place =  %s\n", placeIdToAbbrev(canGo[i]));
-	}
-#endif
-	return canGo;
+	int temp = 0;
+	return DvWhereCanIGo(dv, &temp);
 }
 
 PlaceId cancelChacing(DraculaView dv, PlaceId* canGo, State state, int canGoNum) {
