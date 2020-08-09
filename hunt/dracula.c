@@ -474,8 +474,6 @@ PlaceId getLoopLocation(DraculaView dv, Region r,
 #ifdef DEBUG
 	printf("Do getLoopLocation\n");
 #endif
-	if (checkRegion(dv, placehunter, places, r, maxRound) == UNKNOWN_LOOP && getDraculaState(dv) != LOST)
-		return getNearestLocation(dv);
 	if (*loopRound < maxRound)
 		return places[*loopRound++];
 
@@ -552,13 +550,17 @@ Region decideRegion(DraculaView dv, bool region[7]) {
 	for (int i = 0; i < HUNTERCOUNT; i++)
 		placehunter = DvaddPlace(placehunter, &num, DvGetPlayerLocation(dv, i));
 
-	int temp = 0;
 	State s = getDraculaState(dv);
 	if (s == LOST) {
+		Region r = 0;
+		// Decide the shortest path to the region
+		int minLength = 100;
 		for (int i = 0; i < 7; i++)
-			if (IsDraculaInRegion(dv, i, DvGetPlayerLocation(dv, PLAYER_DRACULA), &temp) &&
-				!IsHunterInRegion(dv, i, placehunter))
-				return i;
+			if (minLength > shortestdistance[i] && shortestdistance[i] != -1) {
+				minLength = shortestdistance[i];
+				r = i;
+			}
+		return r;
 	}
 
 	if (s == CHACING || s == HIDDEN) {
@@ -687,7 +689,7 @@ State getDraculaState(DraculaView dv) {
 	if (canFree)
 		free(p);
 
-	State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA), 2);
+	State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA), 1);
 
 	// Detect Hunter Finding Dracula
 	if (numReturnedLocs < trapsNums) {
@@ -777,6 +779,7 @@ State distancefromhunter(DraculaView dv, PlaceId place, int locsNums) {
 	// If in land, how far away from hunter
 	for (int i = 0; i < HUNTERCOUNT; i++) {
 		PlaceId* list = DvGetShortestPathTo(dv, i, place, &numReturnLocs);
+		printf("The distance = %d\n", numReturnLocs);
 		if (numReturnLocs <= locsNums) {
 			numOfHunter++;
 		}
@@ -837,7 +840,7 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 
 	// If Outflank dracula , dracula can decide moving to sea
 	// If health is lower or equal 2, then dont go to sea
-	if (DvGetHealth(dv, PLAYER_DRACULA) <= 2)
+	if (DvGetHealth(dv, PLAYER_DRACULA) <= 4)
 		currPlace = DvWhereCanIGoByType(dv, true, false, &currCount);
 	else
 		currPlace = DvWhereCanIGo(dv, &currCount);
@@ -845,7 +848,6 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 	*canGoNum = 0;
 	PlaceId* canGo = NULL;
 	bool sameplace = false;
-
 
 	// away from hunter -> dont go the place that they can go
 	int numReturnedLocs = 0;
@@ -855,7 +857,7 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 	int canNotallplacecount = 0;
 
 	for (int i = 0; i < HUNTERCOUNT; i++) {
-		canNotGo = DvWhereCanTheyGo(dv, i, &numReturnedLocs);
+		canNotGo = DvWhereCanTheyGoByType(dv, i, true, false, true, &numReturnedLocs);
 		for (int j = 0; j < numReturnedLocs; j++) {
 			canNotallplace = DvaddPlace(canNotallplace, &canNotallplacecount, canNotGo[j]);
 		}
@@ -871,7 +873,7 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 				sameplace = true;
 		if (sameplace) continue;
 
-		if (!placeIsReal(currPlace[j]))
+		if (!placeIsReal(currPlace[j]) || placeIsSea(currPlace[j]))
 			continue;
 
 		canGo = DvaddPlace(canGo, canGoNum, currPlace[j]);
@@ -902,6 +904,10 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 		canGo = DvaddPlace(canGo, canGoNum, currPlace[j]);
 	}
 
+
+	if (*canGoNum > 0)
+		return canGo;
+
 	PlaceId* hunterplace = NULL;
 	canNotallplacecount = 0;
 	// away from hunter -> dont go the hunter place
@@ -931,11 +937,7 @@ PlaceId* canGoAway(DraculaView dv, PlaceId* allplace, int allplacecount, State s
 	if (allplace != NULL)
 		free(allplace);
 
-	if (*canGoNum > 0)
-		return canGo;
-
-	int temp = 0;
-	return DvWhereCanIGo(dv, &temp);
+	return canGo;
 }
 
 PlaceId cancelChacing(DraculaView dv, PlaceId* canGo, State state, int canGoNum) {
@@ -959,11 +961,26 @@ PlaceId cancelChacing(DraculaView dv, PlaceId* canGo, State state, int canGoNum)
 			return p;
 	}
 
-	// Selete the longest place to the hunter and can be go to sea
+	// Selete the longest place to the hunter and can not be go to sea
 	PlaceId pp = NOWHERE;
-	int canGoSeaNum = 0;
+	int canGoLandNum = 0;
 	PlaceId draculaplace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
-	PlaceId* currplace = DvWhereCanIGo(dv, &canGoSeaNum);
+	PlaceId* currplace = DvWhereCanIGoByType(dv, true, false, &canGoLandNum);
+	for (int i = 0; i < canGoLandNum; i++) {
+		State s = distancefromhunter(dv, currplace[i], 1);
+		if (s == LOST && currplace[i] != draculaplace) {
+			pp = currplace[i];
+		}
+	}
+
+	if (canGoLandNum > 0 && pp != NOWHERE) {
+		free(currplace);
+		return pp;
+	}
+
+	// Selete the longest place to the hunter and can be go to sea
+	int canGoSeaNum = 0;
+	currplace = DvWhereCanIGo(dv, &canGoSeaNum);
 	for (int i = 0; i < canGoSeaNum; i++) {
 		State s = distancefromhunter(dv, currplace[i], 1);
 		if (s == HIDDEN && currplace[i] != draculaplace) {
@@ -1224,7 +1241,7 @@ bool IsHunterTogether(DraculaView dv) {
 	for (int i = 0; i < HUNTERCOUNT; i++) {
 		if (i != player) {
 			PlaceId* list = DvGetShortestPathTo(dv, i, hunterplace, &numReturnLocs);
-			if (numReturnLocs > 0 && numReturnLocs <= 2) {
+			if (numReturnLocs >= 0 && numReturnLocs <= 2) {
 				numOfHunter++;
 			}
 			if (numReturnLocs > 0)
@@ -1341,6 +1358,9 @@ Action getAction(DraculaView dv)
 			|| p == NORTH_SEA || p == MANCHESTER
 			|| p == EDINBURGH || p == ATHENS
 			|| p == TYRRHENIAN_SEA || p == MEDITERRANEAN_SEA)
+		&& !IsHunterInRegion(dv, CDLOOP, placehunter)
+		&& !IsHunterInRegion(dv, TSLOOP, placehunter)
+		&& !IsHunterInRegion(dv, BSLOOP, placehunter)
 		&& !disquainCD
 		) {
 		return TPACTION;
@@ -1352,7 +1372,11 @@ Action getAction(DraculaView dv)
 	}
 
 	printf("ATT ? \n");
-	if (IsDraculaInATT(dv) || (IsHunterTogether(dv) && !IsHunterInRegion(dv, CDLOOP, placehunter))) {
+	if (IsDraculaInATT(dv) 
+		|| (IsHunterTogether(dv) 
+			&& IsHunterInRegion(dv, MNLOOP, placehunter)
+			&& IsHunterInRegion(dv, MALOOP, placehunter)
+			)) {
 		return ATTRACT_HATRED;
 	}
 
@@ -1362,7 +1386,11 @@ Action getAction(DraculaView dv)
 	}
 
 	printf("TPACTION ? \n");
-	if ((!IsHunterTogether(dv) || !IsHunterInRegion(dv, CDLOOP, placehunter)) && !disquainCD) {
+	if (!IsHunterTogether(dv)
+		&& !IsHunterInRegion(dv, CDLOOP, placehunter)
+		&& !IsHunterInRegion(dv, TSLOOP, placehunter)
+		&& !IsHunterInRegion(dv, BSLOOP, placehunter)
+		&& !disquainCD){
 		return TPACTION;
 	}
 
@@ -1394,7 +1422,17 @@ PlaceId DoTPACTION(DraculaView dv)
 	if (detectTPACTIONnotAffectHunter(dv))
 		return DoAWAY(dv);
 
-	if (p == MEDITERRANEAN_SEA || p == TYRRHENIAN_SEA || p == CAGLIARI) {
+	PlaceId* hunterplace = NULL;
+	int hunterplaceNum = 0;
+	for (int i = 0; i < HUNTERCOUNT; i++) {
+		hunterplace = DvaddPlace(hunterplace, &hunterplaceNum, DvGetPlayerLocation(dv, i));
+	}
+
+	if ((p == MEDITERRANEAN_SEA || p == TYRRHENIAN_SEA || p == CAGLIARI)
+		&& !IsHunterInRegion(dv, TSLOOP, hunterplace)
+		&& !IsHunterInRegion(dv, CDLOOP, hunterplace)
+		&& !IsHunterInRegion(dv, BSLOOP, hunterplace)
+		) {
 		if (p == MEDITERRANEAN_SEA || p == TYRRHENIAN_SEA) return CAGLIARI;
 		if (p == CAGLIARI) {
 			if (pp[numLocs - 2] == MEDITERRANEAN_SEA) {
@@ -1504,19 +1542,21 @@ PlaceId DoATTRACT_HATRED(DraculaView dv)
 
 	int loopNum = 0;
 	State s = getDraculaState(dv);
-	if (IsDraculaInRegion(dv, CDLOOP, p, &loopNum) || IsDraculaInRegion(dv, BSLOOP, p, &loopNum))
+	if (IsDraculaInRegion(dv, CDLOOP, p, &loopNum) || IsDraculaInRegion(dv, BSLOOP, p, &loopNum)) {
 		switch ((int)p) {
 			case IONIAN_SEA: return TYRRHENIAN_SEA;
 			case TYRRHENIAN_SEA: return MEDITERRANEAN_SEA;
 			case MEDITERRANEAN_SEA: return ATLANTIC_OCEAN;
 			case ATLANTIC_OCEAN:return NORTH_SEA;
-			case NORTH_SEA: 
+			case NORTH_SEA:
 				if (s == HIDDEN)
 					return HAMBURG;
 				if (s == LOST && !IsHunterInRegion(dv, CDLOOP, placehunter))
 					return EDINBURGH;
 			case EDINBURGH: return MANCHESTER;
 		}
+		return getShortestPathToRegion(dv, TSLOOP);
+	}
 	
 	return DoBackCD(dv);
 }
