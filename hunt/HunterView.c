@@ -146,7 +146,7 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 	*pathLength = 0;
 	if (src == dest) // if the hunter is at that location
 		return path;
-		
+	
 	int w;
     // if HvGetShortestPathTo haven't been called brfore
 	if (src != hv->path[hunter].src) { 
@@ -190,6 +190,7 @@ PlaceId *HvGetShortestPathTo(HunterView hv, Player hunter, PlaceId dest, int *pa
 		hv->path[hunter].dist = dist;
 		hv->path[hunter].pred = pred;
 	} 
+
 	// store the paths into array
 	*pathLength = hv->path[hunter].dist[dest];
 	path = malloc((*pathLength) * sizeof(PlaceId));
@@ -290,9 +291,8 @@ PlaceId *HvGetShortestPathWithoutBoatTo(HunterView hv, Player hunter, PlaceId de
 		return path;
 		
 	int w;
-	printf("%s %s\n", placeIdToName(src), placeIdToName(dest));
+	//printf("%s %s\n", placeIdToName(src), placeIdToName(dest));
 	// initialise values
-	hv->path[hunter].src = src;
 	Round round = HvGetRound(hv);
 
 	if (HvGetPlayer(hv) > hunter) 
