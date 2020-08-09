@@ -60,7 +60,7 @@ typedef DraculaView View;
 # define decideMove decideDraculaMove
 # define ViewFree DvFree
 
-# define xPastPlays "GED.... SBD.... HPA.... MCD.... DZU.V.. GMN.... SVE.... HMA.... MCD.... DSTT... GLV.... SMU.... HSR.... MKL.... "
+# define xPastPlays "GMU.... SCD.... HTO.... MMN.... DGO.V.. GVE.... SCD.... HBA.... MED.... DTS.... GPR.... SCD.... HBA.... MED.... DIO.... GFR.... SCD.... HMS.... MLO.... DATT... GLI.... SCD.... HCG.... MLO.... DVAT... GBR.... SCD.... HCG.... MMN.... DD2T... GBR.... SCD.... HCG.... MMN.... DHIT.V. GBR.... SCD.... HCG.... MMN.... DTPT... GPR.... SCDTD.. HTS.... MED.... DGAT... GPR.... SCD.... HTS.... MED.... DCNT.M. GPR.... SCD.... HTS.... MED.... DBS..M. GPR.... SCD.... HTS.... MED.... DIO..M. GPR.... SCD.... HTS.... MED.... DATT.M. GPR.... SCD.... HTS.... MED.... DVA.V.. GPR.... SCD.... HTS.... MED.... DSJT.M. GPR.... SCD.... HTS.... MED.... DZAT.M. GPR.... SCD.... HTS.... MED.... DVIT... GPR.... SCD.... HTS.... MED.... "
 # define xMsgs { "", "", "", "" }
 
 #else
