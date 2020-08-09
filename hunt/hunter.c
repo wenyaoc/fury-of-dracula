@@ -833,10 +833,12 @@ bool placeCanTeleport(PlaceId place) {
 PlaceId getVampire(HunterView hv, Player player, PlaceId place) {
 	PlaceId newPlace = place;
 	PlaceId vampirePlace = HvGetVampireLocation(hv);
+	//printf("%d %s\n",player, placeIdToName(vampirePlace));
 	if (placeIsReal(vampirePlace)) {
+
 		int pathLength;
 		PlaceId * shortestPath = HvGetShortestPathTo(hv, player, vampirePlace, &pathLength);
-		if (pathLength <= 3 && pathLength > 0) 
+		if (pathLength < 3 && pathLength > 0) 
 			newPlace = shortestPath[0];
 		if (pathLength > 0)
 			free(shortestPath);
@@ -1197,8 +1199,7 @@ PlaceId findDracFromMiddleEurope(HunterView hv, Player player, PlaceId knownDrac
 		if (numSeaMove == 1) {
 			if (player == PLAYER_LORD_GODALMING) centerPlace = LIVERPOOL;
 			else if (player == PLAYER_DR_SEWARD) {
-				if (!countryHasOtherHunter(hv, player, England, 9)) centerPlace = LIVERPOOL;
-				else return NOWHERE;
+				return NOWHERE;
 			} else if (player == PLAYER_VAN_HELSING) {
 				if (!countryHasOtherHunter(hv, player, England, 9)) centerPlace = LIVERPOOL;
 				else return NOWHERE;
