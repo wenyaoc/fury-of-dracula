@@ -133,7 +133,7 @@ bool placeCanTeleport(PlaceId place);
 bool inIsland(PlaceId newPlace);
 bool inCountry(PlaceId * places, PlaceId newPlace, int num);
 bool wentBefore(HunterView hv, PlaceId place);
-
+bool dracInSea(HunterView hv);
 
 void decideHunterMove(HunterView hv) {
 	Player player = HvGetPlayer(hv);
@@ -322,8 +322,8 @@ PlaceId getMove(HunterView hv, Player player) {
 	Round knownDraculaRound = -1;
 	PlaceId knownDraculaLocation = HvGetLastKnownDraculaLocation(hv, &knownDraculaRound);
 	int validRound = getValidMove(hv, round - knownDraculaRound);
-	//printf("curr = %s knownDrac = %s\n", placeIdToName(currPlace), placeIdToName(knownDraculaLocation));
-	//printf("%d %d %d %d\n", round, knownDraculaRound, round - knownDraculaRound, validRound);
+	printf("curr = %s knownDrac = %s\n", placeIdToName(currPlace), placeIdToName(knownDraculaLocation));
+	printf("%d %d %d %d\n", round, knownDraculaRound, round - knownDraculaRound, validRound);
 	if (round - knownDraculaRound > 10) {
 		return currPlace;
 	}	
@@ -969,18 +969,25 @@ PlaceId findDracFromItaly(HunterView hv, Player player, PlaceId knownDraculaLoca
 PlaceId findDracFromEngland(HunterView hv, Player player, PlaceId knownDraculaLocation, Round knownDraculaRound) {
 	Round currRound = HvGetRound(hv);
 	PlaceId currPlace = HvGetPlayerLocation(hv, player);
+
 	int numSeaMove = getValidSeaMove(hv, currRound - knownDraculaRound);
 
 	if (numSeaMove == 0) {
 		int centerPlace;
-		if (player == PLAYER_LORD_GODALMING) centerPlace = LIVERPOOL;
-		else if (player == PLAYER_DR_SEWARD) {
+		int dist = 2;
+		if (player == 2 || player == 3) dist = 1;
+
+		if (player == PLAYER_LORD_GODALMING) {
+			if (knownDraculaLocation == GALWAY || knownDraculaLocation == DUBLIN) {
+				centerPlace = DUBLIN;
+				dist = 0;
+			} else centerPlace = LIVERPOOL;
+		}else if (player == PLAYER_DR_SEWARD) {
 			if (countryHasOtherHunter(hv, player, England, 9)) centerPlace = COLOGNE;
 			else centerPlace = LIVERPOOL;
 		}else if (player == PLAYER_VAN_HELSING) centerPlace = SANTANDER;
 		else centerPlace = SZEGED;
-		int dist = 2;
-		if (player == 2 || player == 3) dist = 1;
+	
 		return searchingAround(hv, player, centerPlace, dist);
 	} else {
 		if(numSeaMove == 1) {
@@ -1004,6 +1011,7 @@ PlaceId findDracFromEngland(HunterView hv, Player player, PlaceId knownDraculaLo
 				}
 			}
 			if (knownDraculaLocation == GALWAY || knownDraculaLocation == DUBLIN) {
+				//if (currPlace == )
 				if (player == PLAYER_LORD_GODALMING) return searchingAround(hv, player, LIVERPOOL, 1);
 				if (player == PLAYER_DR_SEWARD && !countryHasOtherHunter(hv, player, England, 8)) return searchingAround(hv, player, LIVERPOOL, 1);
 			}
@@ -1042,6 +1050,7 @@ PlaceId findDracFromCastle(HunterView hv, Player player, PlaceId knownDraculaLoc
 	Round currRound = HvGetRound(hv);
 	PlaceId currPlace = HvGetPlayerLocation(hv, player);
 	int numSeaMove = getValidSeaMove(hv, currRound - knownDraculaRound);
+	//printf("%d\n", numSeaMove);
 	if (numSeaMove == 0) {
 		int centerPlace;
 		if (currRound - knownDraculaRound < 7) {
@@ -1071,10 +1080,12 @@ PlaceId findDracFromCastle(HunterView hv, Player player, PlaceId knownDraculaLoc
 			if (currPlace == TYRRHENIAN_SEA) return MEDITERRANEAN_SEA;
 			if (currPlace == IONIAN_SEA) return TYRRHENIAN_SEA;
 			if (currPlace == MEDITERRANEAN_SEA) {
-				if (!placeHasOtherHunter(hv, ALICANTE)) return ALICANTE;
-				else if (!placeHasOtherHunter(hv, MARSEILLES)) return MARSEILLES;
+				if (dracInSea(hv)) return ATLANTIC_OCEAN;
+				if (!placeHasOtherHunter(hv, ALICANTE) && !wentBefore(hv, ALICANTE)) return ALICANTE;
+				else if (!placeHasOtherHunter(hv, MARSEILLES) && !wentBefore(hv, MARSEILLES)) return MARSEILLES;
 				else return BARCELONA;
 			}
+			if (currPlace == ATLANTIC_OCEAN && !dracInSea(hv)) return GALWAY; 
 		}
 		if (numSeaMove <= 2) {
 
@@ -1237,15 +1248,19 @@ int getValidSeaMove(HunterView hv, int numRound) {
 	int doubleBackNum = 0;
 	int roundInSea = 0;
 	int * round = calloc(numReturnedMoves, sizeof(int));
+	//printf("%s %s\n", placeIdToName(locs[0]), placeIdToName(moves[0]));
 	for (int i = 1; i < numReturnedMoves; i++) {
+		//printf("%s %s\n", placeIdToName(locs[i]), placeIdToName(moves[i]));
 		if (locs[i] == SEA_UNKNOWN && moves[i] == SEA_UNKNOWN) {
 			roundInSea = roundInSea + 1;
 		} else if (moves[i] >= DOUBLE_BACK_1 && moves[i] <= DOUBLE_BACK_5) { 
 			// double back
 			doubleBackNum = moves[i] - DOUBLE_BACK_1;
-			if (doubleBackNum >= i && locs[i] == SEA_UNKNOWN) {
-				roundInSea = roundInSea + 1;
-			} else if (locs[i] == SEA_UNKNOWN) {
+			//printf("%d %d %d\n", doubleBackNum, i, i - doubleBackNum - 1);
+			if (doubleBackNum >= i) {
+				if(locs[i] == SEA_UNKNOWN) 
+					roundInSea = roundInSea + 1;
+			} else {
 				roundInSea = round[i - doubleBackNum - 1];
 			}
 		}
@@ -1313,4 +1328,19 @@ bool wentBefore(HunterView hv, PlaceId place) {
 			free(lastLocs);
 	}
 	return hasOtherHunter;
+}
+
+
+bool dracInSea(HunterView hv) {
+	int numLocs = 0;
+	bool canFree = true;
+	PlaceId * locs = HvGetLastLocations(hv, PLAYER_DRACULA, 1, &numLocs, &canFree);
+	if (numLocs == 1) {
+		if (placeIsSea(locs[0]) || locs[0] == SEA_UNKNOWN) {
+			free(locs);
+			return true;
+		}
+		free(locs);
+	}
+	return false;
 }
