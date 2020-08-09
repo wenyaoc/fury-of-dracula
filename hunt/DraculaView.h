@@ -181,7 +181,6 @@ PlaceId *DvWhereCanTheyGoByType(DraculaView dv, Player player,
 
 // TODO
 PlaceId* DvGetShortestPathTo(DraculaView dv, Player hunter, PlaceId dest, int* pathLength);
-PlaceId* DvGetShortestPathWithoutBoatTo(DraculaView dv, Player hunter, PlaceId dest, int* pathLength);
 
 bool DvCanGo(DraculaView dv, PlaceId place);
 int getDoubleBackNum(DraculaView dv, PlaceId place);
