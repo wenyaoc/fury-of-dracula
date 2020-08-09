@@ -1264,8 +1264,11 @@ bool detectDisqualifiedHunterInCD(DraculaView dv, Player player)
 	bool canFree = false;
 
 	hunterplace = GvGetLastLocations(getGameView(dv), player, 10, &temp, &canFree);
+	if (hunterplace[0] != CASTLE_DRACULA)
+		return false;
+
 	for (int i = 1; i < temp; i++) {
-		if (hunterplace[0] != CASTLE_DRACULA)
+		if (hunterplace[i] != CASTLE_DRACULA)
 			return false;
 	}
 
@@ -1278,7 +1281,7 @@ bool detectTPACTIONnotAffectHunter(DraculaView dv) {
 		return false;
 
 	State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA), 2);
-	if ((s == LOST || s == CHACING) && !IsHunterTogether(dv))
+	if (s == CHACING && !IsHunterTogether(dv))
 		return true;
 
 	return false;
@@ -1320,7 +1323,7 @@ Action getAction(DraculaView dv)
 
 	int temp = 0;
 
-	//printf("AWAY ? \n");
+	printf("AWAY ? \n");
 	if (disqua >= 2) {
 		if ((p == VALONA || p == IONIAN_SEA
 				|| p == NORTH_SEA || p == MANCHESTER
@@ -1332,44 +1335,43 @@ Action getAction(DraculaView dv)
 		return AWAY;
 	}
 
-	//printf("TPACTION ? \n");
+	printf("TPACTION ? \n");
 	if (!IsHunterTogether(dv)
 		&& (p == VALONA || p == IONIAN_SEA
 			|| p == NORTH_SEA || p == MANCHESTER
 			|| p == EDINBURGH || p == ATHENS
 			|| p == TYRRHENIAN_SEA || p == MEDITERRANEAN_SEA)
-		&& (s == CHACING)
 		&& !disquainCD
 		) {
 		return TPACTION;
 	}
 
-	//printf("AWAY ? \n");
+	printf("AWAY ? \n");
 	if (!IsDraculaInRegion(dv, BSLOOP, p, &temp) && !IsDraculaInRegion(dv, MNLOOP, p, &temp)) {
 		return AWAY;
 	}
 
-	//printf("ATT ? \n");
+	printf("ATT ? \n");
 	if (IsDraculaInATT(dv) || (IsHunterTogether(dv) && !IsHunterInRegion(dv, CDLOOP, placehunter))) {
 		return ATTRACT_HATRED;
 	}
 
-	//printf("BACKCD ? \n");
+	printf("BACKCD ? \n");
 	if (s == LOST && !IsHunterInRegion(dv, CDLOOP, placehunter)) {
 		return BACKCD;
 	}
 
-	//printf("TPACTION ? \n");
+	printf("TPACTION ? \n");
 	if ((!IsHunterTogether(dv) || !IsHunterInRegion(dv, CDLOOP, placehunter)) && !disquainCD) {
 		return TPACTION;
 	}
 
-	//printf("AWAY ?\n");
+	printf("AWAY ?\n");
 	if (!IsHunterTogether(dv) && countMNnum >= 1 && IsHunterInRegion(dv, CDLOOP, placehunter) && s != LOST) {
 		return AWAY;
 	}
 
-	//printf("AWAY\n");
+	printf("AWAY\n");
 	return AWAY;
 }
 
@@ -1379,39 +1381,70 @@ PlaceId DoTPACTION(DraculaView dv)
 
 	//Only Check 2 and 6
 	int shortestdistance[7] = { -1,-1,-1,-1,-1,-1,-1 };
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 7; i++) {
 		shortestdistance[i] = getNumPathToRegion(dv, PLAYER_DRACULA, i);
+	}
 
 	Round round = DvGetRound(dv);
+
+	int numLocs = 0;
+	bool canFree = false;
+	PlaceId* pp = GvGetLastLocations(getGameView(dv), PLAYER_DRACULA, 5, &numLocs, &canFree);
 
 	if (detectTPACTIONnotAffectHunter(dv))
 		return DoAWAY(dv);
 
-	int numLocs = 0;
-	bool canFree = false;
-	PlaceId* pp = GvGetLastLocations(getGameView(dv), PLAYER_DRACULA, 2, &numLocs, &canFree);
-
 	if (p == MEDITERRANEAN_SEA || p == TYRRHENIAN_SEA || p == CAGLIARI) {
 		if (p == MEDITERRANEAN_SEA || p == TYRRHENIAN_SEA) return CAGLIARI;
 		if (p == CAGLIARI) {
-			if (numLocs >= 1) {
-				if (pp[0] == MEDITERRANEAN_SEA) { free(pp); return TYRRHENIAN_SEA; }
-				if (pp[0] == TYRRHENIAN_SEA) { free(pp); return MEDITERRANEAN_SEA; }
+			if (pp[numLocs - 2] == MEDITERRANEAN_SEA) {
+				for (int i = numLocs - 3; i >= 0; i--) {
+					if (pp[i] == TYRRHENIAN_SEA) {
+						free(pp);
+						return DOUBLE_BACK_1;
+					}
+				}
+				free(pp);
+				return TYRRHENIAN_SEA;
+			}
+			if (pp[numLocs - 2] == TYRRHENIAN_SEA) {
+				for (int i = numLocs - 3; i >= 0; i--) {
+					if (pp[i] == MEDITERRANEAN_SEA) {
+						free(pp);
+						return DOUBLE_BACK_1;
+					}
+				}
+				free(pp);
+				return MEDITERRANEAN_SEA;
 			}
 		}
 	}
 	else if (shortestdistance[6] < shortestdistance[2]) {
 		if (p != VALONA && p != IONIAN_SEA && p != ATHENS)
 			return getShortestPathToRegion(dv, BSLOOP);
-
-		if (round < 5 && p != VALONA && p != IONIAN_SEA)
+		if (round < 5 && p != VALONA && p != IONIAN_SEA && p != ATHENS)
 			return getShortestPathToRegion(dv, BSLOOP);
-
 		if (p == VALONA || p == IONIAN_SEA) return ATHENS;
 		if (p == ATHENS) {
-			if (numLocs >= 1) {
-				if (pp[0] == VALONA) { free(pp); return IONIAN_SEA; }
-				if (pp[0] == IONIAN_SEA) { free(pp); return VALONA; }
+			if (pp[numLocs - 2] == VALONA) {
+				for (int i = numLocs - 3; i >= 0; i--) {
+					if (pp[i] == IONIAN_SEA) {
+						free(pp);
+						return DOUBLE_BACK_1;
+					}
+				}
+				free(pp); 
+				return IONIAN_SEA;
+			}
+			if (pp[numLocs - 2] == IONIAN_SEA) {
+				for (int i = numLocs - 3; i >= 0; i--) {
+					if (pp[i] == VALONA) {
+						free(pp);
+						return DOUBLE_BACK_1;
+					}
+				}
+				free(pp);
+				return VALONA;
 			}
 		}
 	}
@@ -1424,9 +1457,25 @@ PlaceId DoTPACTION(DraculaView dv)
 
 		if (p == NORTH_SEA || p == MANCHESTER) return EDINBURGH;
 		if (p == EDINBURGH) {
-			if (numLocs >= 1) {
-				if (pp[0] == NORTH_SEA) { free(pp); return MANCHESTER; }
-				if (pp[0] == MANCHESTER) { free(pp); return NORTH_SEA; }
+			if (pp[numLocs - 2] == NORTH_SEA) {
+				for (int i = numLocs - 3; i >= 0; i--) {
+					if (pp[i] == MANCHESTER) {
+						free(pp);
+						return DOUBLE_BACK_1;
+					}
+				}
+				free(pp);
+				return MANCHESTER;
+			}
+			if (pp[numLocs - 2] == MANCHESTER) {
+				for (int i = numLocs - 3; i >= 0; i--) {
+					if (pp[i] == NORTH_SEA) {
+						free(pp);
+						return DOUBLE_BACK_1;
+					}
+				}
+				free(pp);
+				return NORTH_SEA;
 			}
 		}
 	}
