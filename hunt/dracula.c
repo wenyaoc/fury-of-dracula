@@ -28,9 +28,9 @@
 #define PALANDLENGTH 16
 #define MULANDLENGTH 13
 #define MNLANDLENGTH 10
-#define TSLANDLENGTH 7
+#define TSLANDLENGTH 13
 #define MALANDLENGTH 11
-#define CDLANDLENGTH 10
+#define CDLANDLENGTH 11
 #define BSLANDLENGTH 10
 #define ACTIONPLACELENGTH 8
 #define HUNTERCOUNT 4
@@ -92,7 +92,13 @@ PlaceId TSland[] = {
 	ROME,
 	FLORENCE,
 	GENOA,
-	GENOA
+	GENOA,
+	MEDITERRANEAN_SEA,
+	TYRRHENIAN_SEA,
+	VENICE,
+	MUNICH,
+	ZURICH,
+	MADRID
 };
 //B
 PlaceId MAland[] = {
@@ -119,7 +125,8 @@ PlaceId CDland[] = {
 	SARAJEVO,
 	SARAJEVO,
 	BUCHAREST,
-	BELGRADE
+	BELGRADE,
+	VIENNA
 };
 //G
 PlaceId BSland[] = {
@@ -175,6 +182,7 @@ typedef enum action {
 	BACKCD,                  // When outflank, go to sea more than 2 times
 	ATTRACT_HATRED,
 	AWAY,
+	AFTERTP,
 	DEFAULT = -1
 }Action;
 
@@ -216,8 +224,8 @@ PlaceId noChoices(DraculaView dv);
 PlaceId* DvaddPlace(PlaceId* place, int* num, PlaceId newPlace);
 PlaceId ConvertToAction(DraculaView dv, PlaceId place);
 PlaceId getLoopLocation(DraculaView dv, Region r,
-	PlaceId* placehunter, PlaceId* places,
-	int* loopRound, int maxRound);
+						PlaceId* placehunter, PlaceId* places,
+						int* loopRound, int maxRound);
 
 PlaceId DoTPACTION(DraculaView dv);
 PlaceId DoBackCD(DraculaView dv);
@@ -689,7 +697,14 @@ State getDraculaState(DraculaView dv) {
 	if (canFree)
 		free(p);
 
-	State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA), 1);
+
+	int checkarea = 2;
+	int loopround = 0;
+	if (IsDraculaInRegion(dv, TSLOOP, DvGetPlayerLocation(dv, PLAYER_DRACULA), &loopround)) {
+		checkarea = 1;
+	}
+
+	State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA), checkarea);
 
 	// Detect Hunter Finding Dracula
 	if (numReturnedLocs < trapsNums) {
@@ -961,7 +976,7 @@ PlaceId cancelChacing(DraculaView dv, PlaceId* canGo, State state, int canGoNum)
 			return p;
 	}
 
-	// Selete the longest place to the hunter and can not be go to sea
+	// Selete the longest place to the hunter and can be go to sea
 	PlaceId pp = NOWHERE;
 	int canGoLandNum = 0;
 	PlaceId draculaplace = DvGetPlayerLocation(dv, PLAYER_DRACULA);
@@ -1040,8 +1055,7 @@ PlaceId cancelOutflank(DraculaView dv, PlaceId* canGo, State state, int canGoNum
 	printf("--- New Region = %d ---\n", r);
 	printf("-----------------------\n");
 #endif
-	// if get region is unknow loop -> try to go to MNland and try to teleport
-	// TODO
+
 	// if get the best region
 	PlaceId p = getShortestPathToRegion(dv, r);
 	for (int i = 0; i < canGoNum; i++) {
@@ -1079,7 +1093,7 @@ PlaceId cancelOutflank(DraculaView dv, PlaceId* canGo, State state, int canGoNum
 	numReturnLocs = 0;
 	int maxLength = 0;
 	for (int i = 0; i < HUNTERCOUNT; i++) {
-		if(chacingHunter[i])
+		if (chacingHunter[i])
 			for (int j = 0; j < canGoNum; j++) {
 				PlaceId* list = DvGetShortestPathTo(dv, i, canGo[j], &numReturnLocs);
 
