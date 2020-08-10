@@ -60,7 +60,7 @@ typedef DraculaView View;
 # define decideMove decideDraculaMove
 # define ViewFree DvFree
 
-# define xPastPlays "GED.... SBD.... HPA.... MCD.... DZU.V.. GMN.... SVE.... HMA.... MCD.... DMRT... GLV.... SVI.... HLS.... MKL.... DGET... GSW.... SMU.... HSN.... MCD.... "
+# define xPastPlays "GGE.... SMU.... HCD.... MLO.... DGR.V.. GGE.... SMU.... HCD.... MLO.... DALT... GGE.... SMU.... HCD.... MLO.... DMS.... GGE.... SMU.... HCD.... MLO.... DBAT... GGE.... SMU.... HCD.... MLO.... DD1T... GGE.... SMU.... HCD.... MLO.... DHIT... GGE.... SMU.... HCD.... MLO.... DSRT.V. GGE.... SMU.... HCD.... MLO.... DSNT.M. GGE.... SMU.... HCD.... MLO.... DLST... GGE.... SMU.... HCD.... DAO.... MLO.... GGE.... SMU.... HCD.... MLO.... DNS.... GGE.... SMU.... HCD.... MLO.... DEDT... GGE.... SMU.... HCD.... MLO.... DD2.... GGE.... SMU.... HCD.... MLO.... DHA.... GGE.... SMU.... HCD.... MLO.... DCO.... GGE.... SMU.... HCD.... MLO.... DAM.... GGE.... SMU.... HCD.... MLO.... DBU.... GGE.... SMU.... HCD.... MLO.... DLE.... GGE.... SMU.... HCD.... MLO.... DNA.... GGE.... SMU.... HCD.... MLO.... DBO.... GGE.... SMU.... HCD.... MLO.... DTO.... GGE.... SMU.... HCD.... MLO.... DCF.... GGE.... SMU.... HCD.... MLO.... DD1.... GGE.... SMU.... HCD.... MLO.... DHI.... GGE.... SMU.... HCD.... MLO.... DMR.... GGE.... SMU.... HCD.... MLO.... DGE.... GGE.... SMU.... HCD.... MLO.... DST.... GGE.... SMU.... HCD.... MLO.... DFR.... GGE.... SMU.... HCD.... MLO.... DCO.... GGE.... SMU.... HCD.... MLO.... DAM.... GGE.... SMU.... HCD.... MLO...."
 # define xMsgs { "", "", "", "" }
 
 #else

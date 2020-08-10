@@ -531,6 +531,24 @@ Region getRegionWithoutSea(DraculaView dv) {
 }
 
 Region decideRegion(DraculaView dv, bool region[7]) {
+	
+	int disqua = 0;
+	for (int i = 0; i < HUNTERCOUNT; i++) {
+		if (detectDisqualifiedHunter(dv, i))
+			disqua++;
+	}
+
+	if (disqua == 4) {
+		if (!IsHunterTogether(dv))
+			return PALOOP;
+		if (region[PALOOP])
+			return PALOOP;
+		if (region[MULOOP])
+			return MULOOP;
+		if (region[CDLOOP])
+			return CDLOOP;
+	}
+
 	int shortestdistance[7] = { -1,-1,-1,-1,-1,-1,-1 };
 	for (int i = 0; i < 7; i++)
 		if (region[i])
