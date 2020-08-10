@@ -459,3 +459,4 @@ PlaceId* DvGetShortestPathTo(DraculaView dv, Player hunter, PlaceId dest, int* p
 	}
 	return path;
 }
+//FINAL
