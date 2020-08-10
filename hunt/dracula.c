@@ -697,10 +697,10 @@ State getDraculaState(DraculaView dv) {
 	if (canFree)
 		free(p);
 
-	int checkarea = 1;
+	int checkarea = 2;
 	int loopround = 0;
 	if (IsDraculaInRegion(dv, TSLOOP, DvGetPlayerLocation(dv, PLAYER_DRACULA), &loopround)) {
-		checkarea = 2;
+		checkarea = 1;
 	}
 
 
@@ -1269,14 +1269,14 @@ bool IsHunterTogether(DraculaView dv) {
 
 bool detectDisqualifiedHunter(DraculaView dv, Player player)
 {
-	if (DvGetRound(dv) <= 5)
+	if (DvGetRound(dv) <= 8)
 		return false;
 
 	PlaceId * hunterplace = NULL;
 	int temp = 0;
 	bool canFree = false;
 
-	hunterplace = GvGetLastLocations(getGameView(dv), player, 4, &temp, &canFree);
+	hunterplace = GvGetLastLocations(getGameView(dv), player, 8, &temp, &canFree);
 	for (int i = 1; i < temp; i++) {
 		if (hunterplace[0] != hunterplace[i])
 			return false;
@@ -1605,4 +1605,4 @@ bool IsDraculaInATT(DraculaView dv) {
 
 	return false;
 }
-//FINAL
+//FINAL1
