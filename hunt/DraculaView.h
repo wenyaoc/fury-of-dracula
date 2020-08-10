@@ -187,5 +187,5 @@ int getDoubleBackNum(DraculaView dv, PlaceId place);
 bool canDoubleBack(DraculaView dv);
 bool canHide(DraculaView dv);
 GameView getGameView(DraculaView dv);
-
+//Final
 #endif // !defined(FOD__DRACULA_VIEW_H_)
