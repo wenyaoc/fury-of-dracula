@@ -431,7 +431,7 @@ PlaceId* DvGetShortestPathTo(DraculaView dv, Player hunter, PlaceId dest, int* p
 			int numReturnedLocs;
 			PlaceId* reachable = GvGetReachableByType(dv->gv, hunter,
 													round + dist[w],
-													w, true, false, true, &numReturnedLocs);
+													w, true, true, true, &numReturnedLocs);
 
 			for (int i = 0; i < numReturnedLocs; i++) {
 				v = reachable[i];

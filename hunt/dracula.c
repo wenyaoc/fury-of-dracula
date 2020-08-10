@@ -1381,12 +1381,14 @@ Action getAction(DraculaView dv)
 	}
 
 	printf("TPACTION ? \n");
-	if (!IsHunterInRegion(dv, CDLOOP, placehunter)
+	if (s == LOST 
+		&& !IsHunterInRegion(dv, CDLOOP, placehunter)
 		&& !IsHunterInRegion(dv, TSLOOP, placehunter)
 		&& !IsHunterInRegion(dv, BSLOOP, placehunter)
 		&& !disquainCD) {
 		return TPACTION;
 	}
+
 
 	printf("AWAY ? \n");
 	if (!IsDraculaInRegion(dv, BSLOOP, p, &temp) && !IsDraculaInRegion(dv, MNLOOP, p, &temp)) {
