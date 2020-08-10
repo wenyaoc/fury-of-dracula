@@ -204,7 +204,7 @@ const char * decideLordGodalmingMove(HunterView hv) {
 		if (currRound > 20 && ((currRound - knownDraculaRound) > 6 && (currRound - knownDraculaRound) < 16))
 			centerPlace = LIVERPOOL;
 		else
-			centerPlace = COLOGNE;
+			centerPlace = COLOGNE;   
 		// randomly find a place
 		newPlace = searchingAround(hv, PLAYER_LORD_GODALMING, centerPlace, 2);	
 		// if vampire is not far away
