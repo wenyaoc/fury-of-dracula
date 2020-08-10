@@ -697,12 +697,12 @@ State getDraculaState(DraculaView dv) {
 	if (canFree)
 		free(p);
 
-
-	int checkarea = 2;
+	int checkarea = 1;
 	int loopround = 0;
 	if (IsDraculaInRegion(dv, TSLOOP, DvGetPlayerLocation(dv, PLAYER_DRACULA), &loopround)) {
-		checkarea = 1;
+		checkarea = 2;
 	}
+
 
 	State s = distancefromhunter(dv, DvGetPlayerLocation(dv, PLAYER_DRACULA), checkarea);
 
@@ -1380,6 +1380,14 @@ Action getAction(DraculaView dv)
 		return TPACTION;
 	}
 
+	printf("TPACTION ? \n");
+	if (!IsHunterInRegion(dv, CDLOOP, placehunter)
+		&& !IsHunterInRegion(dv, TSLOOP, placehunter)
+		&& !IsHunterInRegion(dv, BSLOOP, placehunter)
+		&& !disquainCD) {
+		return TPACTION;
+	}
+
 	printf("AWAY ? \n");
 	if (!IsDraculaInRegion(dv, BSLOOP, p, &temp) && !IsDraculaInRegion(dv, MNLOOP, p, &temp)) {
 		return AWAY;
@@ -1397,15 +1405,6 @@ Action getAction(DraculaView dv)
 	printf("BACKCD ? \n");
 	if (s == LOST && !IsHunterInRegion(dv, CDLOOP, placehunter)) {
 		return BACKCD;
-	}
-
-	printf("TPACTION ? \n");
-	if (!IsHunterTogether(dv)
-		&& !IsHunterInRegion(dv, CDLOOP, placehunter)
-		&& !IsHunterInRegion(dv, TSLOOP, placehunter)
-		&& !IsHunterInRegion(dv, BSLOOP, placehunter)
-		&& !disquainCD){
-		return TPACTION;
 	}
 
 	printf("AWAY ?\n");
