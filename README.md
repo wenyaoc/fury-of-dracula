@@ -1,6 +1,12 @@
 # fury-of-dracula
 
 ![Image text](https://github.com/wenyaoc/cs2521-lab08/blob/master/dra.PNG)
+
+## Project
+|view|rank|
+|--|--|
+|hunter|6/113|
+|dracula|44/109|
 ```diff
 - Group name:
 ```
